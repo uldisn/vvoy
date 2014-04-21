@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">eu</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="vpnt_point" view="colnames">
+<left>1050</left>
+<top>76</top>
+<width>110</width>
+<height>110</height>
+<sql_create_table>CREATE TABLE `vpnt_point` (
+  `vpnt_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `vpnt_ccnt_id` smallint(5) unsigned NOT NULL,
+  `vpnt_name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`vpnt_id`),
+  KEY `vpnt_ccnt_id` (`vpnt_ccnt_id`),
+  CONSTRAINT `vpnt_point_ibfk_1` FOREIGN KEY (`vpnt_ccnt_id`) REFERENCES `ccnt_country` (`ccnt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vtrl_trailer" view="colnames">
+<left>262</left>
+<top>327</top>
+<width>171</width>
+<height>174</height>
+<sql_create_table>CREATE TABLE `vtrl_trailer` (
+  `vtrl_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `vtrl_ccmp_id` int(10) unsigned DEFAULT NULL,
+  `vtrl_reg_nr` char(20) DEFAULT NULL,
+  `vtrl_year` smallint(5) unsigned DEFAULT NULL,
+  `vtrl_certificate_number` varchar(100) DEFAULT NULL,
+  `vtrl_self_weight` float(5,3) unsigned DEFAULT NULL,
+  `vtrl_notes` text,
+  PRIMARY KEY (`vtrl_id`),
+  KEY `vtrl_ccmp_id` (`vtrl_ccmp_id`),
+  CONSTRAINT `vtrl_trailer_ibfk_1` FOREIGN KEY (`vtrl_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="vvoy_voyage" view="colnames">
+<left>476</left>
+<top>230</top>
+<width>131</width>
+<height>251</height>
+<sql_create_table>CREATE TABLE `vvoy_voyage` (
+  `vvoy_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vvoy_ccmp_id` int(10) unsigned NOT NULL,
+  `vvoy_number` char(20) CHARACTER SET ascii DEFAULT NULL,
+  `vvoy_vtrc_id` smallint(5) unsigned NOT NULL,
+  `vvoy_vtrl_id` smallint(5) unsigned DEFAULT NULL,
+  `vvoy_status` enum('new','way','finish','closed') DEFAULT NULL,
+  `vvoy_fcrn_id` tinyint(3) unsigned NOT NULL,
+  `vvoy_start_date` datetime DEFAULT NULL,
+  `vvoy_end_date` datetime DEFAULT NULL,
+  `vvoy_sys_ccmp_id` int(10) unsigned DEFAULT NULL,
+  `vvoy_notes` text,
+  PRIMARY KEY (`vvoy_id`),
+  KEY `vvoy_ccmp_id` (`vvoy_ccmp_id`),
+  KEY `vvoy_vtrc_id` (`vvoy_vtrc_id`),
+  KEY `vvoy_vtrl_id` (`vvoy_vtrl_id`),
+  KEY `vvoy_stst_id` (`vvoy_status`),
+  KEY `vvoy_fcrn_id` (`vvoy_fcrn_id`),
+  CONSTRAINT `vvoy_voyage_ibfk_1` FOREIGN KEY (`vvoy_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`),
+  CONSTRAINT `vvoy_voyage_ibfk_3` FOREIGN KEY (`vvoy_vtrl_id`) REFERENCES `vtrl_trailer` (`vtrl_id`),
+  CONSTRAINT `vvoy_voyage_ibfk_5` FOREIGN KEY (`vvoy_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`),
+  CONSTRAINT `vvoy_voyage_ibfk_6` FOREIGN KEY (`vvoy_vtrc_id`) REFERENCES `vtrc_truck` (`vtrc_id`),
+  CONSTRAINT `vvoy_voyage_ibfk_7` FOREIGN KEY (`vvoy_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vvcl_voyage_client" view="colnames">
+<left>312</left>
+<top>68</top>
+<width>115</width>
+<height>182</height>
+<sql_create_table>CREATE TABLE `vvcl_voyage_client` (
+  `vvcl_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vvcl_vvoy_id` int(10) unsigned NOT NULL,
+  `vvcl_ccmp_id` int(10) unsigned DEFAULT NULL,
+  `vvcl_vcnt_id` smallint(5) unsigned DEFAULT NULL,
+  `vvcl_notes` text,
+  `vvcl_freight` decimal(8,2) DEFAULT NULL,
+  `vvcl_fcrn_id` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`vvcl_id`),
+  KEY `vvcl_vvoy_id` (`vvcl_vvoy_id`),
+  KEY `vvcl_ccmp_id` (`vvcl_ccmp_id`),
+  KEY `vvcl_vcnt_id` (`vvcl_vcnt_id`),
+  KEY `vvcl_fcrn_id` (`vvcl_fcrn_id`),
+  CONSTRAINT `vvcl_voyage_client_ibfk_1` FOREIGN KEY (`vvcl_vvoy_id`) REFERENCES `vvoy_voyage` (`vvoy_id`),
+  CONSTRAINT `vvcl_voyage_client_ibfk_2` FOREIGN KEY (`vvcl_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`),
+  CONSTRAINT `vvcl_voyage_client_ibfk_3` FOREIGN KEY (`vvcl_vcnt_id`) REFERENCES `vcnt_contract` (`vcnt_id`),
+  CONSTRAINT `vvcl_voyage_client_ibfk_4` FOREIGN KEY (`vvcl_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vvep_voyage_expenses_plan" view="colnames">
+<left>967</left>
+<top>483</top>
+<width>206</width>
+<height>291</height>
+<sql_create_table>CREATE TABLE `vvep_voyage_expenses_plan` (
+  `vvep_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vvep_vvoy_id` int(10) unsigned NOT NULL,
+  `vvep_vepo_id` smallint(5) unsigned DEFAULT NULL,
+  `vvep_count_id` int(3) unsigned DEFAULT NULL COMMENT 'unit id',
+  `vvep_count` decimal(10,3) unsigned DEFAULT NULL,
+  `vvep_price` decimal(10,2) unsigned DEFAULT NULL,
+  `vvep_fcrn_id` tinyint(3) unsigned DEFAULT NULL,
+  `vvep_total` decimal(10,2) DEFAULT NULL,
+  `vvep_base_fcrn_id` tinyint(3) unsigned DEFAULT NULL,
+  `vvep_base_total` decimal(10,2) DEFAULT NULL,
+  `vvep_notes` text,
+  PRIMARY KEY (`vvep_id`),
+  KEY `vvep_vvoy_id` (`vvep_vvoy_id`),
+  KEY `vvep_fcrn_id` (`vvep_fcrn_id`),
+  KEY `vvep_base_fcrn_id` (`vvep_base_fcrn_id`),
+  KEY `vvep_vepo_id` (`vvep_vepo_id`),
+  CONSTRAINT `vvep_voyage_expenses_plan_ibfk_1` FOREIGN KEY (`vvep_vvoy_id`) REFERENCES `vvoy_voyage` (`vvoy_id`),
+  CONSTRAINT `vvep_voyage_expenses_plan_ibfk_3` FOREIGN KEY (`vvep_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`),
+  CONSTRAINT `vvep_voyage_expenses_plan_ibfk_4` FOREIGN KEY (`vvep_base_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`),
+  CONSTRAINT `vvep_voyage_expenses_plan_ibfk_5` FOREIGN KEY (`vvep_vepo_id`) REFERENCES `vepo_expenses_positions` (`vepo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vvpo_voyage_point" view="colnames">
+<left>802</left>
+<top>79</top>
+<width>190</width>
+<height>315</height>
+<sql_create_table>CREATE TABLE `vvpo_voyage_point` (
+  `vvpo_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vvpo_vvoy_id` int(10) unsigned NOT NULL,
+  `vvpo_vpnt_id` smallint(5) unsigned DEFAULT NULL,
+  `vvpo_sqn` tinyint(3) unsigned DEFAULT NULL,
+  `vvpo_plan_start_date` datetime DEFAULT NULL,
+  `vvpo_plan_end_date` datetime DEFAULT NULL,
+  `vvpo_plan_km` smallint(5) unsigned DEFAULT NULL,
+  `vvpo_plan_fuel_coefficient` decimal(2,2) DEFAULT NULL,
+  `vvpo_plan_fuel_price` decimal(10,2) DEFAULT NULL,
+  `vvpo_plan_fcrn_id` tinyint(3) unsigned DEFAULT NULL,
+  `vvpo_notes` text,
+  `vvpo_start_odo` int(10) unsigned DEFAULT NULL,
+  `vvpo_end_odo` int(10) unsigned DEFAULT NULL,
+  `vvpo_real_start_date` datetime DEFAULT NULL,
+  `vvpo_real_end_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`vvpo_id`),
+  KEY `vvpo_vvoy_id` (`vvpo_vvoy_id`),
+  KEY `vvpo_vpnt_id` (`vvpo_vpnt_id`),
+  KEY `vvpo_plan_fcrn_id` (`vvpo_plan_fcrn_id`),
+  CONSTRAINT `vvpo_voyage_point_ibfk_3` FOREIGN KEY (`vvpo_plan_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`),
+  CONSTRAINT `vvpo_voyage_point_ibfk_1` FOREIGN KEY (`vvpo_vvoy_id`) REFERENCES `vvoy_voyage` (`vvoy_id`),
+  CONSTRAINT `vvpo_voyage_point_ibfk_2` FOREIGN KEY (`vvpo_vpnt_id`) REFERENCES `vpnt_point` (`vpnt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vxpr_voyage_x_person" view="colnames">
+<left>637</left>
+<top>62</top>
+<width>157</width>
+<height>126</height>
+<sql_create_table>CREATE TABLE `vxpr_voyage_x_person` (
+  `vxpr_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vxpr_pprs_id` smallint(5) unsigned DEFAULT NULL,
+  `vxpr_vvoy_id` int(10) unsigned DEFAULT NULL,
+  `vxpr_notes` text,
+  PRIMARY KEY (`vxpr_id`),
+  KEY `vxpr_vvoy_id` (`vxpr_vvoy_id`),
+  KEY `vxpr_pprs_id` (`vxpr_pprs_id`),
+  CONSTRAINT `vxpr_voyage_x_person_ibfk_2` FOREIGN KEY (`vxpr_pprs_id`) REFERENCES `pprs_person` (`pprs_id`),
+  CONSTRAINT `vxpr_voyage_x_person_ibfk_1` FOREIGN KEY (`vxpr_vvoy_id`) REFERENCES `vvoy_voyage` (`vvoy_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="pprs_person" view="colnames">
+<left>458</left>
+<top>56</top>
+<width>149</width>
+<height>110</height>
+<sql_create_table>CREATE TABLE `pprs_person` (
+  `pprs_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `pprs_first_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT 'First name',
+  `pprs_second_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT 'Last name',
+  PRIMARY KEY (`pprs_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="ccnt_country" view="colnames">
+<left>1231</left>
+<top>83</top>
+<width>112</width>
+<height>158</height>
+<sql_create_table>CREATE TABLE `ccnt_country` (
+  `ccnt_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `ccnt_name` varchar(200) NOT NULL,
+  `ccnt_code` char(3) CHARACTER SET ascii DEFAULT NULL,
+  `ccnt_icao_a2` varchar(2) NOT NULL DEFAULT '',
+  `ccnt_icao_a3` varchar(3) NOT NULL DEFAULT '',
+  `ccnt_icao_n3` varchar(3) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ccnt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vcnt_contract" view="colnames">
+<left>78</left>
+<top>66</top>
+<width>153</width>
+<height>147</height>
+<sql_create_table>CREATE TABLE `vcnt_contract` (
+  `vcnt_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `vcnt_sys_ccmp_id` int(10) unsigned NOT NULL,
+  `vcnt_client_ccmp_id` int(10) unsigned NOT NULL,
+  `vcnt_date_from` date DEFAULT NULL,
+  `vcnt_date_to` date DEFAULT NULL,
+  `vcnt_status` enum('Old','Actual') NOT NULL,
+  `vcnt_notes` text,
+  PRIMARY KEY (`vcnt_id`),
+  KEY `vcnt_sys_ccmp_id` (`vcnt_sys_ccmp_id`),
+  KEY `vcnt_client_ccmp_id` (`vcnt_client_ccmp_id`),
+  CONSTRAINT `vcnt_contract_ibfk_1` FOREIGN KEY (`vcnt_sys_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`),
+  CONSTRAINT `vcnt_contract_ibfk_2` FOREIGN KEY (`vcnt_client_ccmp_id`) REFERENCES `ccmp_company` (`ccmp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vtrc_truck" view="colnames">
+<left>37</left>
+<top>253</top>
+<width>199</width>
+<height>238</height>
+<sql_create_table>CREATE TABLE `vtrc_truck` (
+  `vtrc_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `vtrc_cmmp_id` int(10) unsigned DEFAULT NULL,
+  `vtrc_car_reg_nr` char(20) DEFAULT NULL,
+  `vtrc_year` smallint(6) DEFAULT NULL,
+  `vtrc_car_certificate_number` varchar(100) DEFAULT NULL,
+  `vtrc_self_weight` float(5,3) unsigned DEFAULT NULL,
+  `vtrc_fuel_consumption` float(3,1) DEFAULT NULL,
+  `vtrc_year_mileage` smallint(5) unsigned DEFAULT NULL,
+  `vtrc_leased_from_cmmp_id` int(10) unsigned DEFAULT NULL,
+  `vtrc_purchase_value` float(8,2) unsigned DEFAULT NULL,
+  `vtrc_notes` text,
+  PRIMARY KEY (`vtrc_id`),
+  KEY `vtrc_cmmp_id` (`vtrc_cmmp_id`),
+  KEY `vtrc_leased_from_cmmp_id` (`vtrc_leased_from_cmmp_id`),
+  CONSTRAINT `vtrc_truck_ibfk_1` FOREIGN KEY (`vtrc_cmmp_id`) REFERENCES `ccmp_company` (`ccmp_id`),
+  CONSTRAINT `vtrc_truck_ibfk_2` FOREIGN KEY (`vtrc_leased_from_cmmp_id`) REFERENCES `ccmp_company` (`ccmp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vvex_voyage_expenses" view="colnames">
+<left>656</left>
+<top>453</top>
+<width>148</width>
+<height>238</height>
+<sql_create_table>CREATE TABLE `vvex_voyage_expenses` (
+  `vvex_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vvex_vvoy_id` int(10) unsigned NOT NULL,
+  `vvex_vepp_id` int(5) unsigned DEFAULT NULL COMMENT 'izdevumu pozicija',
+  `vvex_vepo_id` smallint(5) unsigned DEFAULT NULL,
+  `vvex_cunt_id` tinyint(3) unsigned NOT NULL COMMENT 'unit id',
+  `vvex_count` decimal(10,3) unsigned NOT NULL,
+  `vvex_price` decimal(10,2) unsigned NOT NULL,
+  `vvex_fcrn_id` tinyint(3) unsigned NOT NULL,
+  `vvex_total` decimal(10,2) DEFAULT NULL,
+  `vvex_base_fcrn_id` tinyint(3) unsigned NOT NULL,
+  `vvex_base_total` decimal(10,2) DEFAULT NULL,
+  `vvex_notes` text,
+  PRIMARY KEY (`vvex_id`),
+  KEY `vvep_vvoy_id` (`vvex_vvoy_id`),
+  KEY `vvep_vepp_id` (`vvex_vepp_id`),
+  KEY `vvex_fcrn_id` (`vvex_fcrn_id`),
+  KEY `vvex_base_fcrn_id` (`vvex_base_fcrn_id`),
+  KEY `vvex_vepo_id` (`vvex_vepo_id`),
+  CONSTRAINT `vvex_voyage_expenses_ibfk_5` FOREIGN KEY (`vvex_vepo_id`) REFERENCES `vepo_expenses_positions` (`vepo_id`),
+  CONSTRAINT `vvex_voyage_expenses_ibfk_1` FOREIGN KEY (`vvex_vvoy_id`) REFERENCES `vvoy_voyage` (`vvoy_id`),
+  CONSTRAINT `vvex_voyage_expenses_ibfk_2` FOREIGN KEY (`vvex_vepp_id`) REFERENCES `vvep_voyage_expenses_plan` (`vvep_id`),
+  CONSTRAINT `vvex_voyage_expenses_ibfk_3` FOREIGN KEY (`vvex_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`),
+  CONSTRAINT `vvex_voyage_expenses_ibfk_4` FOREIGN KEY (`vvex_base_fcrn_id`) REFERENCES `fcrn_currency` (`fcrn_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="vepo_expenses_positions" view="colnames">
+<left>830</left>
+<top>562</top>
+<width>105</width>
+<height>94</height>
+<sql_create_table>CREATE TABLE `vepo_expenses_positions` (
+  `vepo_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `vepo_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`vepo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>

@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * This is the model base class for the table "vvcl_voyage_client".
+ *
+ * Columns in table "vvcl_voyage_client" available as properties of the model:
+ * @property string $vvcl_id
+ * @property string $vvcl_vvoy_id
+ * @property string $vvcl_ccmp_id
+ * @property integer $vvcl_vcnt_id
+ * @property string $vvcl_notes
+ * @property string $vvcl_freight
+ * @property integer $vvcl_fcrn_id
+ *
+ * Relations of table "vvcl_voyage_client" available as properties of the model:
+ * @property VvoyVoyage $vvclVvoy
+ * @property CcmpCompany $vvclCcmp
+ * @property VcntContract $vvclVcnt
+ * @property FcrnCurrency $vvclFcrn
+ */
+abstract class BaseVvclVoyageClient extends CActiveRecord
+{
+
+    public static function model($className = __CLASS__)
+    {
+        return parent::model($className);
+    }
+
+    public function tableName()
+    {
+        return 'vvcl_voyage_client';
+    }
+
+    public function rules()
+    {
+        return array_merge(
+            parent::rules(), array(
+                array('vvcl_vvoy_id', 'required'),
+                array('vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvcl_vcnt_id, vvcl_fcrn_id', 'numerical', 'integerOnly' => true),
+                array('vvcl_vvoy_id, vvcl_ccmp_id', 'length', 'max' => 10),
+                array('vvcl_freight', 'length', 'max' => 8),
+                array('vvcl_notes', 'safe'),
+                array('vvcl_id, vvcl_vvoy_id, vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id', 'safe', 'on' => 'search'),
+            )
+        );
+    }
+
+    public function getItemLabel()
+    {
+        return (string) $this->vvcl_vvoy_id;
+    }
+
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(), array(
+                'savedRelated' => array(
+                    'class' => '\GtcSaveRelationsBehavior'
+                )
+            )
+        );
+    }
+
+    public function relations()
+    {
+        return array_merge(
+            parent::relations(), array(
+                'vvclVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vvcl_vvoy_id'),
+                'vvclCcmp' => array(self::BELONGS_TO, 'CcmpCompany', 'vvcl_ccmp_id'),
+                'vvclVcnt' => array(self::BELONGS_TO, 'VcntContract', 'vvcl_vcnt_id'),
+                'vvclFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vvcl_fcrn_id'),
+            )
+        );
+    }
+
+    public function attributeLabels()
+    {
+        return array(
+            'vvcl_id' => Yii::t('VvoyModule.model', 'Vvcl'),
+            'vvcl_vvoy_id' => Yii::t('VvoyModule.model', 'Vvcl Vvoy'),
+            'vvcl_ccmp_id' => Yii::t('VvoyModule.model', 'Vvcl Ccmp'),
+            'vvcl_vcnt_id' => Yii::t('VvoyModule.model', 'Vvcl Vcnt'),
+            'vvcl_notes' => Yii::t('VvoyModule.model', 'Vvcl Notes'),
+            'vvcl_freight' => Yii::t('VvoyModule.model', 'Vvcl Freight'),
+            'vvcl_fcrn_id' => Yii::t('VvoyModule.model', 'Vvcl Fcrn'),
+        );
+    }
+
+    public function searchCriteria($criteria = null)
+    {
+        if (is_null($criteria)) {
+            $criteria = new CDbCriteria;
+        }
+
+        $criteria->compare('t.vvcl_id', $this->vvcl_id, true);
+        $criteria->compare('t.vvcl_vvoy_id', $this->vvcl_vvoy_id);
+        $criteria->compare('t.vvcl_ccmp_id', $this->vvcl_ccmp_id);
+        $criteria->compare('t.vvcl_vcnt_id', $this->vvcl_vcnt_id);
+        $criteria->compare('t.vvcl_notes', $this->vvcl_notes, true);
+        $criteria->compare('t.vvcl_freight', $this->vvcl_freight, true);
+        $criteria->compare('t.vvcl_fcrn_id', $this->vvcl_fcrn_id);
+
+
+        return $criteria;
+
+    }
+
+}
