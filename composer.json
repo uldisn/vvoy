@@ -1,0 +1,13 @@
+{
+    "name": "uldisn/vvoy",
+    "description": "Voyage",
+    "keywords": ["erp","yii","phundament"],
+    "type": "yii-app",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Uldis Nelsons",
+            "email": "uldisnelsons@gmail.com"
+        }
+    ]
+}
