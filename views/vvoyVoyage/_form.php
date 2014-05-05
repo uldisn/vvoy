@@ -54,39 +54,6 @@
                         </div>
                     </div>
                     <?php  ?>
-
-                    <?php  ?>
-                    <div class="control-group">
-                        <div class='control-label'>
-                            <?php echo $form->labelEx($model, 'vvoy_ccmp_id') ?>
-                        </div>
-                        <div class='controls'>
-                            <span class="tooltip-wrapper" data-toggle='tooltip' data-placement="right"
-                                 title='<?php echo (($t = Yii::t('VvoyModule.model', 'tooltip.vvoy_ccmp_id')) != 'tooltip.vvoy_ccmp_id')?$t:'' ?>'>
-                                <?php
-                            $widget_criteria = new CDbCriteria();
-                            if(Yii::app()->sysCompany->getActiveCompany()){
-                                $widget_criteria->compare('t.ccmp_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
-                            }                                
-                            $this->widget(
-                                '\GtcRelation',
-                                array(
-                                    'model' => $model,
-                                    'relation' => 'vvoyCcmp',
-                                    'criteria' => $widget_criteria,
-                                    'fields' => 'itemLabel',
-                                    'allowEmpty' => true,
-                                    'style' => 'dropdownlist',
-                                    'htmlOptions' => array(
-                                        'checkAll' => 'all'
-                                    ),
-                                )
-                                );
-                            echo $form->error($model,'vvoy_ccmp_id')
-                            ?>                            </span>
-                        </div>
-                    </div>
-                    <?php  ?>                
                 
                     <?php  ?>
                     <div class="control-group">

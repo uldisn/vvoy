@@ -7,6 +7,7 @@
  * @property integer $vcnt_id
  * @property string $vcnt_sys_ccmp_id
  * @property string $vcnt_client_ccmp_id
+ * @property string $vcnt_number
  * @property string $vcnt_date_from
  * @property string $vcnt_date_to
  * @property string $vcnt_status
@@ -40,11 +41,12 @@ abstract class BaseVcntContract extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vcnt_sys_ccmp_id, vcnt_client_ccmp_id, vcnt_status', 'required'),
-                array('vcnt_date_from, vcnt_date_to, vcnt_notes', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vcnt_number, vcnt_date_from, vcnt_date_to, vcnt_notes', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vcnt_sys_ccmp_id, vcnt_client_ccmp_id', 'length', 'max' => 10),
+                array('vcnt_number', 'length', 'max' => 50),
                 array('vcnt_status', 'length', 'max' => 6),
                 array('vcnt_date_from, vcnt_date_to, vcnt_notes', 'safe'),
-                array('vcnt_id, vcnt_sys_ccmp_id, vcnt_client_ccmp_id, vcnt_date_from, vcnt_date_to, vcnt_status, vcnt_notes', 'safe', 'on' => 'search'),
+                array('vcnt_id, vcnt_sys_ccmp_id, vcnt_client_ccmp_id, vcnt_number, vcnt_date_from, vcnt_date_to, vcnt_status, vcnt_notes', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -82,6 +84,7 @@ abstract class BaseVcntContract extends CActiveRecord
             'vcnt_id' => Yii::t('VvoyModule.model', 'Vcnt'),
             'vcnt_sys_ccmp_id' => Yii::t('VvoyModule.model', 'Vcnt Sys Ccmp'),
             'vcnt_client_ccmp_id' => Yii::t('VvoyModule.model', 'Vcnt Client Ccmp'),
+            'vcnt_number' => Yii::t('VvoyModule.model', 'Vcnt Number'),
             'vcnt_date_from' => Yii::t('VvoyModule.model', 'Vcnt Date From'),
             'vcnt_date_to' => Yii::t('VvoyModule.model', 'Vcnt Date To'),
             'vcnt_status' => Yii::t('VvoyModule.model', 'Vcnt Status'),
@@ -130,6 +133,7 @@ abstract class BaseVcntContract extends CActiveRecord
         $criteria->compare('t.vcnt_id', $this->vcnt_id);
         $criteria->compare('t.vcnt_sys_ccmp_id', $this->vcnt_sys_ccmp_id);
         $criteria->compare('t.vcnt_client_ccmp_id', $this->vcnt_client_ccmp_id);
+        $criteria->compare('t.vcnt_number', $this->vcnt_number, true);
         $criteria->compare('t.vcnt_date_from', $this->vcnt_date_from, true);
         $criteria->compare('t.vcnt_date_to', $this->vcnt_date_to, true);
         $criteria->compare('t.vcnt_status', $this->vcnt_status, true);

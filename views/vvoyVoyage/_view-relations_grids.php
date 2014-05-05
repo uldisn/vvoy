@@ -1,10 +1,4 @@
 
-<!--
-<h2>
-    <?php echo Yii::t('VvoyModule.crud', 'Relations') ?></h2>
--->
-
-
 <?php Yii::beginProfile('vvcl_vvoy_id.view.grid'); ?>
 <h3>
     <?php 
@@ -56,12 +50,8 @@ $this->widget('TbGridView',
     array(
         'id' => 'vvcl-voyage-client-grid',
         'dataProvider' => $model->search(),
-        #'responsiveTable' => true,
         'template' => '{items}',
-        'pager' => array(
-            'class' => 'TbPager',
-            'displayFirstAndLast' => true,
-        ),
+        'htmlOptions' => array('class'=>'grid-view-no-details'),
         'columns' => array(
             array(
                 'class' => 'editable.EditableColumn',
@@ -125,11 +115,11 @@ $this->widget('TbGridView',
         )
     )
 );
+
+Yii::endProfile('VvclVoyageClient.view.grid');
+
+Yii::beginProfile('vvep_vvoy_id.view.grid'); 
 ?>
-
-<?php Yii::endProfile('VvclVoyageClient.view.grid'); ?>
-
-<?php Yii::beginProfile('vvep_vvoy_id.view.grid'); ?>
 <h3>
     <?php 
     echo Yii::t('VvoyModule.model', 'Vvep Voyage Expenses Plan') . ' '; 
@@ -167,6 +157,22 @@ $this->widget('TbGridView',
             ),                 
         )
     );        
+    echo '&nbsp;';
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'Button', 
+            'type' => 'success', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-refresh',
+            'htmlOptions' => array(
+                'onclick' => '$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");',
+                'title' => Yii::t('VvoyModule.mode', 'Recalc'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    
     ?>
 </h3> 
  
@@ -180,12 +186,8 @@ $this->widget('TbGridView',
     array(
         'id' => 'vvep-voyage-expenses-plan-grid',
         'dataProvider' => $model->search(),
-        #'responsiveTable' => true,
         'template' => '{items}',
-        'pager' => array(
-            'class' => 'TbPager',
-            'displayFirstAndLast' => true,
-        ),
+        'htmlOptions' => array('class'=>'grid-view-no-details'),
         'columns' => array(
             array(
                 'class' => 'editable.EditableColumn',
@@ -203,7 +205,6 @@ $this->widget('TbGridView',
                 'name' => 'vvep_count',
                 'editable' => array(
                     'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                    //'placement' => 'right',
                 )
             ),
             array(
@@ -277,12 +278,10 @@ $this->widget('TbGridView',
         )
     )
 );
+
+Yii::endProfile('VvepVoyageExpensesPlan.view.grid');
+Yii::beginProfile('vvpo_vvoy_id.view.grid'); 
 ?>
-
-<?php Yii::endProfile('VvepVoyageExpensesPlan.view.grid'); ?>
-
-
-<?php Yii::beginProfile('vvpo_vvoy_id.view.grid'); ?>
 <h3>
     <?php 
     echo Yii::t('VvoyModule.model', 'Vvpo Voyage Point') . ' '; 
@@ -333,12 +332,8 @@ $this->widget('TbGridView',
     array(
         'id' => 'vvpo-voyage-point-grid',
         'dataProvider' => $model->search(),
-        #'responsiveTable' => true,
         'template' => '{items}',
-        'pager' => array(
-            'class' => 'TbPager',
-            'displayFirstAndLast' => true,
-        ),
+        'htmlOptions' => array('class'=>'grid-view-no-details'),
         'columns' => array(
             array(
                 //tinyint(3) unsigned
@@ -478,11 +473,12 @@ $this->widget('TbGridView',
         )
     )
 );
+
+Yii::endProfile('VvpoVoyagePoint.view.grid');
+
+Yii::beginProfile('vxpr_vvoy_id.view.grid'); 
+
 ?>
-
-<?php Yii::endProfile('VvpoVoyagePoint.view.grid'); ?>
-
-<?php Yii::beginProfile('vxpr_vvoy_id.view.grid'); ?>
 <h3>
     <?php 
     echo Yii::t('VvoyModule.model', 'Vxpr Voyage Xperson') . ' '; 
@@ -533,12 +529,8 @@ $this->widget('TbGridView',
     array(
         'id' => 'vxpr-voyage-xperson-grid',
         'dataProvider' => $model->search(),
-        #'responsiveTable' => true,
         'template' => '{items}',
-        'pager' => array(
-            'class' => 'TbPager',
-            'displayFirstAndLast' => true,
-        ),
+        'htmlOptions' => array('class'=>'grid-view-no-details'),
         'columns' => array(
             array(
                 'class' => 'editable.EditableColumn',
@@ -546,7 +538,7 @@ $this->widget('TbGridView',
                 'editable' => array(
                     'type' => 'select',
                     'url' => $this->createUrl('//vvoy/vxprVoyageXPerson/editableSaver'),
-                    'source' => CHtml::listData(PprsPerson::model()->activeCompanyUsers()->findAll(array('limit' => 1000)), 'pprs_id', 'itemLabel'),                        
+                    'source' => CHtml::listData(PprsPerson::model()->filterGroup(1)->findAll(array('limit' => 1000)), 'pprs_id', 'itemLabel'),                        
                     //'placement' => 'right',
                 )
             ),
@@ -573,6 +565,5 @@ $this->widget('TbGridView',
         )
     )
 );
-?>
 
-<?php Yii::endProfile('VxprVoyageXPerson.view.grid'); ?>
+Yii::endProfile('VxprVoyageXPerson.view.grid');

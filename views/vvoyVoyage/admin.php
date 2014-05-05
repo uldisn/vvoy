@@ -7,15 +7,21 @@ $this->setPageTitle(
 ?>
 
     <h1>
+        <?php $this->widget("bootstrap.widgets.TbButton", array(
+                        "label"=>Yii::t("VvoyModule.crud","Create"),
+                        "icon"=>"icon-plus",
+                        "size"=>"large",
+                        "type"=>"success",
+                        "url"=>array("create"),
+                        "visible"=>(Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Create"))
+                   )); ?>
+        &nbsp<i class="icon-road"></i>  
         <?php echo Yii::t('VvoyModule.model', 'Vvoy Voyages Manage'); ?>
     </h1>
 
+<?php 
 
-<?php $this->renderPartial("_toolbar", array("model" => $model)); ?>
-<?php Yii::beginProfile('VvoyVoyage.view.grid'); ?>
-
-
-<?php
+Yii::beginProfile('VvoyVoyage.view.grid'); 
 $this->widget('TbGridView',
     array(
         'id' => 'vvoy-voyage-grid',
@@ -28,10 +34,6 @@ $this->widget('TbGridView',
             'displayFirstAndLast' => true,
         ),
         'columns' => array(
-            array(
-                'name' => 'vvoy_ccmp_id',
-                'value' => '$data->vvoyCcmp->ccmp_name',                
-            ),
             array(
                 'name' => 'vvoy_number',
             ),
@@ -74,18 +76,14 @@ $this->widget('TbGridView',
                 'class' => 'TbButtonColumn',
                 'buttons' => array(
                     'view' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.View")'),
-                    'update' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Update")'),
-                    'delete' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Delete")'),
+                    'update' => array('visible' => 'FALSE'),
+                    'delete' => array('visible' => 'FALSE'),
                 ),
                 'viewButtonUrl' => 'Yii::app()->controller->createUrl("view", array("vvoy_id" => $data->vvoy_id))',
-                'updateButtonUrl' => 'Yii::app()->controller->createUrl("update", array("vvoy_id" => $data->vvoy_id))',
-                'deleteButtonUrl' => 'Yii::app()->controller->createUrl("delete", array("vvoy_id" => $data->vvoy_id))',
                 'viewButtonOptions'=>array('data-toggle'=>'tooltip'),   
-                'updateButtonOptions'=>array('data-toggle'=>'tooltip'),   
-                'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),   
             ),
         )
     )
 );
-?>
-<?php Yii::endProfile('VvoyVoyage.view.grid'); ?>
+
+Yii::endProfile('VvoyVoyage.view.grid');

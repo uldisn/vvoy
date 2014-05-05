@@ -125,9 +125,21 @@
                             ?>                            </span>
                         </div>
                     </div>
-                    <?php  ?>
-                                    
-                    <?php  ?>
+
+                    <div class="control-group">
+                        <div class='control-label'>
+                            <?php echo $form->labelEx($model, 'vcnt_number') ?>
+                        </div>
+                        <div class='controls'>
+                            <span class="tooltip-wrapper" data-toggle='tooltip' data-placement="right"
+                                 title='<?php echo (($t = Yii::t('VvoyModule.model', 'tooltip.vcnt_number')) != 'tooltip.vcnt_number')?$t:'' ?>'>
+                                <?php
+                            echo $form->textField($model, 'vcnt_number', array('size' => 50, 'maxlength' => 50));
+                            echo $form->error($model,'vcnt_number')
+                            ?>                            </span>
+                        </div>
+                    </div>                
+                
                     <div class="control-group">
                         <div class='control-label'>
                             <?php echo $form->labelEx($model, 'vcnt_status') ?>

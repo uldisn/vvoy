@@ -1,127 +1,176 @@
 <?php
-    $this->setPageTitle(
+$this->setPageTitle(
         Yii::t('VvoyModule.model', 'Vvoy Voyage')
         . ' - '
         . Yii::t('VvoyModule.crud', 'View')
-        . ': '   
-        . $model->getItemLabel()            
-);    
+        . ': '
+        . $model->getItemLabel()
+);
+$cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
+    "icon" => "chevron-left",
+    "size" => "large",
+    "url" => (isset($_GET["returnUrl"])) ? $_GET["returnUrl"] : array("{$this->id}/admin"),
+    "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.View")),
+    "htmlOptions" => array(
+        "class" => "search-button",
+        "data-toggle" => "tooltip",
+        "title" => Yii::t("VvoyModule.crud", "Cancel"),
+    )
+        ), TRUE);
 ?>
 
-
+<div class="clearfix">
+    <div class="btn-toolbar pull-left">
+        <div class="btn-group">
+            <?php
+            echo $cancel_button;
+//            $this->widget("bootstrap.widgets.TbButton", array(
+//                "label" => Yii::t("VvoyModule.crud", "Delete"),
+//                "type" => "danger",
+//                "icon" => "icon-trash icon-white",
+//                "size" => "large",
+//                "htmlOptions" => array(
+//                    "submit" => array("delete", "vvoy_id" => $model->{$model->tableSchema->primaryKey}, "returnUrl" => (Yii::app()->request->getParam("returnUrl")) ? Yii::app()->request->getParam("returnUrl") : $this->createUrl("admin")),
+//                    "confirm" => Yii::t("VvoyModule.crud", "Do you want to delete this item?")
+//                ),
+//                "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Delete"))
+//            ));
+            ?>                    
+        </div>
+    </div>
     <h1>
-        <?php echo Yii::t('VvoyModule.model','Vvoy Voyage')?>
+        &nbsp<i class="icon-road"></i>  
+        <?php echo '' . Yii::t('VvoyModule.model', 'Vvoy Voyage'); ?>
     </h1>
-
-<?php $this->renderPartial("_toolbar", array("model"=>$model)); ?>
-
+</div>
 <div class="row">
-    <div class="span5">
+    <div class="span4">
         <?php
         $this->widget(
-            'TbDetailView',
-            array(
-                'data' => $model,
-                'attributes' => array(
-            array(
-                'name' => 'vvoy_ccmp_id',
-                'value' => ($model->vvoyCcmp !== null)?CHtml::link(
-                            '<i class="icon icon-circle-arrow-left"></i> '.$model->vvoyCcmp->itemLabel,
-                            array('/d2company/ccmpCompany/update','ccmp_id' => $model->vvoyCcmp->ccmp_id),
-                            array('class' => '')):'n/a',
-                'type' => 'html',
-            ),
-            array(
-                        'name' => 'vvoy_number',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
+                'TbDetailView', array(
+            'data' => $model,
+            'attributes' => array(
+                array(
+                    'name' => 'vvoy_number',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField', 
                             array(
                                 'model' => $model,
                                 'attribute' => 'vvoy_number',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
-                            true
+                            ), true
                         )
-                    ),
-        array(
-            'name' => 'vvoy_vtrc_id',
-            'value' => $model->vvoyVtrc->itemLabel,
-            'type' => 'html',
-        ),
-        array(
-            'name' => 'vvoy_vtrl_id',
-            'value' => $model->vvoyVtrl->itemLabel,
-            'type' => 'html',
-        ),
-        array(
-                        'name' => 'vvoy_status',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
+                ),
+                array(
+                    'name' => 'vvoy_vtrc_id',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField', 
                             array(
                                 'model' => $model,
+                                'type' => 'select',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'source' => CHtml::listData(VtrcTruck::model()->findAll(array('limit' => 1000)), 'vtrc_id', 'itemLabel'),                        
+                                'attribute' => 'vvoy_vtrc_id',
+
+                            ), true
+                        )                    
+                    
+                ),
+                array(
+                    'name' => 'vvoy_vtrl_id',
+                    'value' => $model->vvoyVtrl->itemLabel,
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField', 
+                            array(
+                                'model' => $model,
+                                'type' => 'select',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'source' => CHtml::listData(VtrlTrailer::model()->findAll(array('limit' => 1000)), 'vtrl_id', 'itemLabel'),                        
+                                'attribute' => 'vvoy_vtrl_id',
+
+                            ), true
+                        )                    
+                    
+                ),
+                array(
+                    'name' => 'vvoy_status',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                            'EditableField', array(
+                                'model' => $model,
+                                'type' => 'select',
                                 'attribute' => 'vvoy_status',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
-                            true
-                        )
-                    ),
-        array(
-            'name' => 'vvoy_fcrn_id',
-            'value' => $model->vvoyFcrn->itemLabel,
-            'type' => 'html',
-        ),
-array(
-                        'name' => 'vvoy_start_date',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
+                                'source' => $model->getEnumFieldLabels('vvoy_status'),
+                            ), true
+                    )
+                ),
+                array(
+                    'name' => 'vvoy_fcrn_id',
+                    //'value' => $model->vvoyFcrn->itemLabel,
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                            'EditableField', array(
+                                'model' => $model,
+                                'type' => 'select',
+                                'attribute' => 'vvoy_fcrn_id',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
+                            ), true
+                    )                    
+                ),
+                array(
+                    'name' => 'vvoy_start_date',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                            'EditableField', 
                             array(
+                                'type' => 'datetime',
                                 'model' => $model,
                                 'attribute' => 'vvoy_start_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
+                                //'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
+                                //'viewformat' => 'yyyy-mm-dd hh:00', //format for display                                
+                            ), 
                             true
-                        )
-                    ),
-array(
-                        'name' => 'vvoy_end_date',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
-                            array(
-                                'model' => $model,
-                                'attribute' => 'vvoy_end_date',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
-                            true
-                        )
-                    ),
-            array(
-                        'name' => 'vvoy_notes',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
-                            array(
-                                'model' => $model,
-                                'attribute' => 'vvoy_notes',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
-                            true
-                        )
-                    ),
-                    
-           ),
-     
-        )); ?>
+                    )
+                ),
+                array(
+                    'name' => 'vvoy_end_date',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                            'EditableField', array(
+                        'model' => $model,
+                        'attribute' => 'vvoy_end_date',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                            ), true
+                    )
+                ),
+                array(
+                    'name' => 'vvoy_notes',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                            'EditableField', array(
+                        'model' => $model,
+                        'attribute' => 'vvoy_notes',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                            ), true
+                    )
+                ),
+            ),
+        ));
+        ?>
     </div>
 
 
-    <div class="span7">
+    <div class="span8">
         <div class="well">
-            <?php $this->renderPartial('_view-relations_grids',array('modelMain' => $model)); ?>        </div>
+        <?php $this->renderPartial('_view-relations_grids', array('modelMain' => $model)); ?>        </div>
     </div>
 </div>
 
-<?php $this->renderPartial("_toolbar", array("model"=>$model)); ?>
+        <?php
+        echo $cancel_button?>

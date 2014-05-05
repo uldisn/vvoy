@@ -20,7 +20,7 @@ class VepoExpensesPositions extends BaseVepoExpensesPositions
 
     public function getItemLabel()
     {
-        return parent::getItemLabel();
+        return (string) $this->vepo_name;
     }
 
     public function behaviors()
@@ -52,4 +52,40 @@ class VepoExpensesPositions extends BaseVepoExpensesPositions
         ));
     }
 
+    public function save($runValidation = true, $attributes = NULL) 
+    {
+        //set system company id
+        if ($this->isNewRecord && Yii::app()->sysCompany->getActiveCompany()){
+            $this->vepo_sys_ccmp_id = Yii::app()->sysCompany->getActiveCompany();
+        }              
+        
+        return parent::save($runValidation,$attributes);
+
+    }
+    
+    public function find($condition='',$params=array())
+    {
+        Yii::trace(get_class($this).'.find()','system.db.ar.CActiveRecord');
+        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+        
+        //criteria for trucks of SysCompanies
+        if(Yii::app()->sysCompany->getActiveCompany()){
+            $criteria->compare('t.vepo_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        }  
+        
+        return $this->query($criteria);
+    }
+    
+    public function findAll($condition='',$params=array())
+    {
+        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+        
+        //criteria for trucks of SysCompanies
+        if(Yii::app()->sysCompany->getActiveCompany()){
+            $criteria->compare('t.vepo_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        }          
+        return $this->query($criteria,true);
+    }        
+    
+    
 }

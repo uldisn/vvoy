@@ -7,11 +7,19 @@ $this->setPageTitle(
 
 ?>
     <h1>
+        <?php                    
+        $this->widget("bootstrap.widgets.TbButton", array(
+                        "label"=>Yii::t("VvoyModule.crud","Create"),
+                        "icon"=>"icon-plus",
+                        "size"=>"large",
+                        "type"=>"success",
+                        "url"=>array("create"),
+                        "visible"=>(Yii::app()->user->checkAccess("Vvoy.VepoExpensesPositions.*") || Yii::app()->user->checkAccess("Vvoy.VepoExpensesPositions.Create"))
+                   ));
+        ?>
         <?php echo Yii::t('VvoyModule.model', 'Vepo Expenses Positions Manag'); ?>
     </h1>
 
-
-<?php $this->renderPartial("_toolbar", array("model" => $model)); ?>
 <div class="row">
     <div class="span7">
 <?php Yii::beginProfile('VepoExpensesPositions.view.grid'); ?>
@@ -33,6 +41,9 @@ $this->widget('TbGridView',
             array(
                 'name' => 'vepo_name',
             ),
+            array(
+                'name' => 'vepo_default',
+            ),            
             array(
                 'class' => 'TbButtonColumn',
                 'buttons' => array(

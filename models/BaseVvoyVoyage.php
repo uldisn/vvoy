@@ -5,7 +5,6 @@
  *
  * Columns in table "vvoy_voyage" available as properties of the model:
  * @property string $vvoy_id
- * @property string $vvoy_ccmp_id
  * @property string $vvoy_number
  * @property integer $vvoy_vtrc_id
  * @property integer $vvoy_vtrl_id
@@ -20,7 +19,6 @@
  * @property VvclVoyageClient[] $vvclVoyageClients
  * @property VvepVoyageExpensesPlan[] $vvepVoyageExpensesPlans
  * @property VvexVoyageExpenses[] $vvexVoyageExpenses
- * @property CcmpCompany $vvoyCcmp
  * @property VtrlTrailer $vvoyVtrl
  * @property FcrnCurrency $vvoyFcrn
  * @property VtrcTruck $vvoyVtrc
@@ -51,21 +49,21 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     {
         return array_merge(
             parent::rules(), array(
-                array('vvoy_ccmp_id, vvoy_vtrc_id, vvoy_fcrn_id', 'required'),
+                array('vvoy_vtrc_id, vvoy_fcrn_id', 'required'),
                 array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvoy_vtrc_id, vvoy_vtrl_id, vvoy_fcrn_id', 'numerical', 'integerOnly' => true),
-                array('vvoy_ccmp_id, vvoy_sys_ccmp_id', 'length', 'max' => 10),
                 array('vvoy_number', 'length', 'max' => 20),
                 array('vvoy_status', 'length', 'max' => 6),
+                array('vvoy_sys_ccmp_id', 'length', 'max' => 10),
                 array('vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
-                array('vvoy_id, vvoy_ccmp_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'safe', 'on' => 'search'),
+                array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'safe', 'on' => 'search'),
             )
         );
     }
 
     public function getItemLabel()
     {
-        return (string) $this->vvoy_ccmp_id;
+        return (string) $this->vvoy_number;
     }
 
     public function behaviors()
@@ -86,7 +84,6 @@ abstract class BaseVvoyVoyage extends CActiveRecord
                 'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
                 'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
                 'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),
-                'vvoyCcmp' => array(self::BELONGS_TO, 'CcmpCompany', 'vvoy_ccmp_id'),
                 'vvoyVtrl' => array(self::BELONGS_TO, 'VtrlTrailer', 'vvoy_vtrl_id'),
                 'vvoyFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vvoy_fcrn_id'),
                 'vvoyVtrc' => array(self::BELONGS_TO, 'VtrcTruck', 'vvoy_vtrc_id'),
@@ -100,7 +97,6 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     {
         return array(
             'vvoy_id' => Yii::t('VvoyModule.model', 'Vvoy'),
-            'vvoy_ccmp_id' => Yii::t('VvoyModule.model', 'Vvoy Ccmp'),
             'vvoy_number' => Yii::t('VvoyModule.model', 'Vvoy Number'),
             'vvoy_vtrc_id' => Yii::t('VvoyModule.model', 'Vvoy Vtrc'),
             'vvoy_vtrl_id' => Yii::t('VvoyModule.model', 'Vvoy Vtrl'),
@@ -154,7 +150,6 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         }
 
         $criteria->compare('t.vvoy_id', $this->vvoy_id, true);
-        $criteria->compare('t.vvoy_ccmp_id', $this->vvoy_ccmp_id);
         $criteria->compare('t.vvoy_number', $this->vvoy_number, true);
         $criteria->compare('t.vvoy_vtrc_id', $this->vvoy_vtrc_id);
         $criteria->compare('t.vvoy_vtrl_id', $this->vvoy_vtrl_id);

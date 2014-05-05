@@ -58,9 +58,86 @@ class VvoyVoyage extends BaseVvoyVoyage
         if ($this->isNewRecord && Yii::app()->sysCompany->getActiveCompany()){
             $this->vvoy_sys_ccmp_id = Yii::app()->sysCompany->getActiveCompany();
         }              
+        
+        //is new
+        $bIsNewRecord = $this->isNewRecord;
+        
+        //save
+        $r = parent::save($runValidation,$attributes);
+        
+        if(!$r){
+            return $r;
+        }
+        
+        
+        if(!$bIsNewRecord){
+            return true;
+        }
+        
+        // For new record add default records to voyage related tables        
+        //add one empty client
+        $vvcl = new VvclVoyageClient;
+        $vvcl->vvcl_vvoy_id = $this->vvoy_id;
+        $vvcl->vvcl_fcrn_id = $this->vvoy_fcrn_id;
+        $vvcl->save();
+            
 
-        return parent::save($runValidation,$attributes);
+        //add defeult expanse positions
+        $default_vepo = VepoExpensesPositions::model()->findAll('vepo_default = 1');
+        foreach ($default_vepo as $vepo) {
+            $vvep = new VvepVoyageExpensesPlan;
+            $vvep->vvep_vvoy_id = $this->vvoy_id;
+            $vvep->vvep_vepo_id = $vepo->vepo_id;
+            $vvep->vvep_fcrn_id = $this->vvoy_fcrn_id;
+            $vvep->save();
+        }
+        
+        //add first point
+        $vvpo = new VvpoVoyagePoint;
+        $vvpo->vvpo_vvoy_id = $this->vvoy_id;
+        $vvpo->vvpo_sqn = 1;
+        $vvpo->vvpo_plan_fcrn_id = $this->vvoy_fcrn_id;
+        $vvpo->save();
+
+        //add second point
+        $vvpo = new VvpoVoyagePoint;
+        $vvpo->vvpo_vvoy_id = $this->vvoy_id;
+        $vvpo->vvpo_sqn = 2;
+        $vvpo->vvpo_plan_fcrn_id = $this->vvoy_fcrn_id;
+        $vvpo->save();
+
+        //add driver empty
+        $vxpr = new VxprVoyageXPerson;
+        $vxpr->vxpr_vvoy_id = $this->vvoy_id;
+        $vxpr->save();
+
+        return true;
 
     }    
+    
+    public function findAll($condition='',$params=array())
+    {
+        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+        
+        //criteria for trucks of SysCompanies
+        if(Yii::app()->sysCompany->getActiveCompany()){
+            $criteria->compare('t.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        }          
+        return $this->query($criteria,true);
+    }       
 
+    public function findByPk($pk,$condition='',$params=array())
+    {
+        
+        $model = parent::findByPk($pk,$condition='',$params=array());
+
+		if (Yii::app()->sysCompany->getActiveCompany()){
+            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvoy_sys_ccmp_id){
+                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
+            }    
+        }           
+        
+        return $model;
+    }        
+    
 }

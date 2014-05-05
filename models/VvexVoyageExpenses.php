@@ -47,9 +47,55 @@ class VvexVoyageExpenses extends BaseVvexVoyageExpenses
         if (is_null($criteria)) {
             $criteria = new CDbCriteria;
         }
+        
+        if(Yii::app()->sysCompany->getActiveCompany()){
+            $criteria->join .= ' INNER JOIN vvoy_voyage v on vvoy_id = vvex_vvoy_id ';
+            $criteria->compare('v.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        }  
+        
         return new CActiveDataProvider(get_class($this), array(
             'criteria' => $this->searchCriteria($criteria),
         ));
     }
+    
+    public function save($runValidation = true, $attributes = NULL) 
+    {
+
+        //on change price or count recalc total
+        if(in_array('vvex_count',$attributes) || in_array('vvex_price',$attributes)){
+            $this->vvex_total = round($this->vvex_count * $this->vvex_price,2);
+            $attributes[] = 'vvex_total';
+        }
+
+        return parent::save($runValidation,$attributes);
+
+    }
+    
+    public function findAll($condition='',$params=array())
+    {
+        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+        
+        //criteria for trucks of SysCompanies
+        if(Yii::app()->sysCompany->getActiveCompany()){
+            $criteria->join .= ' INNER JOIN vvoy_voyage vs on vvoy_id = vvex_vvoy_id ';
+            $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());            
+        }          
+        return $this->query($criteria,true);
+    }        
+    
+    public function findByPk($pk,$condition='',$params=array())
+    {
+        
+        $model = parent::findByPk($pk,$condition='',$params=array());
+
+		if (Yii::app()->sysCompany->getActiveCompany()){
+            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvexVvoy->vvoy_sys_ccmp_id){
+                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
+            }    
+        }           
+        
+        return $model;
+    }     
+    
 
 }

@@ -11,15 +11,6 @@
         <?php echo $form->label($model, 'vvoy_id'); ?>
         <?php ; ?>
     </div>
-
-
-    
-    <div class="row">
-        <?php echo $form->label($model, 'vvoy_ccmp_id'); ?>
-        <?php echo $form->textField($model, 'vvoy_ccmp_id', array('size' => 10, 'maxlength' => 10)); ?>
-    </div>
-
-
     
     <div class="row">
         <?php echo $form->label($model, 'vvoy_number'); ?>

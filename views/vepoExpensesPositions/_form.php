@@ -36,9 +36,7 @@
                             ?>                            </span>
                         </div>
                     </div>
-                    <?php  ?>
-                                    
-                    <?php  ?>
+
                     <div class="control-group">
                         <div class='control-label'>
                             <?php echo $form->labelEx($model, 'vepo_name') ?>
@@ -52,8 +50,20 @@
                             ?>                            </span>
                         </div>
                     </div>
-                    <?php  ?>
-                
+
+                    <div class="control-group">
+                        <div class='control-label'>
+                            <?php echo $form->labelEx($model, 'vepo_default') ?>
+                        </div>
+                        <div class='controls'>
+                            <span class="tooltip-wrapper" data-toggle='tooltip' data-placement="right"
+                                 title='<?php echo (($t = Yii::t('VvoyModule.model', 'tooltip.vepo_default')) != 'tooltip.vepo_default')?$t:'' ?>'>
+                                <?php
+                            echo $form->checkBox($model, 'vepo_default');
+                            echo $form->error($model,'vepo_default')
+                            ?>                            </span>
+                        </div>
+                    </div>                
             </div>
         </div>
         <!-- main inputs -->

@@ -21,11 +21,18 @@ Yii::app()->clientScript->registerScript('search', "
 ?>
 
     <h1>
+        <?php $this->widget("bootstrap.widgets.TbButton", array(
+                        "label"=>Yii::t("VvoyModule.crud","Create"),
+                        "icon"=>"icon-plus",
+                        "size"=>"large",
+                        "type"=>"success",
+                        "url"=>array("create"),
+                        "visible"=>(Yii::app()->user->checkAccess("Vvoy.VcntContract.*") || Yii::app()->user->checkAccess("Vvoy.VcntContract.Create"))
+                   ));?>
+         &nbsp<i class="icon-certificate"></i>  
         <?php echo Yii::t('VvoyModule.model', 'Vcnt Contracts Manage'); ?>
     </h1>
 
-
-<?php $this->renderPartial("_toolbar", array("model" => $model)); ?>
 <?php Yii::beginProfile('VcntContract.view.grid'); ?>
 
 
@@ -46,6 +53,9 @@ $this->widget('TbGridView',
                 'name' => 'vcnt_client_ccmp_id',
                 'value' => '$data->vcntClientCcmp->ccmp_name',
             ),
+            array(
+                'name' => 'vcnt_number',
+            ),            
             array(
                 'name' => 'vcnt_date_from',
             ),

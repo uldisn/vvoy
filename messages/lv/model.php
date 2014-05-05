@@ -130,7 +130,6 @@ return array (
   'tooltip.vpnt_ccnt_id' => '',
   'tooltip.vpnt_id' => '',
   'tooltip.vpnt_name' => '',
-  'tooltip.vvoy_ccmp_id' => '',
   'tooltip.vvoy_end_date' => '',
   'tooltip.vvoy_fcrn_id' => '',
   'tooltip.vvoy_id' => '',
