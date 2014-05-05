@@ -17,6 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+  'Requested closed data.' => 'Pieprasīti slēgti dati',
   'Add new record' => 'Pievienot Jaunu Ierakstu',
   'List' => 'Saraksts',
   'Requested closed data.' => 'Pieprasīti Slēgti dati',

@@ -167,7 +167,7 @@ Yii::beginProfile('vvep_vvoy_id.view.grid');
             'icon' => 'icon-refresh',
             'htmlOptions' => array(
                 'onclick' => '$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");',
-                'title' => Yii::t('VvoyModule.mode', 'Recalc'),
+                'title' => Yii::t('VvoyModule.model', 'Recalc'),
                 'data-toggle' => 'tooltip',
             ),                 
         )
