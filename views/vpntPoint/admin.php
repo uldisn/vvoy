@@ -21,11 +21,19 @@ Yii::app()->clientScript->registerScript('search', "
 ?>
 
     <h1>
+        <?php 
+        $this->widget("bootstrap.widgets.TbButton", array(
+             "label"=>Yii::t("VvoyModule.crud","Create"),
+             "icon"=>"icon-plus",
+             "size"=>"large",
+             "type"=>"success",
+             "url"=>array("create"),
+             "visible"=>(Yii::app()->user->checkAccess("Vvoy.VpntPoint.*") || Yii::app()->user->checkAccess("Vvoy.VpntPoint.Create"))
+        ));        
+        ?>
+        &nbsp<i class="icon-map-marker"></i>  
         <?php echo Yii::t('VvoyModule.model', 'Vpnt Points Manage'); ?>
     </h1>
-
-
-<?php $this->renderPartial("_toolbar", array("model" => $model)); ?>
 <div class="row">
     <div class="span7">
 

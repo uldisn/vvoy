@@ -405,15 +405,17 @@ $this->widget('TbGridView',
                     //'placement' => 'right',
                 )
             ),
-            array(
-                //tinyint(3) unsigned
+           array(
                 'class' => 'editable.EditableColumn',
                 'name' => 'vvpo_plan_fcrn_id',
                 'editable' => array(
+                    'type' => 'select',
                     'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                    'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
                     //'placement' => 'right',
                 )
             ),
+            
             array(
                 'class' => 'editable.EditableColumn',
                 'name' => 'vvpo_notes',
