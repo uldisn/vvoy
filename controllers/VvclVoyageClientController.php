@@ -129,23 +129,20 @@ public function accessRules()
         $es->update();
     }
 
-    public function actionAjaxCreate($field, $value, $no_ajax = 0) 
+    public function actionAjaxCreate($field, $value) 
     {
-        $model = new VvclVoyageClient;
+        $model = new VvoyVoyage;
         $model->$field = $value;
         try {
             if ($model->save()) {
-                if($no_ajax){
-                    $this->redirect(Yii::app()->request->urlReferrer);
-                }            
                 return TRUE;
             }else{
                 return var_export($model->getErrors());
-            }
+            }            
         } catch (Exception $e) {
             throw new CHttpException(500, $e->getMessage());
         }
-    }
+    } 
     
     public function actionDelete($vvcl_id)
     {

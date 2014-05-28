@@ -61,10 +61,19 @@ public function accessRules()
         return true;
     }
 
-    public function actionView($vvpo_id)
+    public function actionView($vvpo_id, $ajax = false)
     {
         $model = $this->loadModel($vvpo_id);
-        $this->render('view', array('model' => $model,));
+        if($ajax){
+            $this->renderPartial('_view-relations_grids', 
+                    array(
+                        'modelMain' => $model,
+                        'ajax' => $ajax,
+                        )
+                    );
+        }else{
+            $this->render('view', array('model' => $model,));
+        }
     }
 
     public function actionCreate()
@@ -129,15 +138,12 @@ public function accessRules()
         $es->update();
     }
 
-    public function actionAjaxCreate($field, $value, $no_ajax = 0) 
+    public function actionAjaxCreate($field, $value) 
     {
         $model = new VvpoVoyagePoint;
         $model->$field = $value;
         try {
             if ($model->save()) {
-                if($no_ajax){
-                    $this->redirect(Yii::app()->request->urlReferrer);
-                }            
                 return TRUE;
             }else{
                 return var_export($model->getErrors());

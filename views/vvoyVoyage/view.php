@@ -80,7 +80,6 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                 ),
                 array(
                     'name' => 'vvoy_vtrl_id',
-                    'value' => $model->vvoyVtrl->itemLabel,
                     'type' => 'raw',
                     'value' => $this->widget(
                         'EditableField', 
@@ -168,7 +167,12 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
 
     <div class="span8">
         <div class="well">
-        <?php $this->renderPartial('_view-relations_grids', array('modelMain' => $model)); ?>        </div>
+        <?php $this->renderPartial('_view-relations_grids', 
+                    array(
+                        'modelMain' => $model,
+                        'ajax' => false,
+                        )
+                    ); ?>        </div>
     </div>
 </div>
 

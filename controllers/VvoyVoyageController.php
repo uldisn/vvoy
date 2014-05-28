@@ -62,10 +62,19 @@ public function accessRules()
         return true;
     }
 
-    public function actionView($vvoy_id)
+    public function actionView($vvoy_id,$ajax = false)
     {
         $model = $this->loadModel($vvoy_id);
-        $this->render('view', array('model' => $model,));
+        if($ajax){
+            $this->renderPartial('_view-relations_grids', 
+                    array(
+                        'modelMain' => $model,
+                        'ajax' => $ajax,
+                        )
+                    );
+        }else{
+            $this->render('view', array('model' => $model,));
+        }
     }
 
     public function actionCreate()
@@ -130,7 +139,7 @@ public function accessRules()
         $es->update();
     }
 
-    public function actionAjaxCreate($field, $value, $no_ajax = 0) 
+    public function actionAjaxCreate($field, $value, $no_ajax = false) 
     {
         $model = new VvoyVoyage;
         $model->$field = $value;
@@ -140,7 +149,9 @@ public function accessRules()
                     $this->redirect(Yii::app()->request->urlReferrer);
                 }            
                 return TRUE;
-            }
+            }else{
+                return var_export($model->getErrors());
+            }            
         } catch (Exception $e) {
             throw new CHttpException(500, $e->getMessage());
         }

@@ -65,7 +65,8 @@ class VvpoVoyagePoint extends BaseVvpoVoyagePoint
         //if not set vvpo_sqn, calculate it
         if($this->isNewRecord && empty($this->vvpo_sqn)){
             $criteria=new CDbCriteria;
-            $criteria->select='max(vvpo_sqn) + 1 AS next_sqn';
+            $criteria->select='max(ifnull(vvpo_sqn,0)) + 1 AS next_sqn';
+            $criteria->condition = 'vvpo_vvoy_id = ' . $this->vvpo_vvoy_id;
             $row = $this->model()->find($criteria);
             if(empty($row)){
                 $this->vvpo_sqn = 1;

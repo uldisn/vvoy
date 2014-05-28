@@ -142,7 +142,7 @@ return array (
   'Vvpo Real Start Date' => 'Start Date',
   'Vvpo Sqn' => 'Sequence',
   'Vvpo Start Odo' => 'Start Odometer',
-  'Vvpo Voyage Point' => 'Voyage Points',
+  'Vvpo Voyage Point' => 'Route',
   'Vvpo Vpnt' => 'Point',
   'Vxpr Notes' => 'Notes',
   'Vxpr Voyage Xperson' => 'Drivers',
