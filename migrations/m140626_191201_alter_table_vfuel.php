@@ -9,7 +9,7 @@ class m140626_191201_alter_table_vfuel extends CDbMigration
 	public function up()
 	{
 		$this->execute("
-            ALTER TABLE `eu`.`vfue_fuel`   
+          ALTER TABLE `vfue_fuel`   
               DROP COLUMN `vfue_ccnt_id`, 
               DROP COLUMN `vfue_company`, 
               DROP COLUMN `vfue_comapny_reg_number`, 
