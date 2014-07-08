@@ -8,7 +8,7 @@ class DashboardController extends Controller
     public $defaultAction = "view";
     public $scenario = "crud";
     public $scope = "crud";
-    public $menu_route = "vvoy/vvoyVoyage";  
+    public $menu_route = "vvoy/dashboard";  
 
 
 public function filters()
