@@ -153,6 +153,34 @@
                             ?>                            </span>
                         </div>
                     </div>
+                
+<div class="control-group">
+                        <div class='control-label'>
+                            <?php echo $form->labelEx($model, 'vvoy_fcrn_plan_date') ?>
+                        </div>
+                        <div class='controls'>
+                            <span class="tooltip-wrapper" data-toggle='tooltip' data-placement="right"
+                                 title='<?php echo (($t = Yii::t('VvoyModule.model', 'tooltip.vvoy_fcrn_plan_date')) != 'tooltip.vvoy_fcrn_plan_date')?$t:'' ?>'>
+                                <?php
+                            $this->widget('zii.widgets.jui.CJuiDatePicker',
+                         array(
+                                 'model' => $model,
+                                 'attribute' => 'vvoy_fcrn_plan_date',
+                                 'language' =>  strstr(Yii::app()->language.'_','_',true),
+                                 'htmlOptions' => array('size' => 10),
+                                 'options' => array(
+                                     'showButtonPanel' => true,
+                                     'changeYear' => true,
+                                     'changeYear' => true,
+                                     'dateFormat' => 'yy-mm-dd',
+                                     ),
+                                 )
+                             );
+                    ;
+                            echo $form->error($model,'vvoy_fcrn_plan_date')
+                            ?>                            </span>
+                        </div>
+                    </div>                
                     <?php  ?>
                                     
                     <?php  if(false){?>

@@ -10,6 +10,7 @@
  * @property integer $vvoy_vtrl_id
  * @property string $vvoy_status
  * @property integer $vvoy_fcrn_id
+ * @property string $vvoy_fcrn_plan_date
  * @property string $vvoy_start_date
  * @property string $vvoy_end_date
  * @property string $vvoy_sys_ccmp_id
@@ -50,13 +51,13 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vvoy_vtrc_id, vvoy_fcrn_id', 'required'),
-                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvoy_vtrc_id, vvoy_vtrl_id, vvoy_fcrn_id', 'numerical', 'integerOnly' => true),
                 array('vvoy_number', 'length', 'max' => 20),
                 array('vvoy_status', 'length', 'max' => 6),
                 array('vvoy_sys_ccmp_id', 'length', 'max' => 10),
-                array('vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
-                array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'safe', 'on' => 'search'),
+                array('vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
+                array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -102,6 +103,7 @@ abstract class BaseVvoyVoyage extends CActiveRecord
             'vvoy_vtrl_id' => Yii::t('VvoyModule.model', 'Vvoy Vtrl'),
             'vvoy_status' => Yii::t('VvoyModule.model', 'Vvoy Status'),
             'vvoy_fcrn_id' => Yii::t('VvoyModule.model', 'Vvoy Fcrn'),
+            'vvoy_fcrn_plan_date' => Yii::t('VvoyModule.model', 'Vvoy Fcrn Plan Date'),
             'vvoy_start_date' => Yii::t('VvoyModule.model', 'Vvoy Start Date'),
             'vvoy_end_date' => Yii::t('VvoyModule.model', 'Vvoy End Date'),
             'vvoy_sys_ccmp_id' => Yii::t('VvoyModule.model', 'Vvoy Sys Ccmp'),
@@ -155,6 +157,7 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         $criteria->compare('t.vvoy_vtrl_id', $this->vvoy_vtrl_id);
         $criteria->compare('t.vvoy_status', $this->vvoy_status, true);
         $criteria->compare('t.vvoy_fcrn_id', $this->vvoy_fcrn_id);
+        $criteria->compare('t.vvoy_fcrn_plan_date', $this->vvoy_fcrn_plan_date, true);
         $criteria->compare('t.vvoy_start_date', $this->vvoy_start_date, true);
         $criteria->compare('t.vvoy_end_date', $this->vvoy_end_date, true);
         $criteria->compare('t.vvoy_sys_ccmp_id', $this->vvoy_sys_ccmp_id, true);

@@ -122,6 +122,19 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     )                    
                 ),
                 array(
+                        'name' => 'vvoy_fcrn_plan_date',
+                        'type' => 'raw',
+                        'value' => $this->widget(
+                            'TbEditableField',
+                            array(
+                                'model' => $model,
+                                'attribute' => 'vvoy_fcrn_plan_date',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                            ),
+                            true
+                        )
+                    ),                
+                array(
                     'name' => 'vvoy_start_date',
                     'type' => 'raw',
                     'value' => $this->widget(
@@ -158,6 +171,17 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
                             ), true
                     )
+                ),
+                
+                array(
+                    'label' =>Yii::t('VvoyModule.model', 'Freight Total'),
+                    'type' => 'raw',
+                    'value' => $model->freightTotal,
+                ),
+                array(
+                    'label' =>Yii::t('VvoyModule.model', 'Expenses Total'),
+                    'type' => 'raw',
+                    'value' => $model->expensesTotal,
                 ),
             ),
         ));

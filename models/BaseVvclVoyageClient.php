@@ -11,6 +11,7 @@
  * @property string $vvcl_notes
  * @property string $vvcl_freight
  * @property integer $vvcl_fcrn_id
+ * @property string $vvcl_base_amt
  *
  * Relations of table "vvcl_voyage_client" available as properties of the model:
  * @property VvoyVoyage $vvclVvoy
@@ -36,12 +37,12 @@ abstract class BaseVvclVoyageClient extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vvcl_vvoy_id', 'required'),
-                array('vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id, vvcl_base_amt', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvcl_vcnt_id, vvcl_fcrn_id', 'numerical', 'integerOnly' => true),
                 array('vvcl_vvoy_id, vvcl_ccmp_id', 'length', 'max' => 10),
-                array('vvcl_freight', 'length', 'max' => 8),
+                array('vvcl_freight, vvcl_base_amt', 'length', 'max' => 8),
                 array('vvcl_notes', 'safe'),
-                array('vvcl_id, vvcl_vvoy_id, vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id', 'safe', 'on' => 'search'),
+                array('vvcl_id, vvcl_vvoy_id, vvcl_ccmp_id, vvcl_vcnt_id, vvcl_notes, vvcl_freight, vvcl_fcrn_id, vvcl_base_amt', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -84,6 +85,7 @@ abstract class BaseVvclVoyageClient extends CActiveRecord
             'vvcl_notes' => Yii::t('VvoyModule.model', 'Vvcl Notes'),
             'vvcl_freight' => Yii::t('VvoyModule.model', 'Vvcl Freight'),
             'vvcl_fcrn_id' => Yii::t('VvoyModule.model', 'Vvcl Fcrn'),
+            'vvcl_base_amt' => Yii::t('VvoyModule.model', 'Vvcl Base Amt'),
         );
     }
 
@@ -100,6 +102,7 @@ abstract class BaseVvclVoyageClient extends CActiveRecord
         $criteria->compare('t.vvcl_notes', $this->vvcl_notes, true);
         $criteria->compare('t.vvcl_freight', $this->vvcl_freight, true);
         $criteria->compare('t.vvcl_fcrn_id', $this->vvcl_fcrn_id);
+        $criteria->compare('t.vvcl_base_amt', $this->vvcl_base_amt, true);
 
 
         return $criteria;
