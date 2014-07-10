@@ -1,17 +1,19 @@
 <?php
 if(!$ajax){
     Yii::app()->clientScript->registerCss('rel_grid',' 
-            .grid-view {padding-top:0px;margin-top: -35px;}
-            h3.rel_grid{padding-left: 40px;}
+            .rel-grid-view {margin-top:-60px;}
+            .rel-grid-view div.summary {height: 60px;}
             ');     
 }
 ?>
+
+
 <?php
 if(!$ajax || $ajax == 'vvcl-voyage-client-grid'){
     Yii::beginProfile('vvcl_vvoy_id.view.grid');
 ?>
 
-<h3 class="rel_grid">    
+<div class="table-header">
     <?=Yii::t('VvoyModule.model', 'Vvcl Voyage Client')?>
     <?php    
         
@@ -29,7 +31,9 @@ if(!$ajax || $ajax == 'vvcl-voyage-client-grid'){
                 'ajax' => 'vvcl-voyage-client-grid',
             ),
             'ajaxOptions' => array(
-                    'success' => 'function(html) {$.fn.yiiGridView.update(\'vvcl-voyage-client-grid\');}'
+                    'success' => 'function(html) {
+                                    $.fn.yiiGridView.update(\'vvcl-voyage-client-grid\');
+                                 }'
                     ),
             'htmlOptions' => array(
                 'title' => Yii::t('VvoyModule.crud', 'Add new record'),
@@ -38,7 +42,7 @@ if(!$ajax || $ajax == 'vvcl-voyage-client-grid'){
         )
     );        
     ?>
-</h3>  
+</div>
 <?php 
 
     if (empty($modelMain->vvclVoyageClients)) {
@@ -58,6 +62,9 @@ $this->widget('TbGridView',
         'id' => 'vvcl-voyage-client-grid',
         'dataProvider' => $model->search(),
         'template' => '{summary}{items}',
+        'htmlOptions' => array(
+            'class' => 'rel-grid-view'
+        ),         
         'summaryText' => '&nbsp;', 
             'columns' => array(
                 array(
@@ -96,7 +103,9 @@ $this->widget('TbGridView',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         //'placement' => 'right',
-                    )
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     'class' => 'editable.EditableColumn',
@@ -133,7 +142,7 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
     Yii::beginProfile('vvep_vvoy_id.view.grid');
 ?>
 
-<h3 class="rel_grid">
+<div class="table-header">
     <i class="icon-money"></i>
     <?=Yii::t('VvoyModule.model', 'Vvep Voyage Expenses Plan')?>
     <?php    
@@ -160,23 +169,10 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
             ),                 
         )
     );        
-    $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'buttonType' => 'Button', 
-                'type' => 'success', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-                'size' => 'mini',
-                'icon' => 'icon-refresh',
-                'htmlOptions' => array(
-                    'onclick' => '$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");',
-                    'title' => Yii::t('VvoyModule.model', 'Recalc'),
-                    'data-toggle' => 'tooltip',
-                ),                 
-            )
-        );        
+
     
     ?>
-</h3> 
+</div> 
  
 <?php 
 
@@ -197,6 +193,9 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
             'dataProvider' => $model->search(),
             'template' => '{summary}{items}',
             'summaryText' => '&nbsp;', 
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),            
             'columns' => array(
                 array(
                     'class' => 'editable.EditableColumn',
@@ -214,7 +213,9 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                     'name' => 'vvep_count',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                    )
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");}',
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     //decimal(10,2) unsigned
@@ -222,8 +223,10 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                     'name' => 'vvep_price',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");}',                        
                         //'placement' => 'right',
-                    )
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     'class' => 'editable.EditableColumn',
@@ -237,12 +240,8 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                 ),
                 array(
                     //decimal(10,2)
-                    'class' => 'editable.EditableColumn',
                     'name' => 'vvep_total',
-                    'editable' => array(
-                        'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                        //'placement' => 'right',
-                    )
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 /*
                 array(
@@ -300,7 +299,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
     Yii::beginProfile('vvpo_vvoy_id.view.grid');
 ?>
 
-<h3 class="rel_grid">    
+<div class="table-header">   
     <i class="icon-map-marker"></i>
     <?=Yii::t('VvoyModule.model', 'Vvpo Voyage Point')?>
     <?php    
@@ -328,7 +327,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
         )
     );        
     ?>
-</h3> 
+</div> 
  
 <?php 
 
@@ -350,6 +349,9 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
             'dataProvider' => $model->search(),
             'template' => '{summary}{items}',
             'summaryText' => '&nbsp;', 
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),            
             'columns' => array(
                 array(
                     //tinyint(3) unsigned
@@ -358,7 +360,8 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         //'placement' => 'right',
-                    )
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     'class' => 'editable.EditableColumn',
@@ -400,8 +403,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'name' => 'vvpo_plan_km',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',
                         //'placement' => 'right',
-                    )
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     //decimal(2,2)
@@ -409,8 +414,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'name' => 'vvpo_plan_fuel_coefficient',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',                        
                         //'placement' => 'right',
-                    )
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     //decimal(10,2)
@@ -418,8 +425,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'name' => 'vvpo_plan_fuel_price',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',                        
                         //'placement' => 'right',
-                    )
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                array(
                     'class' => 'editable.EditableColumn',
@@ -431,7 +440,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         //'placement' => 'right',
                     )
                 ),
-
+                array(
+                    'name' => 'vvpo_plan_amt',
+                    'htmlOptions' => array('class' => 'numeric-column'),
+                    ),
                 array(
                     'class' => 'editable.EditableColumn',
                     'name' => 'vvpo_notes',
@@ -439,7 +451,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'type' => 'textarea',
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         //'placement' => 'right',
-                    )
+                    ),
                 ),
                 /*            
                 array(
@@ -504,7 +516,7 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
     Yii::beginProfile('vxpr_vvoy_id.view.grid');
 ?>
 
-<h3 class="rel_grid">   
+<div class="table-header">  
     <i class="icon-male"></i>
     <?=Yii::t('VvoyModule.model', 'Vxpr Voyage Xperson')?>
     <?php    
@@ -532,7 +544,7 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
         )
     );        
     ?>
-</h3> 
+</div> 
  
 <?php 
 
@@ -554,6 +566,9 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
             'dataProvider' => $model->search(),
             'template' => '{summary}{items}',
             'summaryText' => '&nbsp;', 
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),                 
             'columns' => array(
                 array(
                     'class' => 'editable.EditableColumn',

@@ -61,13 +61,24 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
     public function save($runValidation = true, $attributes = NULL) 
     {
 
-        //on change price or count recalc total
-        if($attributes && (in_array('vvep_count',$attributes) || in_array('vvep_price',$attributes))){
-            $this->vvep_total = round($this->vvep_count * $this->vvep_price,2);
+        //calc base amt
+        if(
+                !empty($this->vvep_count) 
+                && !empty($this->vvep_price)
+                && !empty($this->vvep_fcrn_id)
+                && (
+                        in_array('vvep_count',$attributes)
+                        || in_array('vvep_price',$attributes)
+                        || in_array('vvep_fcrn_id',$attributes)
+                    )
+                ){
+            $this->vvep_total = $this->vvep_count * $this->vvep_price;
+            $this->vvep_base_total = Yii::app()->currency->convertFromTo($this->vvep_fcrn_id, $this->vvepVvoy->vvoy_fcrn_id, $this->vvep_total,$this->vvepVvoy->vvoy_fcrn_plan_date);
             $attributes[] = 'vvep_total';
+            $attributes[] = 'vvep_base_total';
         }
-
-        return parent::save($runValidation,$attributes);
+    
+        return parent::save($runValidation, $attributes);        
 
     }
     
@@ -97,5 +108,6 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
         return $model;
     }     
     
+  
 
 }

@@ -14,6 +14,8 @@
  * @property string $vvpo_plan_fuel_coefficient
  * @property string $vvpo_plan_fuel_price
  * @property integer $vvpo_plan_fcrn_id
+ * @property string $vvpo_plan_amt
+ * @property string $vvpo_plan_base_amt
  * @property string $vvpo_base_amt
  * @property string $vvpo_notes
  * @property string $vvpo_start_odo
@@ -44,12 +46,12 @@ abstract class BaseVvpoVoyagePoint extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vvpo_vvoy_id', 'required'),
-                array('vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvpo_vpnt_id, vvpo_sqn, vvpo_plan_km, vvpo_plan_fcrn_id', 'numerical', 'integerOnly' => true),
-                array('vvpo_vvoy_id, vvpo_plan_fuel_price, vvpo_base_amt, vvpo_start_odo, vvpo_end_odo', 'length', 'max' => 10),
+                array('vvpo_vvoy_id, vvpo_plan_fuel_price, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_start_odo, vvpo_end_odo', 'length', 'max' => 10),
                 array('vvpo_plan_fuel_coefficient', 'length', 'max' => 2),
                 array('vvpo_plan_start_date, vvpo_plan_end_date, vvpo_notes, vvpo_real_start_date, vvpo_real_end_date', 'safe'),
-                array('vvpo_id, vvpo_vvoy_id, vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'safe', 'on' => 'search'),
+                array('vvpo_id, vvpo_vvoy_id, vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -94,6 +96,8 @@ abstract class BaseVvpoVoyagePoint extends CActiveRecord
             'vvpo_plan_fuel_coefficient' => Yii::t('VvoyModule.model', 'Vvpo Plan Fuel Coefficient'),
             'vvpo_plan_fuel_price' => Yii::t('VvoyModule.model', 'Vvpo Plan Fuel Price'),
             'vvpo_plan_fcrn_id' => Yii::t('VvoyModule.model', 'Vvpo Plan Fcrn'),
+            'vvpo_plan_amt' => Yii::t('VvoyModule.model', 'Vvpo Plan Amt'),
+            'vvpo_plan_base_amt' => Yii::t('VvoyModule.model', 'Vvpo Plan Base Amt'),
             'vvpo_base_amt' => Yii::t('VvoyModule.model', 'Vvpo Base Amt'),
             'vvpo_notes' => Yii::t('VvoyModule.model', 'Vvpo Notes'),
             'vvpo_start_odo' => Yii::t('VvoyModule.model', 'Vvpo Start Odo'),
@@ -119,6 +123,8 @@ abstract class BaseVvpoVoyagePoint extends CActiveRecord
         $criteria->compare('t.vvpo_plan_fuel_coefficient', $this->vvpo_plan_fuel_coefficient, true);
         $criteria->compare('t.vvpo_plan_fuel_price', $this->vvpo_plan_fuel_price, true);
         $criteria->compare('t.vvpo_plan_fcrn_id', $this->vvpo_plan_fcrn_id);
+        $criteria->compare('t.vvpo_plan_amt', $this->vvpo_plan_amt, true);
+        $criteria->compare('t.vvpo_plan_base_amt', $this->vvpo_plan_base_amt, true);
         $criteria->compare('t.vvpo_base_amt', $this->vvpo_base_amt, true);
         $criteria->compare('t.vvpo_notes', $this->vvpo_notes, true);
         $criteria->compare('t.vvpo_start_odo', $this->vvpo_start_odo, true);

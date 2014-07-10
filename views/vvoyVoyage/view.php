@@ -35,6 +35,8 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
 //                ),
 //                "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Delete"))
 //            ));
+            
+                 
             ?>                    
         </div>
     </div>
@@ -48,6 +50,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
         <?php
         $this->widget(
                 'TbDetailView', array(
+            'id' => 'vvoy_voyage_view',        
             'data' => $model,
             'attributes' => array(
                 array(
@@ -125,8 +128,9 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         'name' => 'vvoy_fcrn_plan_date',
                         'type' => 'raw',
                         'value' => $this->widget(
-                            'TbEditableField',
+                            'EditableField',
                             array(
+                                'type' => 'date',
                                 'model' => $model,
                                 'attribute' => 'vvoy_fcrn_plan_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
@@ -173,32 +177,28 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     )
                 ),
                 
-                array(
-                    'label' =>Yii::t('VvoyModule.model', 'Freight Total'),
-                    'type' => 'raw',
-                    'value' => $model->freightTotal,
-                ),
-                array(
-                    'label' =>Yii::t('VvoyModule.model', 'Expenses Total'),
-                    'type' => 'raw',
-                    'value' => $model->expensesTotal,
-                ),
             ),
         ));
-        ?>
+        
+         $this->renderPartial('_total', 
+                    array(
+                        'model' => $total_model,
+                        'ajax' => false,
+                        )
+                    ); 
+         ?>                
     </div>
 
 
     <div class="span8">
-        <div class="well">
         <?php $this->renderPartial('_view-relations_grids', 
                     array(
                         'modelMain' => $model,
                         'ajax' => false,
                         )
-                    ); ?>        </div>
+                    ); ?>        
     </div>
 </div>
 
-        <?php
-        echo $cancel_button?>
+<?php
+echo $cancel_button;

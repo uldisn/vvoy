@@ -22,8 +22,9 @@ class VvoyVoyage extends BaseVvoyVoyage
     {
         return array_merge(
             parent::relations(), array(
-                'freightTotal'=>array(self::STAT,  'vvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_freight)'),                
+                'freightTotal'=>array(self::STAT,  'vvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_base_amt)'),                
                 'expensesTotal'=>array(self::STAT,  'VvepVoyageExpensesPlan', 'vvep_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
+                'fuelTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
                 //'fuelTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
                 
 //                'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),

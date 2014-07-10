@@ -66,14 +66,32 @@ public function accessRules()
     {
         $model = $this->loadModel($vvoy_id);
         if($ajax){
-            $this->renderPartial('_view-relations_grids', 
-                    array(
-                        'modelMain' => $model,
-                        'ajax' => $ajax,
-                        )
-                    );
+            
+            if($ajax == 'vvoy-voyage-total-grid'){
+                $total_model = new VvoyVoyage('search');
+                $total_model->vvoy_id = $vvoy_id;                
+                $this->renderPartial('_total', 
+                        array(
+                            'model' => $total_model,
+                            'ajax' => $ajax,
+                            )
+                        );                
+            }else{
+                $this->renderPartial('_view-relations_grids', 
+                        array(
+                            'modelMain' => $model,
+                            'ajax' => $ajax,
+                            )
+                        );
+            }
         }else{
-            $this->render('view', array('model' => $model,));
+            $total_model = new VvoyVoyage('search');
+            $total_model->vvoy_id = $vvoy_id;
+            $this->render('view', array(
+                                    'model' => $model,
+                                    'total_model' => $total_model,
+                                )
+                            );
         }
     }
 
