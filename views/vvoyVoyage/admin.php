@@ -1,9 +1,5 @@
 <?php
-$this->setPageTitle(
-    Yii::t('VvoyModule.model', 'Vvoy Voyages')
-    . ' - '
-    . Yii::t('VvoyModule.crud', 'Manage')
-);
+$this->setPageTitle(Yii::t('VvoyModule.model', 'Voyages plans'));
 ?>
 
     <h1>
@@ -16,7 +12,7 @@ $this->setPageTitle(
                         "visible"=>(Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Create"))
                    )); ?>
         &nbsp<i class="icon-road"></i>  
-        <?php echo Yii::t('VvoyModule.model', 'Vvoy Voyages Manage'); ?>
+        <?php echo Yii::t('VvoyModule.model', 'Voyages plans'); ?>
     </h1>
 
 <?php 
@@ -63,6 +59,30 @@ $this->widget('TbGridView',
             array(
                 'name' => 'vvoy_end_date',
             ),
+            array(
+                'name' => 'vvoy_fcrn_id',
+                'value' => '$data->vvoyFcrn->fcrn_code',
+            ),            
+            array(
+                'header' => Yii::t('VvoyModule.model', 'Freight'),
+                'value' => '$data->freightTotal',
+                'htmlOptions' => array('class' => 'numeric-column'),
+            ),
+            array(
+                'header' => Yii::t('VvoyModule.model', 'Expenses'),
+                'value' => '$data->expensesTotal',
+                'htmlOptions' => array('class' => 'numeric-column'),
+            ),
+            array(
+                'header' => Yii::t('VvoyModule.model', 'Fuel'),
+                'value' => '$data->fuelTotal',
+                'htmlOptions' => array('class' => 'numeric-column'),
+            ),
+            array(
+                'header' => Yii::t('VvoyModule.model', 'Diff.'),
+                'value' => '$data->freightTotal - $data->fuelTotal - $data->expensesTotal',
+                'htmlOptions' => array('class' => 'numeric-column'),
+            ),            
             array(
                 'class' => 'editable.EditableColumn',
                 'name' => 'vvoy_notes',

@@ -1,8 +1,6 @@
 <?php
 $this->setPageTitle(
-        Yii::t('VvoyModule.model', 'Vvoy Voyage')
-        . ' - '
-        . Yii::t('VvoyModule.crud', 'View')
+        Yii::t('VvoyModule.model', 'Voyage plan')
         . ': '
         . $model->getItemLabel()
 );
@@ -42,7 +40,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
     </div>
     <h1>
         &nbsp<i class="icon-road"></i>  
-        <?php echo '' . Yii::t('VvoyModule.model', 'Vvoy Voyage'); ?>
+        <?php echo '' . Yii::t('VvoyModule.model', 'Voyage plan'); ?>
     </h1>
 </div>
 <div class="row">

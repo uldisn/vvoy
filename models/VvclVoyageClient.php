@@ -44,9 +44,22 @@ class VvclVoyageClient extends BaseVvclVoyageClient
 
     public function save($runValidation = true, $attributes = NULL)
     {
+        if(empty($attributes)){
+            return parent::save();
+        }
+        
         //calc base amt
-        $this->vvcl_base_amt = Yii::app()->currency->convertFromTo($this->vvcl_fcrn_id, $this->vvclVvoy->vvoy_fcrn_id, $this->vvcl_freight,$this->vvclVvoy->vvoy_fcrn_plan_date);
-        $attributes[] = 'vvcl_base_amt';
+        if(
+                !empty($this->vvcl_fcrn_id)
+                && !empty($this->vvcl_freight)
+                && (
+                    in_array('vvcl_freight', $attributes)
+                    || in_array('vvcl_fcrn_id', $attributes)
+                   )
+        ){
+            $this->vvcl_base_amt = Yii::app()->currency->convertFromTo($this->vvcl_fcrn_id, $this->vvclVvoy->vvoy_fcrn_id, $this->vvcl_freight,$this->vvclVvoy->vvoy_fcrn_plan_date);
+            $attributes[] = 'vvcl_base_amt';
+        }
     
         return parent::save($runValidation, $attributes);
     }    

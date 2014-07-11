@@ -25,22 +25,22 @@ $this->widget('TbGridView', array(
     ),    
     'columns' => array(
         array(
-            'name' => 'fcrn_code',
+            'name' => 'vvoy_fcrn_id',
             'value' => '$data->vvoyFcrn->fcrn_code',
         ),
         array(
             'header' => Yii::t('VvoyModule.model', 'Freight'),
-            'value' => $model->freightTotal,
+            'value' => '$data->freightTotal',
             'htmlOptions' => array('class' => 'numeric-column'),
         ),
         array(
             'header' => Yii::t('VvoyModule.model', 'Expenses'),
-            'value' => $model->expensesTotal,
+            'value' => '$data->expensesTotal',
             'htmlOptions' => array('class' => 'numeric-column'),
         ),
         array(
             'header' => Yii::t('VvoyModule.model', 'Fuel'),
-            'value' => $model->fuelTotal,
+            'value' => '$data->fuelTotal',
             'htmlOptions' => array('class' => 'numeric-column'),
         ),
         array(
