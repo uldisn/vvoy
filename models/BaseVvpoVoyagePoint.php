@@ -49,7 +49,7 @@ abstract class BaseVvpoVoyagePoint extends CActiveRecord
                 array('vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvpo_vpnt_id, vvpo_sqn, vvpo_plan_km, vvpo_plan_fcrn_id', 'numerical', 'integerOnly' => true),
                 array('vvpo_vvoy_id, vvpo_plan_fuel_price, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_start_odo, vvpo_end_odo', 'length', 'max' => 10),
-                array('vvpo_plan_fuel_coefficient', 'length', 'max' => 2),
+                array('vvpo_plan_fuel_coefficient', 'length', 'max' => 4),
                 array('vvpo_plan_start_date, vvpo_plan_end_date, vvpo_notes, vvpo_real_start_date, vvpo_real_end_date', 'safe'),
                 array('vvpo_id, vvpo_vvoy_id, vvpo_vpnt_id, vvpo_sqn, vvpo_plan_start_date, vvpo_plan_end_date, vvpo_plan_km, vvpo_plan_fuel_coefficient, vvpo_plan_fuel_price, vvpo_plan_fcrn_id, vvpo_plan_amt, vvpo_plan_base_amt, vvpo_base_amt, vvpo_notes, vvpo_start_odo, vvpo_end_odo, vvpo_real_start_date, vvpo_real_end_date', 'safe', 'on' => 'search'),
             )

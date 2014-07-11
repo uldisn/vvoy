@@ -13,7 +13,8 @@ class m140709_181001_alter_table_vvpo extends CDbMigration
             ADD COLUMN `vvpo_plan_amt` DECIMAL(10,2) UNSIGNED NULL AFTER `vvpo_plan_fcrn_id`,
             ADD COLUMN `vvpo_plan_base_amt` DECIMAL(10,2) UNSIGNED NULL AFTER `vvpo_plan_amt`,
             ADD COLUMN `vvpo_base_amt` DECIMAL(10,2) NULL AFTER `vvpo_plan_base_amt`;
-
+        ALTER TABLE `vvpo_voyage_point`   
+            CHANGE `vvpo_plan_fuel_coefficient` `vvpo_plan_fuel_coefficient` DECIMAL(4,2) NULL;
         ");
 	}
 

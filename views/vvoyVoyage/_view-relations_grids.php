@@ -97,6 +97,17 @@ $this->widget('TbGridView',
                     )
                 ),
                 array(
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vvcl_fcrn_id',
+                    'editable' => array(
+                        'type' => 'select',
+                        'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
+                        'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
+                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                        //'placement' => 'right',
+                    )
+                ),                
+                array(
                     //decimal(8,2)
                     'class' => 'editable.EditableColumn',
                     'name' => 'vvcl_freight',
@@ -107,17 +118,6 @@ $this->widget('TbGridView',
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
                 ),
-                array(
-                    'class' => 'editable.EditableColumn',
-                    'name' => 'vvcl_fcrn_id',
-                    'editable' => array(
-                        'type' => 'select',
-                        'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
-                        'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
-                        //'placement' => 'right',
-                    )
-                ),
-
                 array(
                     'class' => 'TbButtonColumn',
                     'buttons' => array(
@@ -213,18 +213,10 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                     'name' => 'vvep_count',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");}',
-                    ),
-                    'htmlOptions' => array('class' => 'numeric-column'),
-                ),
-                array(
-                    //decimal(10,2) unsigned
-                    'class' => 'editable.EditableColumn',
-                    'name' => 'vvep_price',
-                    'editable' => array(
-                        'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");}',                        
-                        //'placement' => 'right',
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',                        
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
                 ),
@@ -234,9 +226,27 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                     'editable' => array(
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                        'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
+                        'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),   
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',                                                
                         //'placement' => 'right',
                     )
+                ),                
+                array(
+                    //decimal(10,2) unsigned
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vvep_price',
+                    'editable' => array(
+                        'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',                        
+                        //'placement' => 'right',
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     //decimal(10,2)
@@ -281,7 +291,8 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                         'delete' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.DeletevvepVoyageExpensesPlans")'),
                     ),
                     'deleteButtonUrl' => 'Yii::app()->controller->createUrl("/vvoy/vvepVoyageExpensesPlan/delete", array("vvep_id" => $data->vvep_id))',
-                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),                    
+                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),           
+                    'afterDelete' => 'function() {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',                    
                 ),
             )
         )
@@ -361,7 +372,6 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         //'placement' => 'right',
                     ),
-                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     'class' => 'editable.EditableColumn',
@@ -374,7 +384,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     )
                 ),
                 array(
-                    'class' => 'TbEditableColumn',
+                    'class' => 'editable.EditableColumn',
                     'name' => 'vvpo_plan_start_date',
                     'editable' => array(
                         'type'        => 'combodate',
@@ -386,7 +396,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     )
                 ),
                 array(
-                    'class' => 'TbEditableColumn',
+                    'class' => 'editable.EditableColumn',
                     'name' => 'vvpo_plan_end_date',
                     'editable' => array(
                         'type'        => 'combodate',
@@ -403,7 +413,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'name' => 'vvpo_plan_km',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvpo-voyage-point-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',
                         //'placement' => 'right',
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
@@ -414,18 +427,10 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'name' => 'vvpo_plan_fuel_coefficient',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',                        
-                        //'placement' => 'right',
-                    ),
-                    'htmlOptions' => array('class' => 'numeric-column'),
-                ),
-                array(
-                    //decimal(10,2)
-                    'class' => 'editable.EditableColumn',
-                    'name' => 'vvpo_plan_fuel_price',
-                    'editable' => array(
-                        'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvpo-voyage-point-grid");}',                        
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvpo-voyage-point-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',                    
                         //'placement' => 'right',
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
@@ -437,8 +442,26 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvpo-voyage-point-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',                        
                         //'placement' => 'right',
                     )
+                ),                
+                array(
+                    //decimal(10,2)
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vvpo_plan_fuel_price',
+                    'editable' => array(
+                        'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                        'success' => 'function(response, newValue) {
+                                            $.fn.yiiGridView.update("vvpo-voyage-point-grid");
+                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                      }',
+                        //'placement' => 'right',
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
                     'name' => 'vvpo_plan_amt',
@@ -498,7 +521,8 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'delete' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.DeletevvpoVoyagePoints")'),
                     ),
                     'deleteButtonUrl' => 'Yii::app()->controller->createUrl("/vvoy/vvpoVoyagePoint/delete", array("vvpo_id" => $data->vvpo_id))',
-                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),                    
+                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),   
+                    'afterDelete' => 'function() {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
                 ),
             )
         )
@@ -598,7 +622,7 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
                         'delete' => array('visible' => 'Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.DeletevxprVoyageXPeople")'),
                     ),
                     'deleteButtonUrl' => 'Yii::app()->controller->createUrl("/vvoy/vxprVoyageXPerson/delete", array("vxpr_id" => $data->vxpr_id))',
-                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),                    
+                    'deleteButtonOptions'=>array('data-toggle'=>'tooltip'),         
                 ),
             )
         )
