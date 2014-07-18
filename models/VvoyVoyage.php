@@ -22,19 +22,10 @@ class VvoyVoyage extends BaseVvoyVoyage
     {
         return array_merge(
             parent::relations(), array(
-                'freightTotal'=>array(self::STAT,  'vvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_base_amt)'),                
-                'expensesTotal'=>array(self::STAT,  'VvepVoyageExpensesPlan', 'vvep_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
-                'fuelTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
-                //'fuelTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
-                
-//                'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
-//                'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
-//                'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),
-//                'vvoyVtrl' => array(self::BELONGS_TO, 'VtrlTrailer', 'vvoy_vtrl_id'),
-//                'vvoyFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vvoy_fcrn_id'),
-//                'vvoyVtrc' => array(self::BELONGS_TO, 'VtrcTruck', 'vvoy_vtrc_id'),
-//                'vvpoVoyagePoints' => array(self::HAS_MANY, 'VvpoVoyagePoint', 'vvpo_vvoy_id'),
-//                'vxprVoyageXPeople' => array(self::HAS_MANY, 'VxprVoyageXPerson', 'vxpr_vvoy_id'),
+                'freightPlanTotal'=>array(self::STAT,  'vvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_base_amt)'),                
+                'expensesPlanTotal'=>array(self::STAT,  'VvepVoyageExpensesPlan', 'vvep_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
+                'fuelPlanTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
+                'fuelExoTotal'=>array(self::STAT,  'VfueFuel', 'vfue_vvoy_id', 'select' => 'SUM(vfue_base_amt)'),                
             )
         );
     }    

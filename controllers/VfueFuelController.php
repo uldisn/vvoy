@@ -1,14 +1,13 @@
 <?php
 
 
-class VvoyVoyageController extends Controller
+class VfueFuelController extends Controller
 {
     #public $layout='//layouts/column2';
 
     public $defaultAction = "admin";
     public $scenario = "crud";
     public $scope = "crud";
-    public $menu_route = "vvoy/vvoyVoyage";  
 
 
 public function filters()
@@ -24,27 +23,27 @@ public function accessRules()
         array(
             'allow',
             'actions' => array('create', 'admin', 'view', 'update', 'editableSaver', 'delete','ajaxCreate'),
-            'roles' => array('Vvoy.VvoyVoyage.*'),
+            'roles' => array('Vvoy.VfueFuel.*'),
         ),
         array(
             'allow',
             'actions' => array('create','ajaxCreate'),
-            'roles' => array('Vvoy.VvoyVoyage.Create'),
+            'roles' => array('Vvoy.VfueFuel.Create'),
         ),
         array(
             'allow',
             'actions' => array('view', 'admin'), // let the user view the grid
-            'roles' => array('Vvoy.VvoyVoyage.View'),
+            'roles' => array('Vvoy.VfueFuel.View'),
         ),
         array(
             'allow',
             'actions' => array('update', 'editableSaver'),
-            'roles' => array('Vvoy.VvoyVoyage.Update'),
+            'roles' => array('Vvoy.VfueFuel.Update'),
         ),
         array(
             'allow',
             'actions' => array('delete'),
-            'roles' => array('Vvoy.VvoyVoyage.Delete'),
+            'roles' => array('Vvoy.VfueFuel.Delete'),
         ),
         array(
             'deny',
@@ -62,74 +61,49 @@ public function accessRules()
         return true;
     }
 
-    public function actionView($vvoy_id,$ajax = false)
+    public function actionView($vfue_id)
     {
-        $model = $this->loadModel($vvoy_id);
-        if($ajax){
-            
-            if($ajax == 'vvoy-voyage-total-grid'){
-                $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
-                $this->renderPartial('_total', 
-                        array(
-                            'model' => $total_model,
-                            'ajax' => $ajax,
-                            )
-                        );                
-            }else{
-                $this->renderPartial('_view-relations_grids', 
-                        array(
-                            'modelMain' => $model,
-                            'ajax' => $ajax,
-                            )
-                        );
-            }
-        }else{
-            $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
-            $this->render('view', array(
-                                    'model' => $model,
-                                    'total_model' => $total_model,
-                                )
-                            );
-        }
+        $model = $this->loadModel($vfue_id);
+        $this->render('view', array('model' => $model));
     }
 
     public function actionCreate()
     {
-        $model = new VvoyVoyage;
+        $model = new VfueFuel;
         $model->scenario = $this->scenario;
 
-        $this->performAjaxValidation($model, 'vvoy-voyage-form');
+        $this->performAjaxValidation($model, 'vfue-fuel-form');
 
-        if (isset($_POST['VvoyVoyage'])) {
-            $model->attributes = $_POST['VvoyVoyage'];
+        if (isset($_POST['VfueFuel'])) {
+            $model->attributes = $_POST['VfueFuel'];
 
             try {
                 if ($model->save()) {
                     if (isset($_GET['returnUrl'])) {
                         $this->redirect($_GET['returnUrl']);
                     } else {
-                        $this->redirect(array('view', 'vvoy_id' => $model->vvoy_id));
+                        $this->redirect(array('view', 'vfue_id' => $model->vfue_id));
                     }
                 }
             } catch (Exception $e) {
-                $model->addError('vvoy_id', $e->getMessage());
+                $model->addError('vfue_id', $e->getMessage());
             }
-        } elseif (isset($_GET['VvoyVoyage'])) {
-            $model->attributes = $_GET['VvoyVoyage'];
+        } elseif (isset($_GET['VfueFuel'])) {
+            $model->attributes = $_GET['VfueFuel'];
         }
 
         $this->render('create', array('model' => $model));
     }
 
-    public function actionUpdate($vvoy_id)
+    public function actionUpdate($vfue_id)
     {
-        $model = $this->loadModel($vvoy_id);
+        $model = $this->loadModel($vfue_id);
         $model->scenario = $this->scenario;
 
-        $this->performAjaxValidation($model, 'vvoy-voyage-form');
+        $this->performAjaxValidation($model, 'vfue-fuel-form');
 
-        if (isset($_POST['VvoyVoyage'])) {
-            $model->attributes = $_POST['VvoyVoyage'];
+        if (isset($_POST['VfueFuel'])) {
+            $model->attributes = $_POST['VfueFuel'];
 
 
             try {
@@ -137,27 +111,27 @@ public function accessRules()
                     if (isset($_GET['returnUrl'])) {
                         $this->redirect($_GET['returnUrl']);
                     } else {
-                        $this->redirect(array('view', 'vvoy_id' => $model->vvoy_id));
+                        $this->redirect(array('view', 'vfue_id' => $model->vfue_id));
                     }
                 }
             } catch (Exception $e) {
-                $model->addError('vvoy_id', $e->getMessage());
+                $model->addError('vfue_id', $e->getMessage());
             }
         }
 
-        $this->render('update', array('model' => $model,));
+        $this->render('update', array('model' => $model));
     }
 
     public function actionEditableSaver()
     {
         Yii::import('TbEditableSaver');
-        $es = new TbEditableSaver('VvoyVoyage'); // classname of model to be updated
+        $es = new TbEditableSaver('VfueFuel'); // classname of model to be updated
         $es->update();
     }
 
-    public function actionAjaxCreate($field, $value, $no_ajax = false) 
+    public function actionAjaxCreate($field, $value, $no_ajax = 0) 
     {
-        $model = new VvoyVoyage;
+        $model = new VfueFuel;
         $model->$field = $value;
         try {
             if ($model->save()) {
@@ -173,11 +147,11 @@ public function accessRules()
         }
     }
     
-    public function actionDelete($vvoy_id)
+    public function actionDelete($vfue_id)
     {
         if (Yii::app()->request->isPostRequest) {
             try {
-                $this->loadModel($vvoy_id)->delete();
+                $this->loadModel($vfue_id)->delete();
             } catch (Exception $e) {
                 throw new CHttpException(500, $e->getMessage());
             }
@@ -196,23 +170,23 @@ public function accessRules()
 
     public function actionAdmin()
     {
-        $model = new VvoyVoyage('search');
+        $model = new VfueFuel('search');
         $scopes = $model->scopes();
         if (isset($scopes[$this->scope])) {
             $model->{$this->scope}();
         }
         $model->unsetAttributes();
 
-        if (isset($_GET['VvoyVoyage'])) {
-            $model->attributes = $_GET['VvoyVoyage'];
+        if (isset($_GET['VfueFuel'])) {
+            $model->attributes = $_GET['VfueFuel'];
         }
 
-        $this->render('admin', array('model' => $model,));
+        $this->render('admin', array('model' => $model));
     }
 
     public function loadModel($id)
     {
-        $m = VvoyVoyage::model();
+        $m = VfueFuel::model();
         // apply scope, if available
         $scopes = $m->scopes();
         if (isset($scopes[$this->scope])) {
@@ -227,7 +201,7 @@ public function accessRules()
 
     protected function performAjaxValidation($model)
     {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'vvoy-voyage-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'vfue-fuel-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

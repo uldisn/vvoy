@@ -1,18 +1,10 @@
 <?php
-$this->setPageTitle(Yii::t('VvoyModule.model', 'Voyages plans'));
+$this->setPageTitle(Yii::t('VvoyModule.model', 'Voyages expenses'));
 ?>
 
     <h1>
-        <?php $this->widget("bootstrap.widgets.TbButton", array(
-                        "label"=>Yii::t("VvoyModule.crud","Create"),
-                        "icon"=>"icon-plus",
-                        "size"=>"large",
-                        "type"=>"success",
-                        "url"=>array("create"),
-                        "visible"=>(Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Create"))
-                   )); ?>
         &nbsp<i class="icon-road"></i>  
-        <?php echo Yii::t('VvoyModule.model', 'Voyages plans'); ?>
+        <?php echo Yii::t('VvoyModule.model', 'Voyages expenses'); ?>
     </h1>
 
 <?php 

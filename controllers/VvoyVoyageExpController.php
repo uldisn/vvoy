@@ -1,14 +1,14 @@
 <?php
 
 
-class VvoyVoyageController extends Controller
+class VvoyVoyageExpController extends Controller
 {
     #public $layout='//layouts/column2';
 
     public $defaultAction = "admin";
     public $scenario = "crud";
     public $scope = "crud";
-    public $menu_route = "vvoy/vvoyVoyage";  
+    public $menu_route = "vvoy/vvoyVoyageExp";  
 
 
 public function filters()

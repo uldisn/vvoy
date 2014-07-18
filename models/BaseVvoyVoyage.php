@@ -17,6 +17,7 @@
  * @property string $vvoy_notes
  *
  * Relations of table "vvoy_voyage" available as properties of the model:
+ * @property VfueFuel[] $vfueFuels
  * @property VvclVoyageClient[] $vvclVoyageClients
  * @property VvepVoyageExpensesPlan[] $vvepVoyageExpensesPlans
  * @property VvexVoyageExpenses[] $vvexVoyageExpenses
@@ -82,6 +83,7 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     {
         return array_merge(
             parent::relations(), array(
+                'vfueFuels' => array(self::HAS_MANY, 'VfueFuel', 'vfue_vvoy_id'),
                 'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
                 'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
                 'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),

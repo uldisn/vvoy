@@ -27,6 +27,8 @@ return array (
   'Vepo' => '',
   'Vepo Sys Ccmp' => '',
   'Voyage plan' => 'Reisa applēses',
+  'Voyage expenses' => 'Reisa izdevumi',
+  'Voyages expenses' => 'Reisu izdevumi',
   'Voyages' => '',
   'Vpnt' => '',
   'Vvcl' => '',

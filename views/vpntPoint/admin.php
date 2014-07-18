@@ -32,7 +32,7 @@ Yii::app()->clientScript->registerScript('search', "
         ));        
         ?>
         &nbsp<i class="icon-map-marker"></i>  
-        <?php echo Yii::t('VvoyModule.model', 'Vpnt Points Manage'); ?>
+        <?php echo Yii::t('VvoyModule.model', 'Vpnt Points'); ?>
     </h1>
 <div class="row">
     <div class="span7">

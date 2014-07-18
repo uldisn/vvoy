@@ -17,7 +17,7 @@ $this->setPageTitle(
                         "visible"=>(Yii::app()->user->checkAccess("Vvoy.VepoExpensesPositions.*") || Yii::app()->user->checkAccess("Vvoy.VepoExpensesPositions.Create"))
                    ));
         ?>
-        <?php echo Yii::t('VvoyModule.model', 'Vepo Expenses Positions Manag'); ?>
+        <?php echo Yii::t('VvoyModule.model', 'Vepo Expenses Positions'); ?>
     </h1>
 
 <div class="row">

@@ -30,7 +30,7 @@ Yii::app()->clientScript->registerScript('search', "
                         "visible"=>(Yii::app()->user->checkAccess("Vvoy.VcntContract.*") || Yii::app()->user->checkAccess("Vvoy.VcntContract.Create"))
                    ));?>
          &nbsp<i class="icon-certificate"></i>  
-        <?php echo Yii::t('VvoyModule.model', 'Vcnt Contracts Manage'); ?>
+        <?php echo Yii::t('VvoyModule.model', 'Vcnt Contracts'); ?>
     </h1>
 
 <?php Yii::beginProfile('VcntContract.view.grid'); ?>
