@@ -2,6 +2,19 @@
 
 class VvoyModule extends CWebModule
 {
+    
+    /**
+     * tabulas ptyp_type id - autovadītājs
+     * @var int 
+     */
+    public $driver_person_type = 1;
+
+    /**
+     * tabulas pdcm_document_type id, kas ir norēķina dokumenti
+     * @var array
+     */
+    public $driver_payment_docs = array();
+    
 	public function init()
 	{
 		// this method is called when the module is being created

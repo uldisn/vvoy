@@ -12,11 +12,13 @@
  * @property string $vfue_fuel_type
  * @property string $vfue_qnt
  * @property string $vfue_amt
+ * @property string $vfue_ppxd_id
  * @property integer $vfue_base_fcrn_id
  * @property string $vfue_base_amt
  * @property string $vfue_notes
  *
  * Relations of table "vfue_fuel" available as properties of the model:
+ * @property PpxdPersonXDocument $vfuePpxd
  * @property FcrnCurrency $vfueFcrn
  * @property FcrnCurrency $vfueBaseFcrn
  * @property VvoyVoyage $vfueVvoy
@@ -39,12 +41,12 @@ abstract class BaseVfueFuel extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vfue_vvoy_id', 'required'),
-                array('vfue_number, vfue_date, vfue_fcrn_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_base_fcrn_id, vfue_base_amt, vfue_notes', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vfue_number, vfue_date, vfue_fcrn_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_ppxd_id, vfue_base_fcrn_id, vfue_base_amt, vfue_notes', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vfue_fcrn_id, vfue_base_fcrn_id', 'numerical', 'integerOnly' => true),
-                array('vfue_vvoy_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_base_amt', 'length', 'max' => 10),
+                array('vfue_vvoy_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_ppxd_id, vfue_base_amt', 'length', 'max' => 10),
                 array('vfue_number', 'length', 'max' => 100),
                 array('vfue_date, vfue_notes', 'safe'),
-                array('vfue_id, vfue_vvoy_id, vfue_number, vfue_date, vfue_fcrn_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_base_fcrn_id, vfue_base_amt, vfue_notes', 'safe', 'on' => 'search'),
+                array('vfue_id, vfue_vvoy_id, vfue_number, vfue_date, vfue_fcrn_id, vfue_fuel_type, vfue_qnt, vfue_amt, vfue_ppxd_id, vfue_base_fcrn_id, vfue_base_amt, vfue_notes', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -69,6 +71,7 @@ abstract class BaseVfueFuel extends CActiveRecord
     {
         return array_merge(
             parent::relations(), array(
+                'vfuePpxd' => array(self::BELONGS_TO, 'PpxdPersonXDocument', 'vfue_ppxd_id'),
                 'vfueFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vfue_fcrn_id'),
                 'vfueBaseFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vfue_base_fcrn_id'),
                 'vfueVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vfue_vvoy_id'),
@@ -87,6 +90,7 @@ abstract class BaseVfueFuel extends CActiveRecord
             'vfue_fuel_type' => Yii::t('VvoyModule.model', 'Vfue Fuel Type'),
             'vfue_qnt' => Yii::t('VvoyModule.model', 'Vfue Qnt'),
             'vfue_amt' => Yii::t('VvoyModule.model', 'Vfue Amt'),
+            'vfue_ppxd_id' => Yii::t('VvoyModule.model', 'Vfue Ppxd'),
             'vfue_base_fcrn_id' => Yii::t('VvoyModule.model', 'Vfue Base Fcrn'),
             'vfue_base_amt' => Yii::t('VvoyModule.model', 'Vfue Base Amt'),
             'vfue_notes' => Yii::t('VvoyModule.model', 'Vfue Notes'),
@@ -107,6 +111,7 @@ abstract class BaseVfueFuel extends CActiveRecord
         $criteria->compare('t.vfue_fuel_type', $this->vfue_fuel_type, true);
         $criteria->compare('t.vfue_qnt', $this->vfue_qnt, true);
         $criteria->compare('t.vfue_amt', $this->vfue_amt, true);
+        $criteria->compare('t.vfue_ppxd_id', $this->vfue_ppxd_id);
         $criteria->compare('t.vfue_base_fcrn_id', $this->vfue_base_fcrn_id);
         $criteria->compare('t.vfue_base_amt', $this->vfue_base_amt, true);
         $criteria->compare('t.vfue_notes', $this->vfue_notes, true);

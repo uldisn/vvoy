@@ -141,12 +141,43 @@ $this->widget('TbGridView',
 if(!$ajax || $ajax == 'vfue-fuel-grid'){
 //if(false){
     Yii::beginProfile('vfue_vvoy_id.view.grid');
+    
+    /**
+     * get payment documents for all drivers
+     */
+    //get draivers
+    $model_persons = $modelMain->vxprVoyageXPeople;
+    $persons = array();
+    foreach ($model_persons as $mp){
+        $persons[] = $mp->vxpr_pprs_id;
+    }
+    
+    //if no drivers, cann not add payment documents
+    $warning = '';
+    if(count($persons) == 0){
+        $warning = Yii::t('VvoyModule.model', 'Pleas add driver(s) to voyage. Can not add payment docoments!');
+    }
+    
+    //get documents
+    $payment_doc_type = $this->module->driver_payment_docs;
+    $payment_doc = PpxdPersonXDocument::model()->filterByDocTypeAndPerson($payment_doc_type,$persons)->findAll(array('limit' => 1000));
+    
+    //create list data
+    if(count($persons) > 1){
+        // if more one driver show document with driver name
+        $payment_doc_list_data = CHtml::listData($payment_doc, 'ppxd_id', 'itemLabelExtended');
+    }elseif(count($persons) == 1){
+        $payment_doc_list_data = CHtml::listData($payment_doc, 'ppxd_id', 'itemLabel');
+    }else{
+        
+    }    
 ?>
 
 <div class="table-header">
     <?=Yii::t('VvoyModule.model', 'Vfue Fuel')?>
     <?php    
-        
+   
+    
     $this->widget(
         'bootstrap.widgets.TbButton',
         array(
@@ -170,6 +201,7 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
         )
     );        
     ?>
+    <span class="label label-warning"><?php echo $warning?></span>
 </div>
  
 <?php 
@@ -185,7 +217,6 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
     $model->vfue_vvoy_id = $modelMain->primaryKey;
 
     // render grid view
-
     $this->widget('TbGridView',
         array(
             'id' => 'vfue-fuel-grid',
@@ -251,6 +282,16 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                     //'placement' => 'right',
                 )
             ),
+            array(
+                'class' => 'editable.EditableColumn',
+                'name' => 'vfue_ppxd_id',
+                'editable' => array(
+                    'type' => 'select',
+                    'url' => $this->createUrl('//vvoy/vfueFuel/editableSaver'),
+                    'source' => $payment_doc_list_data,
+                    //'placement' => 'right',
+                )
+            ),                
             /*    
             array(
                 'class' => 'editable.EditableColumn',

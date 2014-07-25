@@ -581,7 +581,10 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
     
     $model = new VxprVoyageXPerson();
     $model->vxpr_vvoy_id = $modelMain->primaryKey;
-
+    
+    $person_type_driver = $this->module->driver_person_type;
+    $drivers = PprsPerson::model()->filterGroup($person_type_driver)->findAll(array('limit' => 1000));
+    
     // render grid view
 
     $this->widget('TbGridView',
@@ -600,7 +603,7 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
                     'editable' => array(
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vxprVoyageXPerson/editableSaver'),
-                        'source' => CHtml::listData(PprsPerson::model()->filterGroup(1)->findAll(array('limit' => 1000)), 'pprs_id', 'itemLabel'),                        
+                        'source' => CHtml::listData($drivers, 'pprs_id', 'itemLabel'),                        
                         //'placement' => 'right',
                     )
                 ),
