@@ -163,6 +163,120 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                             ), true
                     )
                 ),
+
+                array(
+                    'name' => 'vvoy_fuel_tank_start',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_fuel_tank_start',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+                array(
+                    'name' => 'vvoy_fuel',
+                ),
+                array(
+                    'name' => 'vvoy_fuel_tank_end',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_fuel_tank_end',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+
+                array(
+                    'name' => 'vvoy_odo_start',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_odo_start',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+
+                array(
+                    'name' => 'vvoy_odo_end',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_odo_end',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+
+                array(
+                    'name' => 'vvoy_fuel_tank_start_amt',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_fuel_tank_start_amt',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+                
+                array(
+                    'name' => 'vvoy_fuel_amt',
+                ),                       
+
+                array(
+                    'name' => 'vvoy_fuel_tank_end_amt',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_fuel_tank_end_amt',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),
+
+
+         
+                array(
+                    'name' => 'vvoy_abs_odo_start',
+                ),
+
+                array(
+                    'name' => 'vvoy_abs_odo_end',
+                ),
+
+                array(
+                    'name' => 'vvoy_mileage',
+                    'type' => 'raw',
+                    'value' => $this->widget(
+                        'EditableField',
+                        array(
+                            'model' => $model,
+                            'attribute' => 'vvoy_mileage',
+                            'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        ),
+                        true
+                    )
+                ),                
                 array(
                     'name' => 'vvoy_notes',
                     'type' => 'raw',

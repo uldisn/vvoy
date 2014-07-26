@@ -26,6 +26,7 @@ class VvoyVoyage extends BaseVvoyVoyage
                 'expensesPlanTotal'=>array(self::STAT,  'VvepVoyageExpensesPlan', 'vvep_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
                 'fuelPlanTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
                 'fuelExoTotal'=>array(self::STAT,  'VfueFuel', 'vfue_vvoy_id', 'select' => 'SUM(vfue_base_amt)'),                
+                'fuelExoTotalQnt'=>array(self::STAT,  'VfueFuel', 'vfue_vvoy_id', 'select' => 'SUM(vfue_qnt)'),                
             )
         );
     }    
@@ -73,6 +74,20 @@ class VvoyVoyage extends BaseVvoyVoyage
         
         //is new
         $bIsNewRecord = $this->isNewRecord;
+        
+        $vvoy_fuel_tank_end_amt = $this->calcFuelTankEndAmt();
+        if(!is_null($vvoy_fuel_tank_end_amt)){
+            
+            $this->vvoy_fuel_tank_end_amt = $vvoy_fuel_tank_end_amt;
+            $attributes[] = 'vvoy_fuel_tank_end_amt';
+            
+            $this->vvoy_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
+            $attributes[] = 'vvoy_fuel';
+            
+            $this->vvoy_fuel_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal - $this->vvoy_fuel_tank_end_amt;
+            $attributes[] = 'vvoy_fuel_amt';
+            
+        }
         
         //save
         $r = parent::save($runValidation,$attributes);
@@ -127,29 +142,44 @@ class VvoyVoyage extends BaseVvoyVoyage
 
     }    
     
-    public function findAll($condition='',$params=array())
-    {
-        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+    /**
+     * weighted average price
+     * @return null
+     */
+    public function calcFuelTankEndAmt(){
         
-        //criteria for trucks of SysCompanies
-        if(Yii::app()->sysCompany->getActiveCompany()){
-            $criteria->compare('t.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
-        }          
-        return $this->query($criteria,true);
-    }       
+        /**
+         * validate, is set all data
+         */
+        if(empty($this->vvoy_fuel_tank_start)){
+            return false;
+        }
 
-    public function findByPk($pk,$condition='',$params=array())
-    {
-        
-        $model = parent::findByPk($pk,$condition='',$params=array());
+        if(empty($this->vvoy_fuel_tank_end)){
+            return false;
+        }
 
-		if (Yii::app()->sysCompany->getActiveCompany()){
-            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvoy_sys_ccmp_id){
-                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
-            }    
-        }           
+        if(empty($this->vvoy_fuel_tank_start_amt)){
+            return false;
+        }
+
+        if(empty($this->vfueFuels)){
+            return false;
+        }
         
-        return $model;
-    }        
+        //calc
+        $total_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal;
+        $total_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
+        $avarge_price = $total_amt/$total_fuel;
+        
+        return round($avarge_price*$this->vvoy_fuel_tank_end,2);
+        
+    }
     
+    protected function beforeFind() {
+        $criteria = new CDbCriteria;
+        $criteria->compare('t.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        $this->dbCriteria->mergeWith($criteria);
+        parent::beforeFind();
+    }    
 }

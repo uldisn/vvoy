@@ -195,6 +195,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         'ajax' => false,
                         )
                     ); ?>        
+        <?php $this->widget('d2FilesWidget',array('module'=>$this->module->id, 'model'=>$model)); ?>
     </div>
 </div>
 
