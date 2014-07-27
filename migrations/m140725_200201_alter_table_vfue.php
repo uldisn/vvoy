@@ -9,7 +9,7 @@ class m140725_200201_alter_table_vfue extends CDbMigration
 	public function up()
 	{
 		$this->execute("
-        ALTER TABLE `eu`.`vvoy_voyage`   
+        ALTER TABLE `vvoy_voyage`   
             ADD COLUMN `vvoy_fuel_tank_start` SMALLINT UNSIGNED NULL  COMMENT 'fuel in tank at start voyage' AFTER `vvoy_notes`,
             ADD COLUMN `vvoy_fuel_tank_end` SMALLINT UNSIGNED NULL  COMMENT 'fuel in tank at end voyage' AFTER `vvoy_fuel_tank_start`,
             ADD COLUMN `vvoy_fuel_tank_start_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel_tank_end`,
