@@ -17,7 +17,7 @@ class m140725_200201_alter_table_vfue extends CDbMigration
             ADD COLUMN `vvoy_odo_start` INT NULL AFTER `vvoy_fuel_tank_end_amt`,
             ADD COLUMN `vvoy_odo_end` INT NULL AFTER `vvoy_odo_start`,
             ADD COLUMN `vvoy_fuel` SMALLINT UNSIGNED NULL AFTER `vvoy_fuel_tank_end_amt`,
-            ADD COLUMN `vvoy_fuel_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel`;            
+            ADD COLUMN `vvoy_fuel_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel`,            
             ADD COLUMN `vvoy_abs_odo_start` INT NULL AFTER `vvoy_fuel_amt`,
             ADD COLUMN `vvoy_abs_odo_end` INT NULL AFTER `vvoy_abs_odo_start`,
             ADD COLUMN `vvoy_mileage` SMALLINT NULL AFTER `vvoy_abs_odo_end`;
