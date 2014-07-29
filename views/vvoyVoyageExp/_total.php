@@ -16,26 +16,46 @@ if (!$ajax) {
     <thead>
         <tr>
             <th></th>
-            <th><?php echo Yii::t('VvoyModule.model', 'Freight') ?></th>
-            <th><?php echo Yii::t('VvoyModule.model', 'Expenses') ?></th>
-            <th><?php echo Yii::t('VvoyModule.model', 'Fuel') ?></th>
-            <th><?php echo Yii::t('VvoyModule.model', 'Diff.') ?></th>
+            <th colspan="2"><?php echo Yii::t('VvoyModule.model', 'Planed') ?></th>
+            <th colspan="2"><?php echo Yii::t('VvoyModule.model', 'Real') ?></th>
+
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th><?php echo Yii::t('VvoyModule.model', 'Planed Expenses') ?></th>
-            <td class="numeric-column"><?php echo $model->freightPlanTotal ?></td>
-            <td class="numeric-column"><?php echo $model->expensesPlanTotal ?></td>
-            <td class="numeric-column"><?php echo $model->fuelPlanTotal ?></td>
-            <td class="numeric-column"><?php echo $model->freightPlanTotal - $model->fuelPlanTotal - $model->expensesPlanTotal ?></td>
+            <th><?php echo Yii::t('VvoyModule.model', 'Milage') ?></th>
+            <td style="width: 5px">+</td>
+            <td class="numeric-column"><?php echo $model->milagePlanTotal ?></td>
+            <td style="width: 5px">+</td>
+            <td class="numeric-column"><?php echo $model->vvoy_mileage ?></td>
         </tr>
         <tr>
-            <th><?php echo Yii::t('VvoyModule.model', 'Real Expenses') ?></th>
-            <td class="numeric-column">-<?php //echo $model->freightPlanTotal ?></td>
-            <td class="numeric-column">-<?php //echo $model->expensesPlanTotal ?></td>
-            <td class="numeric-column"><?php echo $model->fuelExoTotal ?></td>
-            <td class="numeric-column">-<?php //echo $model->freightPlanTotal - $model->fuelPlanTotal - $model->expensesPlanTotal ?></td>
+            <th><?php echo Yii::t('VvoyModule.model', 'Freight') ?></th>
+            <td style="width: 5px">+</td>
+            <td class="numeric-column"><?php echo $model->freightPlanTotal ?></td>
+            <td style="width: 5px">+</td>
+            <td class="numeric-column"><?php echo $model->freightPlanTotal ?></td>
+        </tr>
+        <tr>
+            <th><?php echo Yii::t('VvoyModule.model', 'Expenses') ?></th>            
+            <td>-</td>
+            <td class="numeric-column"><?php echo $model->expensesPlanTotal ?></td>
+            <td>-</td>
+            <td class="numeric-column">???</td>
+        </tr>
+        <tr>
+            <th><?php echo Yii::t('VvoyModule.model', 'Fuel') ?></th>
+            <td>-</td>
+            <td class="numeric-column"><?php echo $model->fuelPlanTotal ?></td>            
+            <td>-</td>
+            <td class="numeric-column"><?php echo $model->vvoy_fuel_amt ?></td>            
+        </tr>
+        <tr>
+            <th><?php echo Yii::t('VvoyModule.model', 'Diff.') ?></th>
+            <td></td>
+            <td class="numeric-column"><?php echo $model->freightPlanTotal - $model->fuelPlanTotal - $model->expensesPlanTotal ?></td>            
+            <td></td>
+            <td class="numeric-column">??</td>            
         </tr>
     </tbody>
 

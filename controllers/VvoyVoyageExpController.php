@@ -153,6 +153,19 @@ public function accessRules()
         Yii::import('TbEditableSaver');
         $es = new TbEditableSaver('VvoyVoyage'); // classname of model to be updated
         $es->update();
+        
+        //atgriezj pieprasītac vērtības
+        $get_field = yii::app()->request->getParam('get_field');
+        if(!empty($get_field)){
+            $json = array();
+            foreach($get_field as $gf){
+                $json[$gf] = $es->model->$gf;
+            }
+            header('Content-type:application/json');
+            echo json_encode($json);    
+            
+        }
+        
     }
 
     public function actionAjaxCreate($field, $value, $no_ajax = false) 
