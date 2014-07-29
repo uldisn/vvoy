@@ -43,10 +43,12 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     /**
     * ENUM field values
     */
-    const VVOY_STATUS_NEW = 'new';
-    const VVOY_STATUS_WAY = 'way';
-    const VVOY_STATUS_FINISH = 'finish';
+    const VVOY_STATUS_PROJECT = 'project';
+    const VVOY_STATUS_ACCEPTED = 'accepted';
+    const VVOY_STATUS_IN_WAY = 'in way';
+    const VVOY_STATUS_FINISHED = 'finished';
     const VVOY_STATUS_CLOSED = 'closed';
+    const VVOY_STATUS_CANCELED = 'canceled';
 
     public static function model($className = __CLASS__)
     {
@@ -66,7 +68,7 @@ abstract class BaseVvoyVoyage extends CActiveRecord
                 array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvoy_vtrc_id, vvoy_vtrl_id, vvoy_fcrn_id, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'numerical', 'integerOnly' => true),
                 array('vvoy_number', 'length', 'max' => 20),
-                array('vvoy_status', 'length', 'max' => 6),
+                array('vvoy_status', 'length', 'max' => 8),
                 array('vvoy_sys_ccmp_id, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel_amt', 'length', 'max' => 10),
                 array('vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
                 array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'safe', 'on' => 'search'),
@@ -139,10 +141,12 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     {
         return array(
            'vvoy_status' => array(
-               self::VVOY_STATUS_NEW => Yii::t('VvoyModule.model', 'VVOY_STATUS_NEW'),
-               self::VVOY_STATUS_WAY => Yii::t('VvoyModule.model', 'VVOY_STATUS_WAY'),
-               self::VVOY_STATUS_FINISH => Yii::t('VvoyModule.model', 'VVOY_STATUS_FINISH'),
+               self::VVOY_STATUS_PROJECT => Yii::t('VvoyModule.model', 'VVOY_STATUS_PROJECT'),
+               self::VVOY_STATUS_ACCEPTED => Yii::t('VvoyModule.model', 'VVOY_STATUS_ACCEPTED'),
+               self::VVOY_STATUS_IN_WAY => Yii::t('VvoyModule.model', 'VVOY_STATUS_IN_WAY'),
+               self::VVOY_STATUS_FINISHED => Yii::t('VvoyModule.model', 'VVOY_STATUS_FINISHED'),
                self::VVOY_STATUS_CLOSED => Yii::t('VvoyModule.model', 'VVOY_STATUS_CLOSED'),
+               self::VVOY_STATUS_CANCELED => Yii::t('VvoyModule.model', 'VVOY_STATUS_CANCELED'),
            ),
             );
     }

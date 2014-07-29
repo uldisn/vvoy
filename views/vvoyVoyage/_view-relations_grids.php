@@ -422,6 +422,16 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'htmlOptions' => array('class' => 'numeric-column'),
                 ),
                 array(
+                    //decimal(4,1) unsigned
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vvpo_plan_weight',
+                    'editable' => array(
+                        'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
+                        //'placement' => 'right',
+                    ),
+                    'htmlOptions' => array('class' => 'numeric-column'),                    
+                ),                
+                array(
                     //decimal(2,2)
                     'class' => 'editable.EditableColumn',
                     'name' => 'vvpo_plan_fuel_coefficient',
