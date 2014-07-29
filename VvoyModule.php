@@ -8,6 +8,15 @@ class VvoyModule extends CWebModule
      * @var int 
      */
     public $driver_person_type = 1;
+    
+    
+    /**
+     * izmanto reisa autovadītāja izmaksu aprēķināsana pēc kilometriem
+     * @var integer 
+     */
+    public $person_seting_eur_km = 1;
+    public $vepo_postion_eur_km = 6;
+    
 
     /**
      * tabulas pdcm_document_type id, kas ir norēķina dokumenti

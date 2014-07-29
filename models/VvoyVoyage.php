@@ -179,7 +179,7 @@ class VvoyVoyage extends BaseVvoyVoyage
     
     protected function beforeFind() {
         $criteria = new CDbCriteria;
-        $criteria->compare('t.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        $criteria->compare('vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
         $this->dbCriteria->mergeWith($criteria);
         parent::beforeFind();
     }    

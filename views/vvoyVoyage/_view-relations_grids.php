@@ -203,7 +203,13 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                     'editable' => array(
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
-                        'source' => CHtml::listData(VepoExpensesPositions::model()->findAll(array('limit' => 1000)), 'vepo_id', 'itemLabel'),                        
+                        'source' => CHtml::listData(VepoExpensesPositions::model()->findAll(array('limit' => 1000)), 'vepo_id', 'itemLabel'),    
+                        'success' => 'function(response, newValue) {
+                                            if(newValue == "'.$this->module->vepo_postion_eur_km.'"){
+                                                $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
+                                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            }
+                                     }',                           
                         //'placement' => 'right',
                     )
                 ),

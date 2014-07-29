@@ -61,6 +61,54 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
     public function save($runValidation = true, $attributes = NULL) 
     {
 
+        //euro centi/km 
+        
+        $vvoy_module=Yii::app()->getController()->module;
+
+        
+        if(!empty($attributes) && in_array ('vvep_vepo_id',$attributes)  && $this->vvep_vepo_id == $vvoy_module->vepo_postion_eur_km){
+            
+            $model_vvoy = $this->vvepVvoy;
+            
+            //get price
+            if(empty($this->vvep_price) && !empty($vvoy_module->person_seting_eur_km)){
+                $model_persons = $model_vvoy->vxprVoyageXPeople;
+                $persons = array();
+                foreach ($model_persons as $mp){
+                    $persons[] = $mp->vxpr_pprs_id;
+                }
+                unset($model_persons);
+
+                if(count($persons) != 0){
+
+                    //get documents
+                    $seting_id = $vvoy_module->person_seting_eur_km;
+                    $setting = PpxsPersonXSetting::model()->filterBySetingAndPerson($seting_id,$persons)->find();
+                    if($setting){
+                        $this->vvep_price = $setting->ppxs_value;
+                        $attributes[] = 'vvep_price';
+                    }
+                }
+
+            }
+            
+            //get milage => count
+            if(empty($this->vvep_count)){
+                $milage =$model_vvoy->milagePlanTotal();
+                if($milage){
+                    $this->vvep_count = $milage;
+                    $attributes[] = 'vvep_count';                    
+                }
+            }
+            
+            //currency set EUR
+            if(empty($this->vvep_fcrn_id)){
+                $this->vvep_fcrn_id = FCRN_EUR;
+                $attributes[] = 'vvep_fcrn_id';                    
+            }
+        }        
+
+        
         //calc base amt
         if(
                 !empty($this->vvep_count) 
@@ -82,32 +130,38 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
 
     }
     
-    public function findAll($condition='',$params=array())
-    {
-        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
-        
-        //criteria for trucks of SysCompanies
-        if(Yii::app()->sysCompany->getActiveCompany()){
-            $criteria->join .= ' INNER JOIN vvoy_voyage vs on vs.vvoy_id = t.vvep_vvoy_id ';
-            $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());            
-        }          
-        return $this->query($criteria,true);
-    }        
+//    public function findAll($condition='',$params=array())
+//    {
+//        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
+//        
+//        //criteria for trucks of SysCompanies
+//        if(Yii::app()->sysCompany->getActiveCompany()){
+//            $criteria->join .= ' INNER JOIN vvoy_voyage vs on vs.vvoy_id = t.vvep_vvoy_id ';
+//            $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());            
+//        }          
+//        return $this->query($criteria,true);
+//    }        
+//    
+//    public function findByPk($pk,$condition='',$params=array())
+//    {
+//        
+//        $model = parent::findByPk($pk,$condition='',$params=array());
+//
+//		if (Yii::app()->sysCompany->getActiveCompany()){
+//            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvepVvoy->vvoy_sys_ccmp_id){
+//                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
+//            }    
+//        }           
+//        
+//        return $model;
+//    }     
     
-    public function findByPk($pk,$condition='',$params=array())
-    {
-        
-        $model = parent::findByPk($pk,$condition='',$params=array());
-
-		if (Yii::app()->sysCompany->getActiveCompany()){
-            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvepVvoy->vvoy_sys_ccmp_id){
-                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
-            }    
-        }           
-        
-        return $model;
-    }     
-    
-  
+   protected function beforeFind() {
+        $criteria = new CDbCriteria;
+        $criteria->join .= ' INNER JOIN vvoy_voyage vs on vs.vvoy_id = vvep_vvoy_id  ';
+        $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
+        $this->dbCriteria->mergeWith($criteria);
+        parent::beforeFind();
+    }      
 
 }

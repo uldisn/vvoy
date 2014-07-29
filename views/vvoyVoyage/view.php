@@ -146,8 +146,9 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                 'model' => $model,
                                 'attribute' => 'vvoy_start_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                //'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
-                                //'viewformat' => 'yyyy-mm-dd hh:00', //format for display                                
+                                'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
+                                'viewformat' => 'yyyy-mm-dd hh:ii', //format for display                                
+                                //'datetime' => array('minuteStep'=>15)
                             ), 
                             true
                     )
