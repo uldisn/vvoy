@@ -9,7 +9,7 @@ class m140725_200201_alter_table_vfue extends CDbMigration
 	public function up()
 	{
 		$this->execute("
-        ALTER TABLE `eu`.`vvoy_voyage`   
+        ALTER TABLE `vvoy_voyage`   
             ADD COLUMN `vvoy_fuel_tank_start` SMALLINT UNSIGNED NULL  COMMENT 'fuel in tank at start voyage' AFTER `vvoy_notes`,
             ADD COLUMN `vvoy_fuel_tank_end` SMALLINT UNSIGNED NULL  COMMENT 'fuel in tank at end voyage' AFTER `vvoy_fuel_tank_start`,
             ADD COLUMN `vvoy_fuel_tank_start_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel_tank_end`,
@@ -17,7 +17,7 @@ class m140725_200201_alter_table_vfue extends CDbMigration
             ADD COLUMN `vvoy_odo_start` INT NULL AFTER `vvoy_fuel_tank_end_amt`,
             ADD COLUMN `vvoy_odo_end` INT NULL AFTER `vvoy_odo_start`,
             ADD COLUMN `vvoy_fuel` SMALLINT UNSIGNED NULL AFTER `vvoy_fuel_tank_end_amt`,
-            ADD COLUMN `vvoy_fuel_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel`;            
+            ADD COLUMN `vvoy_fuel_amt` DECIMAL(10,2) NULL AFTER `vvoy_fuel`,            
             ADD COLUMN `vvoy_abs_odo_start` INT NULL AFTER `vvoy_fuel_amt`,
             ADD COLUMN `vvoy_abs_odo_end` INT NULL AFTER `vvoy_abs_odo_start`,
             ADD COLUMN `vvoy_mileage` SMALLINT NULL AFTER `vvoy_abs_odo_end`;

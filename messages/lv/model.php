@@ -117,7 +117,7 @@ return array (
   'Vvcl Freight' => 'Summa',
   'Vvcl Notes' => 'Piezīmes',
   'Vvcl Vcnt' => 'Klienta Līgums',
-  'Vvcl Voyage Client' => 'Klientu frakts',
+  'Vvcl Voyage Client' => 'Frakts',
   'Vvep Base Fcrn' => 'Bāzes Valūta',
   'Vvep Base Total' => 'Bāzes Summa',
   'Vvep Count' => 'Skaits',
