@@ -10,7 +10,7 @@ class m140729_190901_insert_psty extends CDbMigration
 	{
 		$this->execute("
             INSERT INTO `psty_setting_type` (`psty_name`, `psty_field_type`) VALUES ('EUR/km', 'money'); 
-            INSERT INTO `eu`.`vepo_expenses_positions` (vepo_id,`vepo_sys_ccmp_id`, `vepo_name`) VALUES (6,'27', 'Autovadītājs EUR/km');
+            INSERT INTO `vepo_expenses_positions` (vepo_id,`vepo_sys_ccmp_id`, `vepo_name`) VALUES (6,'27', 'Autovadītājs EUR/km');
 
 
         ");

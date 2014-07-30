@@ -118,7 +118,13 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                 'type' => 'select',
                                 'attribute' => 'vvoy_fcrn_id',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
+                                'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),    
+                                'success' => 'function(response, newValue) {
+                                                $.fn.yiiGridView.update(\'vvep-voyage-expenses-plan-grid\');
+                                                $.fn.yiiGridView.update(\'vvpo-voyage-point-grid\');
+                                                $.fn.yiiGridView.update(\'vcrt-vvoy-currency-rate-grid\');
+                                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                                
+                                              }',
                             ), true
                     )                    
                 ),
@@ -132,6 +138,13 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                 'model' => $model,
                                 'attribute' => 'vvoy_fcrn_plan_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'success' => 'function(response, newValue) {
+                                                $.fn.yiiGridView.update(\'vvep-voyage-expenses-plan-grid\');
+                                                $.fn.yiiGridView.update(\'vvpo-voyage-point-grid\');
+                                                $.fn.yiiGridView.update(\'vcrt-vvoy-currency-rate-grid\');
+                                                $.fn.yiiGridView.update(\'vvoy-voyage-total-grid\');                                                
+                                              }',                                
+                                
                             ),
                             true
                         )
@@ -179,6 +192,13 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
             ),
         ));
         
+         $this->renderPartial('_grid_vcrt', 
+                    array(
+                        'modelMain' => $model,
+                        'ajax' => false,
+                        )
+                    ); 
+         
          $this->renderPartial('_total', 
                     array(
                         'model' => $total_model,

@@ -51,7 +51,8 @@ class VfueFuel extends BaseVfueFuel
                 && !empty($this->vfue_fcrn_id)
                 && !empty($this->vfue_amt)
                 && (
-                        in_array('vfue_date',$attributes)
+                        is_null($attributes)
+                        || in_array('vfue_date',$attributes)
                         || in_array('vfue_fcrn_id',$attributes)
                         || in_array('vfue_amt',$attributes)
                     )

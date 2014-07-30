@@ -121,7 +121,8 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
                     )
                 ){
             $this->vvep_total = $this->vvep_count * $this->vvep_price;
-            $this->vvep_base_total = Yii::app()->currency->convertFromTo($this->vvep_fcrn_id, $this->vvepVvoy->vvoy_fcrn_id, $this->vvep_total,$this->vvepVvoy->vvoy_fcrn_plan_date);
+            //$this->vvep_base_total = Yii::app()->currency->convertFromTo($this->vvep_fcrn_id, $this->vvepVvoy->vvoy_fcrn_id, $this->vvep_total,$this->vvepVvoy->vvoy_fcrn_plan_date);
+            $this->vvep_base_total = VcrtVvoyCurrencyRate::convertToBase($this->vvep_vvoy_id, $this->vvepVvoy->vvoy_fcrn_id, $this->vvep_total);
             $attributes[] = 'vvep_total';
             $attributes[] = 'vvep_base_total';
         }
@@ -130,33 +131,7 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
 
     }
     
-//    public function findAll($condition='',$params=array())
-//    {
-//        $criteria=$this->getCommandBuilder()->createCriteria($condition,$params);
-//        
-//        //criteria for trucks of SysCompanies
-//        if(Yii::app()->sysCompany->getActiveCompany()){
-//            $criteria->join .= ' INNER JOIN vvoy_voyage vs on vs.vvoy_id = t.vvep_vvoy_id ';
-//            $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());            
-//        }          
-//        return $this->query($criteria,true);
-//    }        
-//    
-//    public function findByPk($pk,$condition='',$params=array())
-//    {
-//        
-//        $model = parent::findByPk($pk,$condition='',$params=array());
-//
-//		if (Yii::app()->sysCompany->getActiveCompany()){
-//            if( Yii::app()->sysCompany->getActiveCompany() != $model->vvepVvoy->vvoy_sys_ccmp_id){
-//                throw new CHttpException(404, Yii::t('TrucksModule.crud_static', 'Requested closed data.'));
-//            }    
-//        }           
-//        
-//        return $model;
-//    }     
-    
-   protected function beforeFind() {
+    protected function beforeFind() {
         $criteria = new CDbCriteria;
         $criteria->join .= ' INNER JOIN vvoy_voyage vs on vs.vvoy_id = vvep_vvoy_id  ';
         $criteria->compare('vs.vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());

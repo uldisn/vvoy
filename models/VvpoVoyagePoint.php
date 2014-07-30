@@ -87,7 +87,8 @@ class VvpoVoyagePoint extends BaseVvpoVoyagePoint
                 && !empty($this->vvpo_plan_fuel_price)
                 && !empty($this->vvpo_plan_fcrn_id)
                 && (
-                        in_array('vvpo_plan_km',$attributes)
+                        is_null($attributes)    
+                        || in_array('vvpo_plan_km',$attributes)
                         || in_array('vvpo_plan_fuel_coefficient',$attributes)
                         || in_array('vvpo_plan_fuel_price',$attributes)
                         || in_array('vvpo_plan_fcrn_id',$attributes)
@@ -96,7 +97,8 @@ class VvpoVoyagePoint extends BaseVvpoVoyagePoint
             $consumtion = $this->vvpoVvoy->vvoyVtrc->vtrc_fuel_consumption * $this->vvpo_plan_fuel_coefficient;
             $fuel = ($this->vvpo_plan_km/100) * $consumtion;
             $this->vvpo_plan_amt = $fuel * $this->vvpo_plan_fuel_price;
-            $this->vvpo_plan_base_amt = Yii::app()->currency->convertFromTo($this->vvpo_plan_fcrn_id, $this->vvpoVvoy->vvoy_fcrn_id, $this->vvpo_plan_amt,$this->vvpoVvoy->vvoy_fcrn_plan_date);
+            //$this->vvpo_plan_base_amt = Yii::app()->currency->convertFromTo($this->vvpo_plan_fcrn_id, $this->vvpoVvoy->vvoy_fcrn_id, $this->vvpo_plan_amt,$this->vvpoVvoy->vvoy_fcrn_plan_date);
+            $this->vvpo_plan_base_amt = VcrtVvoyCurrencyRate::convertToBase($this->vvpo_vvoy_id, $this->vvpo_plan_fcrn_id, $this->vvpo_plan_amt);
             $attributes[] = 'vvpo_plan_amt';
             $attributes[] = 'vvpo_plan_base_amt';
         }

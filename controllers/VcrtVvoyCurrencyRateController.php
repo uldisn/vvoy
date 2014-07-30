@@ -1,14 +1,13 @@
 <?php
 
 
-class VvoyVoyageController extends Controller
+class VcrtVvoyCurrencyRateController extends Controller
 {
     #public $layout='//layouts/column2';
 
     public $defaultAction = "admin";
     public $scenario = "crud";
     public $scope = "crud";
-    public $menu_route = "vvoy/vvoyVoyage";  
 
 
 public function filters()
@@ -24,27 +23,27 @@ public function accessRules()
         array(
             'allow',
             'actions' => array('create', 'admin', 'view', 'update', 'editableSaver', 'delete','ajaxCreate'),
-            'roles' => array('Vvoy.VvoyVoyage.*'),
+            'roles' => array('Vvoy.VcrtVvoyCurrencyRate.*'),
         ),
         array(
             'allow',
             'actions' => array('create','ajaxCreate'),
-            'roles' => array('Vvoy.VvoyVoyage.Create'),
+            'roles' => array('Vvoy.VcrtVvoyCurrencyRate.Create'),
         ),
         array(
             'allow',
             'actions' => array('view', 'admin'), // let the user view the grid
-            'roles' => array('Vvoy.VvoyVoyage.View'),
+            'roles' => array('Vvoy.VcrtVvoyCurrencyRate.View'),
         ),
         array(
             'allow',
             'actions' => array('update', 'editableSaver'),
-            'roles' => array('Vvoy.VvoyVoyage.Update'),
+            'roles' => array('Vvoy.VcrtVvoyCurrencyRate.Update'),
         ),
         array(
             'allow',
             'actions' => array('delete'),
-            'roles' => array('Vvoy.VvoyVoyage.Delete'),
+            'roles' => array('Vvoy.VcrtVvoyCurrencyRate.Delete'),
         ),
         array(
             'deny',
@@ -62,83 +61,58 @@ public function accessRules()
         return true;
     }
 
-    public function actionView($vvoy_id,$ajax = false)
+    public function actionView($vcrt_id, $ajax = false)
     {
-        $model = $this->loadModel($vvoy_id);
-        
+        $model = $this->loadModel($vcrt_id);
         if($ajax){
-            //ajax
-            if($ajax == 'vvoy-voyage-total-grid'){
-                $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
-                $this->renderPartial('_total', 
-                        array(
-                            'model' => $total_model,
-                            'ajax' => $ajax,
-                            )
-                        );                
-            }elseif($ajax == 'vcrt-vvoy-currency-rate-grid'){
-                $this->renderPartial('_grid_vcrt', 
-                        array(
-                            'modelMain' => $model,
-                            'ajax' => $ajax,
-                            )
-                        );
-            }else{
-                $this->renderPartial('_view-relations_grids', 
-                        array(
-                            'modelMain' => $model,
-                            'ajax' => $ajax,
-                            )
-                        );
-            }
+            $this->renderPartial('_view-relations_grids', 
+                    array(
+                        'modelMain' => $model,
+                        'ajax' => $ajax,
+                        )
+                    );
         }else{
-            //full
-            $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
-            $this->render('view', array(
-                                    'model' => $model,
-                                    'total_model' => $total_model,
-                                )
-                            );
+            $this->render('view', array('model' => $model,));
         }
     }
 
     public function actionCreate()
     {
-        $model = new VvoyVoyage;
+        $model = new VcrtVvoyCurrencyRate;
         $model->scenario = $this->scenario;
 
-        $this->performAjaxValidation($model, 'vvoy-voyage-form');
+        $this->performAjaxValidation($model, 'vcrt-vvoy-currency-rate-form');
 
-        if (isset($_POST['VvoyVoyage'])) {
-            $model->attributes = $_POST['VvoyVoyage'];
+        if (isset($_POST['VcrtVvoyCurrencyRate'])) {
+            $model->attributes = $_POST['VcrtVvoyCurrencyRate'];
 
             try {
                 if ($model->save()) {
                     if (isset($_GET['returnUrl'])) {
                         $this->redirect($_GET['returnUrl']);
                     } else {
-                        $this->redirect(array('view', 'vvoy_id' => $model->vvoy_id));
+                        $this->redirect(array('view', 'vcrt_id' => $model->vcrt_id));
                     }
                 }
             } catch (Exception $e) {
-                $model->addError('vvoy_id', $e->getMessage());
+                $model->addError('vcrt_id', $e->getMessage());
             }
-        } elseif (isset($_GET['VvoyVoyage'])) {
-            $model->attributes = $_GET['VvoyVoyage'];
+        } elseif (isset($_GET['VcrtVvoyCurrencyRate'])) {
+            $model->attributes = $_GET['VcrtVvoyCurrencyRate'];
         }
 
         $this->render('create', array('model' => $model));
     }
 
-    public function actionUpdate($vvoy_id)
+    public function actionUpdate($vcrt_id)
     {
-        $model = $this->loadModel($vvoy_id);
+        $model = $this->loadModel($vcrt_id);
         $model->scenario = $this->scenario;
 
-        $this->performAjaxValidation($model, 'vvoy-voyage-form');
+        $this->performAjaxValidation($model, 'vcrt-vvoy-currency-rate-form');
 
-        if (isset($_POST['VvoyVoyage'])) {
-            $model->attributes = $_POST['VvoyVoyage'];
+        if (isset($_POST['VcrtVvoyCurrencyRate'])) {
+            $model->attributes = $_POST['VcrtVvoyCurrencyRate'];
 
 
             try {
@@ -146,33 +120,30 @@ public function accessRules()
                     if (isset($_GET['returnUrl'])) {
                         $this->redirect($_GET['returnUrl']);
                     } else {
-                        $this->redirect(array('view', 'vvoy_id' => $model->vvoy_id));
+                        $this->redirect(array('view', 'vcrt_id' => $model->vcrt_id));
                     }
                 }
             } catch (Exception $e) {
-                $model->addError('vvoy_id', $e->getMessage());
+                $model->addError('vcrt_id', $e->getMessage());
             }
         }
 
-        $this->render('update', array('model' => $model,));
+        $this->render('update', array('model' => $model));
     }
 
     public function actionEditableSaver()
     {
         Yii::import('TbEditableSaver');
-        $es = new TbEditableSaver('VvoyVoyage'); // classname of model to be updated
+        $es = new TbEditableSaver('VcrtVvoyCurrencyRate'); // classname of model to be updated
         $es->update();
     }
 
-    public function actionAjaxCreate($field, $value, $no_ajax = false) 
+    public function actionAjaxCreate($field, $value) 
     {
-        $model = new VvoyVoyage;
+        $model = new VcrtVvoyCurrencyRate;
         $model->$field = $value;
         try {
             if ($model->save()) {
-                if($no_ajax){
-                    $this->redirect(Yii::app()->request->urlReferrer);
-                }            
                 return TRUE;
             }else{
                 return var_export($model->getErrors());
@@ -182,11 +153,11 @@ public function accessRules()
         }
     }
     
-    public function actionDelete($vvoy_id)
+    public function actionDelete($vcrt_id)
     {
         if (Yii::app()->request->isPostRequest) {
             try {
-                $this->loadModel($vvoy_id)->delete();
+                $this->loadModel($vcrt_id)->delete();
             } catch (Exception $e) {
                 throw new CHttpException(500, $e->getMessage());
             }
@@ -205,23 +176,23 @@ public function accessRules()
 
     public function actionAdmin()
     {
-        $model = new VvoyVoyage('search');
+        $model = new VcrtVvoyCurrencyRate('search');
         $scopes = $model->scopes();
         if (isset($scopes[$this->scope])) {
             $model->{$this->scope}();
         }
         $model->unsetAttributes();
 
-        if (isset($_GET['VvoyVoyage'])) {
-            $model->attributes = $_GET['VvoyVoyage'];
+        if (isset($_GET['VcrtVvoyCurrencyRate'])) {
+            $model->attributes = $_GET['VcrtVvoyCurrencyRate'];
         }
 
-        $this->render('admin', array('model' => $model,));
+        $this->render('admin', array('model' => $model));
     }
 
     public function loadModel($id)
     {
-        $m = VvoyVoyage::model();
+        $m = VcrtVvoyCurrencyRate::model();
         // apply scope, if available
         $scopes = $m->scopes();
         if (isset($scopes[$this->scope])) {
@@ -236,7 +207,7 @@ public function accessRules()
 
     protected function performAjaxValidation($model)
     {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'vvoy-voyage-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'vcrt-vvoy-currency-rate-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

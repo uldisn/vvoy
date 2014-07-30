@@ -75,34 +75,42 @@ class VvoyVoyage extends BaseVvoyVoyage
         
         //is new
         $bIsNewRecord = $this->isNewRecord;
+
+        //plan currency rates
+        if(in_array('vvoy_fcrn_id', $attributes) 
+                || in_array('vvoy_fcrn_plan_date', $attributes)){
+            $vcrt = new VcrtVvoyCurrencyRate;
+            $vcrt->deleteRates($this->vvoy_id);
+            $vcrt->fillRates($this->vvoy_id,$this->vvoy_fcrn_plan_date,$this->vvoy_fcrn_id);
+        }                
         
-        $vvoy_fuel_tank_end_amt = $this->calcFuelTankEndAmt();
-        if(!is_null($vvoy_fuel_tank_end_amt)){
-            
-            $this->vvoy_fuel_tank_end_amt = $vvoy_fuel_tank_end_amt;
-            $attributes[] = 'vvoy_fuel_tank_end_amt';
-            
-            $this->vvoy_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
-            $attributes[] = 'vvoy_fuel';
-            
-            $this->vvoy_fuel_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal - $this->vvoy_fuel_tank_end_amt;
-            $attributes[] = 'vvoy_fuel_amt';
-            
-        }
         
         //save
         $r = parent::save($runValidation,$attributes);
-        
+
         if(!$r){
             return $r;
         }
         
+        foreach($this->vfueFuels as $cm){
+            $cm->save();
+        }
+
+        foreach($this->vvclVoyageClients as $cm){
+            $cm->save();
+        }
+        
+        foreach($this->vvpoVoyagePoints as $cm){
+            $cm->save();
+        }
+
+        $this->recalcTotals();
         
         if(!$bIsNewRecord){
             return true;
         }
         
-        // For new record add default records to voyage related tables        
+        
         //add one empty client
         $vvcl = new VvclVoyageClient;
         $vvcl->vvcl_vvoy_id = $this->vvoy_id;
@@ -139,10 +147,27 @@ class VvoyVoyage extends BaseVvoyVoyage
         $vxpr->vxpr_vvoy_id = $this->vvoy_id;
         $vxpr->save();
 
+        
         return true;
 
     }    
     
+    public function recalcTotals(){
+
+        //recalc totals
+        $vvoy_fuel_tank_end_amt = $this->calcFuelTankEndAmt();
+        if(!is_null($vvoy_fuel_tank_end_amt)){
+            
+            $this->vvoy_fuel_tank_end_amt = $vvoy_fuel_tank_end_amt;
+            $this->vvoy_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
+            $this->vvoy_fuel_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal - $this->vvoy_fuel_tank_end_amt;
+
+            parent::save();
+        }        
+        
+    }
+
+
     /**
      * weighted average price
      * @return null
