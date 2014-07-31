@@ -69,10 +69,10 @@ public function accessRules()
         if($ajax){
             //ajax
             if($ajax == 'vvoy-voyage-total-grid'){
-                $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
+                //$total_model = VvoyVoyage::model()->findByPk($vvoy_id);
                 $this->renderPartial('_total', 
                         array(
-                            'model' => $total_model,
+                            'model' => $model,
                             'ajax' => $ajax,
                             )
                         );                
@@ -96,7 +96,6 @@ public function accessRules()
             $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
             $this->render('view', array(
                                     'model' => $model,
-                                    'total_model' => $total_model,
                                 )
                             );
         }

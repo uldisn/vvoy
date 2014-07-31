@@ -103,7 +103,9 @@ $this->widget('TbGridView',
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                        'success' => 'function(response, newValue) {
+                                reload_total_grid();
+                        }',
                         //'placement' => 'right',
                     )
                 ),                
@@ -114,7 +116,9 @@ $this->widget('TbGridView',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         //'placement' => 'right',
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                        'success' => 'function(response, newValue) {
+                                reload_total_grid();
+                        }',
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
                 ),
@@ -207,7 +211,7 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                         'success' => 'function(response, newValue) {
                                             if(newValue == "'.$this->module->vepo_postion_eur_km.'"){
                                                 $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
-                                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                                reload_total_grid();                                            
                                             }
                                      }',                           
                         //'placement' => 'right',
@@ -221,7 +225,7 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',                        
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
@@ -235,7 +239,7 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                         'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),   
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',                                                
                         //'placement' => 'right',
                     )
@@ -248,7 +252,7 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
                         'url' => $this->createUrl('//vvoy/vvepVoyageExpensesPlan/editableSaver'),
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvep-voyage-expenses-plan-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',                        
                         //'placement' => 'right',
                     ),
@@ -420,8 +424,9 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         'success' => 'function(response, newValue) {
+                                            reload_total_grid();
                                             $.fn.yiiGridView.update("vvpo-voyage-point-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            
                                       }',
                         //'placement' => 'right',
                     ),
@@ -445,7 +450,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvpo-voyage-point-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',                    
                         //'placement' => 'right',
                     ),
@@ -460,7 +465,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvpo-voyage-point-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',                        
                         //'placement' => 'right',
                     )
@@ -473,7 +478,7 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
                         'url' => $this->createUrl('//vvoy/vvpoVoyagePoint/editableSaver'),
                         'success' => 'function(response, newValue) {
                                             $.fn.yiiGridView.update("vvpo-voyage-point-grid");
-                                            $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                            
+                                            reload_total_grid();
                                       }',
                         //'placement' => 'right',
                     ),

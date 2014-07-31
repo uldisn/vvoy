@@ -1,3 +1,35 @@
+<?php 
+    /**
+     * @todo jāpārliek uz widget
+     */
+    $ajax_url = $this->createUrl('vvoyDataJson',array(
+        'vvoy_id' => $model->vvoy_id,
+        //'ajax' => 'vvoy-voyage-total-grid',
+        ));
+    Yii::app()->clientScript->registerScript('reload_total_grid', ' 
+            function reload_total_and_start_end_grid(){
+                $.ajax({
+                    type: \'GET\',
+                    url: \''.$ajax_url.'\', 
+                    success: function(data) {
+                        if(data){
+                            if (data.vvoy_fuel) {
+                                $("#start_end_vvoy_fuel").html(data.vvoy_fuel);
+                            }
+                            if (response.vvoy_fuel_amt) {
+                                $("#start_end_vvoy_fuel_amt").html(data.vvoy_fuel_amt);
+                            }                               
+                            if (response.vvoy_fuel_tank_end_amt) {
+                                $("#start_end_vvoy_fuel_tank_end_amt").html(data.vvoy_fuel_tank_end_amt);
+                            }   
+                        }
+                        reload_total_grid();
+                        
+                    }
+                });
+            }    
+            '); 
+?>
 <div id="grid_start_end">
     <table class="items table">
         <thead>
@@ -28,16 +60,7 @@
                         ),
                         'success' => '   
                             function(response, newValue) {
-                                if (response && response.vvoy_fuel) {
-                                    $("#start_end_vvoy_fuel").html(response.vvoy_fuel);
-                                }
-                                if (response && response.vvoy_fuel_amt) {
-                                    $("#start_end_vvoy_fuel_amt").html(response.vvoy_fuel_amt);
-                                }                               
-                                if (response && response.vvoy_fuel_tank_end_amt) {
-                                    $("#start_end_vvoy_fuel_tank_end_amt").html(response.vvoy_fuel_tank_end_amt);
-                                }                                       
-                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");
+                                reload_total_and_start_end_grid();
                             }    
                             
                           ',
@@ -63,16 +86,7 @@
                         ),
                         'success' => '   
                             function(response, newValue) {
-                                if (response && response.vvoy_fuel) {
-                                    $("#start_end_vvoy_fuel").html(response.vvoy_fuel);
-                                }    
-                                if (response && response.vvoy_fuel_amt) {
-                                    $("#start_end_vvoy_fuel_amt").html(response.vvoy_fuel_amt);
-                                }                               
-                                if (response && response.vvoy_fuel_tank_end_amt) {
-                                    $("#start_end_vvoy_fuel_tank_end_amt").html(response.vvoy_fuel_tank_end_amt);
-                                }                                       
-                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");
+                                reload_total_and_start_end_grid();
                             }    
                           ',
                         )
@@ -133,13 +147,7 @@
                             ),
                             'success' => '   
                                 function(response, newValue) {
-                                    if (response && response.vvoy_fuel_amt) {
-                                        $("#start_end_vvoy_fuel_amt").html(response.vvoy_fuel_amt);
-                                    }                               
-                                    if (response && response.vvoy_fuel_tank_end_amt) {
-                                        $("#start_end_vvoy_fuel_tank_end_amt").html(response.vvoy_fuel_tank_end_amt);
-                                    }       
-                                    $.fn.yiiGridView.update("vvoy-voyage-total-grid");
+                                    reload_total_and_start_end_grid();
                                 }    
                               ',
                         )
