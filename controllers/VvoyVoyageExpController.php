@@ -33,7 +33,7 @@ public function accessRules()
         ),
         array(
             'allow',
-            'actions' => array('view', 'admin'), // let the user view the grid
+            'actions' => array('view', 'admin','vvoyDataJson'), // let the user view the grid
             'roles' => array('Vvoy.VvoyVoyage.View'),
         ),
         array(
@@ -68,10 +68,9 @@ public function accessRules()
         if($ajax){
             
             if($ajax == 'vvoy-voyage-total-grid'){
-                $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
                 $this->renderPartial('_total', 
                         array(
-                            'model' => $total_model,
+                            'model' => $model,
                             'ajax' => $ajax,
                             )
                         );                
@@ -87,11 +86,19 @@ public function accessRules()
             $total_model = VvoyVoyage::model()->findByPk($vvoy_id);
             $this->render('view', array(
                                     'model' => $model,
-                                    'total_model' => $total_model,
                                 )
                             );
         }
     }
+
+    public function actionVvoyDataJson($vvoy_id){
+        $model = $this->loadModel($vvoy_id);
+        $json = $model->attributes;
+        header('Content-type:application/json');
+        echo json_encode($json);    
+        
+    }
+
 
     public function actionCreate()
     {

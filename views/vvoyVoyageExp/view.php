@@ -110,31 +110,9 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                 ),
                 array(
                     'name' => 'vvoy_fcrn_id',
-                    //'value' => $model->vvoyFcrn->itemLabel,
-                    'type' => 'raw',
-                    'value' => $this->widget(
-                            'EditableField', array(
-                                'model' => $model,
-                                'type' => 'select',
-                                'attribute' => 'vvoy_fcrn_id',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
-                            ), true
-                    )                    
                 ),
                 array(
                         'name' => 'vvoy_fcrn_plan_date',
-                        'type' => 'raw',
-                        'value' => $this->widget(
-                            'EditableField',
-                            array(
-                                'type' => 'date',
-                                'model' => $model,
-                                'attribute' => 'vvoy_fcrn_plan_date',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ),
-                            true
-                        )
                     ),                
                 array(
                     'name' => 'vvoy_start_date',
@@ -190,7 +168,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     ); 
          $this->renderPartial('_total', 
                     array(
-                        'model' => $total_model,
+                        'model' => $model,
                         'ajax' => false,
                         )
                     ); 

@@ -49,12 +49,14 @@ class VfueFuel extends BaseVfueFuel
         if(
                 !empty($this->vfue_date) 
                 && !empty($this->vfue_fcrn_id)
+                && !empty($this->vfue_qnt)
                 && !empty($this->vfue_amt)
                 && (
                         is_null($attributes)
                         || in_array('vfue_date',$attributes)
                         || in_array('vfue_fcrn_id',$attributes)
                         || in_array('vfue_amt',$attributes)
+                        || in_array('vfue_qnt',$attributes)
                     )
                 ){
             $this->vfue_base_amt = Yii::app()->currency->convertFromTo($this->vfue_fcrn_id, $this->vfueVvoy->vvoy_fcrn_id, $this->vfue_amt,$this->vfue_date);
@@ -64,6 +66,10 @@ class VfueFuel extends BaseVfueFuel
         return parent::save($runValidation, $attributes);        
 
     }    
+    
+    protected function afterSave(){
+        return $this->vfueVvoy->recalcTotals();
+    }
     
     public function search($criteria = null)
     {

@@ -77,8 +77,12 @@ class VvoyVoyage extends BaseVvoyVoyage
         $bIsNewRecord = $this->isNewRecord;
 
         //plan currency rates
-        if(in_array('vvoy_fcrn_id', $attributes) 
-                || in_array('vvoy_fcrn_plan_date', $attributes)){
+        if(!empty($attributes) &&
+                (
+                   in_array('vvoy_fcrn_id', $attributes) 
+                || in_array('vvoy_fcrn_plan_date', $attributes)
+                )
+         ){
             $vcrt = new VcrtVvoyCurrencyRate;
             $vcrt->deleteRates($this->vvoy_id);
             $vcrt->fillRates($this->vvoy_id,$this->vvoy_fcrn_plan_date,$this->vvoy_fcrn_id);
@@ -91,19 +95,9 @@ class VvoyVoyage extends BaseVvoyVoyage
         if(!$r){
             return $r;
         }
-        
-        foreach($this->vfueFuels as $cm){
-            $cm->save();
-        }
 
-        foreach($this->vvclVoyageClients as $cm){
-            $cm->save();
-        }
         
-        foreach($this->vvpoVoyagePoints as $cm){
-            $cm->save();
-        }
-
+        $this->recalcItems();
         $this->recalcTotals();
         
         if(!$bIsNewRecord){
@@ -152,27 +146,28 @@ class VvoyVoyage extends BaseVvoyVoyage
 
     }    
     
-    public function recalcTotals(){
+    public function recalcItems(){
+        
+        foreach($this->vfueFuels as $cm){
+            $cm->save();
+        }
 
-        //recalc totals
-        $vvoy_fuel_tank_end_amt = $this->calcFuelTankEndAmt();
-        if(!is_null($vvoy_fuel_tank_end_amt)){
-            
-            $this->vvoy_fuel_tank_end_amt = $vvoy_fuel_tank_end_amt;
-            $this->vvoy_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
-            $this->vvoy_fuel_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal - $this->vvoy_fuel_tank_end_amt;
+        foreach($this->vvclVoyageClients as $cm){
+            $cm->save();
+        }
+        
+        foreach($this->vvpoVoyagePoints as $cm){
+            $cm->save();
+        }
 
-            parent::save();
-        }        
         
     }
-
-
+    
     /**
      * weighted average price
      * @return null
      */
-    public function calcFuelTankEndAmt(){
+    public function recalcTotals(){
         
         /**
          * validate, is set all data
@@ -198,7 +193,25 @@ class VvoyVoyage extends BaseVvoyVoyage
         $total_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
         $avarge_price = $total_amt/$total_fuel;
         
-        return round($avarge_price*$this->vvoy_fuel_tank_end,2);
+        $this->vvoy_fuel_tank_end_amt = round($avarge_price*$this->vvoy_fuel_tank_end,2);
+        $this->vvoy_fuel = $this->vvoy_fuel_tank_start + $this->fuelExoTotalQnt - $this->vvoy_fuel_tank_end;
+        $this->vvoy_fuel_amt = $this->vvoy_fuel_tank_start_amt + $this->fuelExoTotal - $this->vvoy_fuel_tank_end_amt;        
+        
+        $attributes = array(
+                'vvoy_fuel_tank_end_amt',
+                'vvoy_fuel',
+                'vvoy_fuel_amt',
+            );
+            try {
+                if ($r = parent::save(true, $attributes)) {
+                    return $r;
+                }
+            } catch (Exception $e) {
+                $e = $e->getMessage();
+                var_dump($e);
+                exit;
+            }
+        return; 
         
     }
     

@@ -75,5 +75,9 @@ class VvclVoyageClient extends BaseVvclVoyageClient
             'criteria' => $this->searchCriteria($criteria),
         ));
     }
+    
+    protected function afterSave(){
+        return $this->vvclVvoy->recalcTotals();
+    }
 
 }

@@ -107,4 +107,8 @@ class VvpoVoyagePoint extends BaseVvpoVoyagePoint
 
     }    
 
+    protected function afterSave(){
+        return $this->vvpoVvoy->recalcTotals();
+    }    
+    
 }

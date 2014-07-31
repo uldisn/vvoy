@@ -33,6 +33,7 @@ if(!$ajax || $ajax == 'vvcl-voyage-client-grid'){
             'ajaxOptions' => array(
                     'success' => 'function(html) {
                                     $.fn.yiiGridView.update(\'vvcl-voyage-client-grid\');
+                                    reload_total_grid();
                                  }'
                     ),
             'htmlOptions' => array(
@@ -103,7 +104,9 @@ $this->widget('TbGridView',
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),                        
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                        'success' => 'function(response, newValue) { 
+                                        reload_total_and_start_end_grid()
+                                      }',
                         //'placement' => 'right',
                     )
                 ),                
@@ -114,7 +117,10 @@ $this->widget('TbGridView',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         //'placement' => 'right',
-                        'success' => 'function(response, newValue) {$.fn.yiiGridView.update("vvoy-voyage-total-grid");}',
+                        'success' => 'function(response, newValue) { 
+                                        reload_total_and_start_end_grid()
+                                      }',
+
                     ),
                     'htmlOptions' => array('class' => 'numeric-column'),
                 ),
@@ -242,6 +248,9 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                 'editable' => array(
                     'type' => 'date',
                     'url' => $this->createUrl('//vvoy/vfueFuel/editableSaver'),
+                    'success' => 'function(response, newValue) { 
+                                    reload_total_and_start_end_grid()
+                    }',                    
                     //'placement' => 'right',
                 )
             ),
@@ -252,6 +261,9 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                     'type' => 'select',
                     'url' => $this->createUrl('//vvoy/vfueFuel/editableSaver'),
                     'source' => CHtml::listData(FcrnCurrency::model()->findAll(array('limit' => 1000)), 'fcrn_id', 'itemLabel'),
+                    'success' => 'function(response, newValue) { 
+                                    reload_total_and_start_end_grid()
+                    }',                                        
                     //'placement' => 'right',
                 )
             ),
@@ -271,6 +283,9 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                 'editable' => array(
                     'url' => $this->createUrl('//vvoy/vfueFuel/editableSaver'),
                     //'placement' => 'right',
+                    'success' => 'function(response, newValue) { 
+                                    reload_total_and_start_end_grid()
+                    }',                                        
                 )
             ),
             array(
@@ -280,6 +295,9 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                 'editable' => array(
                     'url' => $this->createUrl('//vvoy/vfueFuel/editableSaver'),
                     //'placement' => 'right',
+                    'success' => 'function(response, newValue) { 
+                                    reload_total_and_start_end_grid()
+                    }',                                        
                 )
             ),
             array(
@@ -342,5 +360,4 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
 
 <?php
     Yii::endProfile('VfueFuel.view.grid');
-}    
-?> 
+}

@@ -39,7 +39,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
         </div>
     </div>
     <h1>
-        &nbsp<i class="icon-road"></i>  
+        &nbsp;<i class="icon-road"></i>  
         <?php echo '' . Yii::t('VvoyModule.model', 'Voyage plan'); ?>
     </h1>
 </div>
@@ -123,7 +123,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                                 $.fn.yiiGridView.update(\'vvep-voyage-expenses-plan-grid\');
                                                 $.fn.yiiGridView.update(\'vvpo-voyage-point-grid\');
                                                 $.fn.yiiGridView.update(\'vcrt-vvoy-currency-rate-grid\');
-                                                $.fn.yiiGridView.update("vvoy-voyage-total-grid");                                                
+                                                reload_total_grid();                                              
                                               }',
                             ), true
                     )                    
@@ -142,7 +142,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                                 $.fn.yiiGridView.update(\'vvep-voyage-expenses-plan-grid\');
                                                 $.fn.yiiGridView.update(\'vvpo-voyage-point-grid\');
                                                 $.fn.yiiGridView.update(\'vcrt-vvoy-currency-rate-grid\');
-                                                $.fn.yiiGridView.update(\'vvoy-voyage-total-grid\');                                                
+                                                reload_total_grid();
                                               }',                                
                                 
                             ),
@@ -201,7 +201,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
          
          $this->renderPartial('_total', 
                     array(
-                        'model' => $total_model,
+                        'model' => $model,
                         'ajax' => false,
                         )
                     ); 

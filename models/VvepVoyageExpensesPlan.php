@@ -130,6 +130,10 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
         return parent::save($runValidation, $attributes);        
 
     }
+
+    protected function afterSave(){
+        return $this->vvepVvoy->recalcTotals();
+    }    
     
     protected function beforeFind() {
         $criteria = new CDbCriteria;
