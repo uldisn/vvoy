@@ -73,7 +73,7 @@ $this->widget('TbGridView',
                     'editable' => array(
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
-                        'source' => CHtml::listData(CcmpCompany::model()->userSysCompanyComanies()->findAll(array('limit' => 1000)), 'ccmp_id', 'itemLabel'),                        
+                        'source' => CHtml::listData(CcmpCompany::model()->userSysCompanyCompanies()->findAll(array('limit' => 1000)), 'ccmp_id', 'itemLabel'),                        
                         //'placement' => 'right',
                     )
                 ),
