@@ -6,7 +6,7 @@
         'vvoy_id' => $model->vvoy_id,
         //'ajax' => 'vvoy-voyage-total-grid',
         ));
-    Yii::app()->clientScript->registerScript('reload_total_grid', ' 
+    Yii::app()->clientScript->registerScript('reload_total_and_start_end_grid', ' 
             function reload_total_and_start_end_grid(){
                 $.ajax({
                     type: \'GET\',
@@ -16,10 +16,10 @@
                             if (data.vvoy_fuel) {
                                 $("#start_end_vvoy_fuel").html(data.vvoy_fuel);
                             }
-                            if (response.vvoy_fuel_amt) {
+                            if (data.vvoy_fuel_amt) {
                                 $("#start_end_vvoy_fuel_amt").html(data.vvoy_fuel_amt);
                             }                               
-                            if (response.vvoy_fuel_tank_end_amt) {
+                            if (data.vvoy_fuel_tank_end_amt) {
                                 $("#start_end_vvoy_fuel_tank_end_amt").html(data.vvoy_fuel_tank_end_amt);
                             }   
                         }
