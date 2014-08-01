@@ -131,7 +131,7 @@ public function accessRules()
 
     public function actionAjaxCreate($field, $value) 
     {
-        $model = new VvoyVoyage;
+        $model = new VvclVoyageClient;
         $model->$field = $value;
         try {
             if ($model->save()) {

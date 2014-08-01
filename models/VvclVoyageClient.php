@@ -44,7 +44,15 @@ class VvclVoyageClient extends BaseVvclVoyageClient
 
     public function save($runValidation = true, $attributes = NULL)
     {
-         
+        
+        if($this->isNewRecord){
+            $vvoy = VvoyVoyage::model()->findByPk($this->vvcl_vvoy_id);
+            $this->vvcl_fcrn_id = $vvoy->vvoy_fcrn_id;
+            $this->vvcl_plan_fcrn_id = $vvoy->vvoy_fcrn_id;
+//            $attributes[] = 'vvcl_fcrn_id';
+//            $attributes[] = 'vvcl_plan_fcrn_id';
+        }
+        
         //calc plan base amt
         if(
                 !empty($this->vvcl_plan_fcrn_id)

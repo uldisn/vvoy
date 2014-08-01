@@ -99,7 +99,7 @@ $this->widget('TbGridView',
                 ),
                 array(
                     'name' => 'vvcl_plan_fcrn_id',
-                    'value' => '$data->vvclPlanFcrn->itemLabel',
+                    //'value' => '$data->vvclPlanFcrn->fcrn_code',
                 ),
                 array(
                     'name' => 'vvcl_plan_freight',
@@ -206,7 +206,9 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
                 'ajax' => 'vfue-fuel-grid',
             ),
             'ajaxOptions' => array(
-                    'success' => 'function(html) {$.fn.yiiGridView.update(\'vfue-fuel-grid\');}'
+                    'success' => 'function(html) {
+                                    $.fn.yiiGridView.update(\'vfue-fuel-grid\');
+                }'
                     ),
             'htmlOptions' => array(
                 'title' => Yii::t('VvoyModule.crud', 'Add new record'),

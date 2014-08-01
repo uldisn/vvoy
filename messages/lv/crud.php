@@ -17,10 +17,15 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+  'Finish' => 'Beigās',
+  'Fuel Tank' => 'Degviela bākā',
+  'Fuel Tank Amt' => 'Degvielas summa bākā',
+  'In Way' => 'Ceļā',
+  'Odo' => 'Odo.',
+  'Start' => 'Sākums',
+  'List' => '@@Saraksts@@',
+  'Requested closed data.' => '@@Pieprasīti Slēgti dati@@',
   'Add new record' => 'Pievienot Jaunu Ierakstu',
-  'List' => 'Saraksts',
-  'Requested closed data.' => 'Pieprasīti Slēgti dati',
-  'View Mode' => 'Skatīšanās Režīms',
   'Cancel' => 'Atcelt',
   'Create' => 'Izveidot',
   'Data' => 'Dati',
@@ -35,4 +40,5 @@ return array (
   'The requested page does not exist.' => 'Pieprasītā lapa neeksistē',
   'Update' => 'Labot',
   'View' => 'Skatīt',
+  'View Mode' => 'Skatīšanās Režīms',
 );

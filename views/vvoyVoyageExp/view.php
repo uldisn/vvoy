@@ -21,7 +21,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
     <div class="btn-toolbar pull-left">
         <div class="btn-group">
             <?php
-            echo $cancel_button;
+//            echo $cancel_button;
 //            $this->widget("bootstrap.widgets.TbButton", array(
 //                "label" => Yii::t("VvoyModule.crud", "Delete"),
 //                "type" => "danger",
@@ -39,7 +39,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
         </div>
     </div>
     <h1>
-        &nbsp<i class="icon-road"></i>  
+        &nbsp;<i class="icon-road"></i>  
         <?php echo '' . Yii::t('VvoyModule.model', 'Voyage expenses'); ?>
     </h1>
 </div>
@@ -164,7 +164,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     array(
                         'model' => $model,
                         'ajax' => false,
-                        ),false,true
+                        )
                     ); 
          $this->renderPartial('_total', 
                     array(
@@ -177,14 +177,30 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
 
 
     <div class="span8">
-        <?php $this->renderPartial('_view-relations_grids', 
+        <?php 
+            $this->renderPartial('_view-relations_grids', 
                     array(
                         'modelMain' => $model,
                         'ajax' => false,
                         )
-                    ); ?>        
+                    ); 
+            ?>        
     </div>
+    <div class="span8">
+        <?php $this->widget('d2FilesWidget',array('module'=>$this->module->id, 'model'=>$model)); ?>
+    </div>    
 </div>
 
 <?php
+$cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
+    "icon" => "chevron-left",
+    "size" => "large",
+    "url" => (isset($_GET["returnUrl"])) ? $_GET["returnUrl"] : array("{$this->id}/admin"),
+    "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.View")),
+    "htmlOptions" => array(
+        "class" => "search-button",
+        "data-toggle" => "tooltip",
+        "title" => Yii::t("VvoyModule.crud", "Cancel"),
+    )
+        ), TRUE);
 echo $cancel_button;
