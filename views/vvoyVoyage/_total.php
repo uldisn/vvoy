@@ -64,7 +64,7 @@ if (!$ajax) {
             <td style="width: 5px">+</td>
             <td class="numeric-column"><?php echo $model->freightPlanTotal ?></td>
             <td style="width: 5px">+</td>
-            <td class="numeric-column"><?php echo $model->freightPlanTotal ?></td>
+            <td class="numeric-column"><?php echo $model->freightTotal ?></td>
         </tr>
         <tr>
             <th><?php echo Yii::t('VvoyModule.model', 'Expenses') ?></th>            

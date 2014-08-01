@@ -98,6 +98,14 @@ $this->widget('TbGridView',
                     )
                 ),
                 array(
+                    'name' => 'vvcl_plan_fcrn_id',
+                    'value' => '$data->vvclPlanFcrn->itemLabel',
+                ),
+                array(
+                    'name' => 'vvcl_plan_freight',
+                    'htmlOptions' => array('class' => 'numeric-column'),                    
+                ),
+                array(
                     'class' => 'editable.EditableColumn',
                     'name' => 'vvcl_fcrn_id',
                     'editable' => array(

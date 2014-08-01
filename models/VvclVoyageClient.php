@@ -45,6 +45,21 @@ class VvclVoyageClient extends BaseVvclVoyageClient
     public function save($runValidation = true, $attributes = NULL)
     {
          
+        //calc plan base amt
+        if(
+                !empty($this->vvcl_plan_fcrn_id)
+                && !empty($this->vvcl_plan_freight)
+                && (
+                        is_null($attributes)    
+                    || in_array('vvcl_plan_freight', $attributes)
+                    || in_array('vvcl_plan_fcrn_id', $attributes)
+                   )
+        ){
+            //$this->vvcl_base_amt = Yii::app()->currency->convertFromTo($this->vvcl_fcrn_id, $this->vvclVvoy->vvoy_fcrn_id, $this->vvcl_freight,$this->vvclVvoy->vvoy_fcrn_plan_date);
+            $this->vvcl_plan_base_amt = VcrtVvoyCurrencyRate::convertToBase($this->vvcl_vvoy_id, $this->vvcl_plan_fcrn_id, $this->vvcl_plan_freight);
+            $attributes[] = 'vvcl_plan_base_amt';
+        }
+
         //calc base amt
         if(
                 !empty($this->vvcl_fcrn_id)
@@ -55,8 +70,7 @@ class VvclVoyageClient extends BaseVvclVoyageClient
                     || in_array('vvcl_fcrn_id', $attributes)
                    )
         ){
-            //$this->vvcl_base_amt = Yii::app()->currency->convertFromTo($this->vvcl_fcrn_id, $this->vvclVvoy->vvoy_fcrn_id, $this->vvcl_freight,$this->vvclVvoy->vvoy_fcrn_plan_date);
-            $this->vvcl_base_amt = VcrtVvoyCurrencyRate::convertToBase($this->vvcl_vvoy_id, $this->vvcl_fcrn_id, $this->vvcl_freight);
+            $this->vvcl_base_amt = Yii::app()->currency->convertFromTo($this->vvcl_fcrn_id, $this->vvclVvoy->vvoy_fcrn_id, $this->vvcl_freight,$this->vvclVvoy->vvoy_fcrn_plan_date);
             $attributes[] = 'vvcl_base_amt';
         }
     

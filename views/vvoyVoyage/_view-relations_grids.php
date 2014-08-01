@@ -98,7 +98,7 @@ $this->widget('TbGridView',
                 ),
                 array(
                     'class' => 'editable.EditableColumn',
-                    'name' => 'vvcl_fcrn_id',
+                    'name' => 'vvcl_plan_fcrn_id',
                     'editable' => array(
                         'type' => 'select',
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
@@ -112,7 +112,7 @@ $this->widget('TbGridView',
                 array(
                     //decimal(8,2)
                     'class' => 'editable.EditableColumn',
-                    'name' => 'vvcl_freight',
+                    'name' => 'vvcl_plan_freight',
                     'editable' => array(
                         'url' => $this->createUrl('//vvoy/vvclVoyageClient/editableSaver'),
                         //'placement' => 'right',
