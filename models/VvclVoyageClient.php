@@ -44,10 +44,7 @@ class VvclVoyageClient extends BaseVvclVoyageClient
 
     public function save($runValidation = true, $attributes = NULL)
     {
-        if(empty($attributes)){
-            return parent::save();
-        }
-        
+         
         //calc base amt
         if(
                 !empty($this->vvcl_fcrn_id)
@@ -77,7 +74,8 @@ class VvclVoyageClient extends BaseVvclVoyageClient
     }
     
     protected function afterSave(){
-        return $this->vvclVvoy->recalcTotals();
+        parent::afterSave();
+        $this->vvclVvoy->recalcTotals();
     }
 
 }

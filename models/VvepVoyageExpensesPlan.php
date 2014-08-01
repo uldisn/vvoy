@@ -61,11 +61,13 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
     public function save($runValidation = true, $attributes = NULL) 
     {
 
-        //euro centi/km 
+        
         
         $vvoy_module=Yii::app()->getController()->module;
 
-        
+        /**
+         * euro centi/km 
+         */
         if(!empty($attributes) && in_array ('vvep_vepo_id',$attributes)  && $this->vvep_vepo_id == $vvoy_module->vepo_postion_eur_km){
             
             $model_vvoy = $this->vvepVvoy;
@@ -132,7 +134,8 @@ class VvepVoyageExpensesPlan extends BaseVvepVoyageExpensesPlan
     }
 
     protected function afterSave(){
-        return $this->vvepVvoy->recalcTotals();
+        parent::afterSave();
+        $this->vvepVvoy->recalcTotals();
     }    
     
     protected function beforeFind() {

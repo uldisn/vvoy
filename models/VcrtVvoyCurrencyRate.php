@@ -142,4 +142,10 @@ class VcrtVvoyCurrencyRate extends BaseVcrtVvoyCurrencyRate
         return round($amt * $vcrt->vcrt_rate,$round);
     }
     
+    protected function afterSave(){
+        parent::afterSave();
+        $this->vcrtVvoy->recalcItems();
+        $this->vcrtVvoy->recalcTotals();
+    }    
+    
 }

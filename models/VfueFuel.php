@@ -68,7 +68,8 @@ class VfueFuel extends BaseVfueFuel
     }    
     
     protected function afterSave(){
-        return $this->vfueVvoy->recalcTotals();
+        parent::afterSave();
+        $this->vfueVvoy->recalcTotals();
     }
     
     public function search($criteria = null)
