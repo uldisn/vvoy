@@ -157,8 +157,7 @@ public function accessRules()
 
     public function actionEditableSaver()
     {
-        Yii::import('TbEditableSaver');
-        $es = new TbEditableSaver('VvoyVoyage'); // classname of model to be updated
+        $es = new EditableSaver('VvoyVoyage'); // classname of model to be updated
         $es->update();
         
         //atgriezj pieprasītac vērtības

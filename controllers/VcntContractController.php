@@ -125,8 +125,7 @@ public function accessRules()
 
     public function actionEditableSaver()
     {
-        Yii::import('TbEditableSaver');
-        $es = new TbEditableSaver('VcntContract'); // classname of model to be updated
+        $es = new EditableSaver('VcntContract'); // classname of model to be updated
         $es->update();
     }
 
