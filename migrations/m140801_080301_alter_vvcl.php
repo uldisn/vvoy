@@ -16,7 +16,7 @@ class m140801_080301_alter_vvcl extends CDbMigration
               ADD COLUMN `vvcl_plan_base_amt` DECIMAL(8,2) UNSIGNED NULL AFTER `vvcl_fcrn_id`;
 
             ALTER TABLE `vvcl_voyage_client` 
-                ADD FOREIGN KEY (`vvcl_plan_fcrn_id`) REFERENCES `eu`.`fcrn_currency`(`fcrn_id`); 
+                ADD FOREIGN KEY (`vvcl_plan_fcrn_id`) REFERENCES `fcrn_currency`(`fcrn_id`); 
 
         ");
 	}

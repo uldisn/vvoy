@@ -371,3 +371,91 @@ if(!$ajax || $ajax == 'vfue-fuel-grid'){
 <?php
     Yii::endProfile('VfueFuel.view.grid');
 }
+
+if(!$ajax || $ajax == 'vexp-expenses-grid'){
+    Yii::beginProfile('vexp_vvoy_id.view.grid');
+?>
+
+<div class="table-header">
+    <?=Yii::t('VvoyModule.model', 'Vexp Expenses')?>
+    <?php    
+        
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'ajaxButton', 
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-plus',
+            'url' => array(
+                '//vvoy/vexpExpenses/ajaxCreate',
+                'field' => 'vexp_vvoy_id',
+                'value' => $modelMain->primaryKey,
+                'ajax' => 'vexp-expenses-grid',
+            ),
+            'ajaxOptions' => array(
+                    'success' => 'function(html) {$.fn.yiiGridView.update(\'vexp-expenses-grid\');}'
+                    ),
+            'htmlOptions' => array(
+                'title' => Yii::t('VvoyModule.crud', 'Add new record'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    ?>
+</div>
+ 
+<?php 
+
+    if (empty($modelMain->vexpExpenses)) {
+        $model = new VexpExpenses;
+        $model->vexp_vvoy_id = $modelMain->primaryKey;
+        $model->save();
+        unset($model);
+    } 
+    
+    $model = new VexpExpenses();
+    $model->vexp_vvoy_id = $modelMain->primaryKey;
+
+    // render grid view
+
+    $this->widget('TbGridView',
+        array(
+            'id' => 'vexp-expenses-grid',
+            'dataProvider' => $model->search(),
+            'template' => '{summary}{items}',
+            'summaryText' => '&nbsp;',
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),            
+            'columns' => array(
+                array(
+                'name' => 'vepo_name',
+                'value' => '$data->vexpVepo->itemLabel',
+                ),
+                array(
+                    'name' => 'fcrn_name',
+                    'value' => '$data->vexpFixr->fixrFcrn->itemLabel',
+                ),
+                array(
+                    'name' => 'fixr_amt',
+                    'value' => '$data->vexpFixr->fixr_amt',
+                ),
+                array(
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vexp_notes',
+                    'editable' => array(
+                        'type' => 'textarea',
+                        'url' => $this->createUrl('//vvoy/vexpExpenses/editableSaver'),
+                        //'placement' => 'right',
+                    )
+                ),
+
+            )
+        )
+    );
+    ?>
+
+<?php
+    Yii::endProfile('VexpExpenses.view.grid');
+}

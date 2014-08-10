@@ -9,7 +9,7 @@ class m140716_141001_alter_table_vfue extends CDbMigration
 	public function up()
 	{
 		$this->execute("
-            ALTER TABLE `vfue_fuel` ADD FOREIGN KEY (`vfue_vvoy_id`) REFERENCES `eu`.`vvoy_voyage`(`vvoy_id`); 
+            ALTER TABLE `vfue_fuel` ADD FOREIGN KEY (`vfue_vvoy_id`) REFERENCES `vvoy_voyage`(`vvoy_id`); 
             ALTER TABLE `vfue_fuel` DROP FOREIGN KEY `vfue_fuel_ibfk_1`; 
         ");
 	}

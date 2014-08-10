@@ -11,8 +11,9 @@
  * @property string $vexp_notes
  *
  * Relations of table "vexp_expenses" available as properties of the model:
- * @property VvoyVoyage $vexpVvoy
+ * @property FixrFiitXRef $vexpFixr
  * @property VepoExpensesPositions $vexpVepo
+ * @property VvoyVoyage $vexpVvoy
  */
 abstract class BaseVexpExpenses extends CActiveRecord
 {
@@ -61,8 +62,9 @@ abstract class BaseVexpExpenses extends CActiveRecord
     {
         return array_merge(
             parent::relations(), array(
-                'vexpVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vexp_vvoy_id'),
+                'vexpFixr' => array(self::BELONGS_TO, 'FixrFiitXRef', 'vexp_fixr_id'),
                 'vexpVepo' => array(self::BELONGS_TO, 'VepoExpensesPositions', 'vexp_vepo_id'),
+                'vexpVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vexp_vvoy_id'),
             )
         );
     }
@@ -87,7 +89,7 @@ abstract class BaseVexpExpenses extends CActiveRecord
         $criteria->compare('t.vexp_id', $this->vexp_id, true);
         $criteria->compare('t.vexp_vepo_id', $this->vexp_vepo_id);
         $criteria->compare('t.vexp_vvoy_id', $this->vexp_vvoy_id);
-        $criteria->compare('t.vexp_fixr_id', $this->vexp_fixr_id, true);
+        $criteria->compare('t.vexp_fixr_id', $this->vexp_fixr_id);
         $criteria->compare('t.vexp_notes', $this->vexp_notes, true);
 
 

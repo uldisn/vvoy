@@ -1,6 +1,6 @@
 <?php
 
-class m140725_180201_alter_table_vfue extends CDbMigration
+class m140810_102601_alter_vexp extends CDbMigration
 {
 
 	/**
@@ -9,9 +9,9 @@ class m140725_180201_alter_table_vfue extends CDbMigration
 	public function up()
 	{
 		$this->execute("
-            ALTER TABLE `vfue_fuel`   
-                ADD COLUMN `vfue_ppxd_id` INT UNSIGNED NULL  COMMENT 'Payment card, advance' AFTER `vfue_amt`,
-                ADD FOREIGN KEY (`vfue_ppxd_id`) REFERENCES `ppxd_person_x_document`(`ppxd_id`);
+            ALTER TABLE `vexp_expenses` ADD FOREIGN KEY (`vexp_fixr_id`) REFERENCES `fixr_fiit_x_ref`(`fixr_id`); 
+
+
         ");
 	}
 
