@@ -14,6 +14,7 @@ class m140810_100201_create_vexp extends CDbMigration
               `vexp_vepo_id` smallint(3) unsigned DEFAULT NULL,
               `vexp_vvoy_id` int(10) unsigned DEFAULT NULL,
               `vexp_fixr_id` int(10) unsigned NOT NULL,
+              `vexp_base_amt` DECIMAL(10,2) UNSIGNED,
               `vexp_notes` text,
               PRIMARY KEY (`vexp_id`),
               KEY `vexp_vepo_id` (`vexp_vepo_id`),

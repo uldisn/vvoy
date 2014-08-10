@@ -62,4 +62,26 @@ class VexpExpenses extends BaseVexpExpenses
         ));
     }
 
+    public function save($runValidation = true, $attributes = NULL) 
+    {
+
+        //calc base amt
+        if(
+                !empty($this->vexpFixr->fixr_fcrn_date) 
+                && !empty($this->vexpFixr->fixr_fcrn_id)
+                && !empty($this->vexpFixr->fixr_amt)
+           ){
+            $this->vexp_base_amt = Yii::app()->currency->convertFromTo(
+                                                            $this->vexpFixr->fixr_fcrn_id, 
+                                                            $this->vexpVvoy->vvoy_fcrn_id, 
+                                                            $this->vexpFixr->fixr_amt,
+                                                            $this->vexpFixr->fixr_fcrn_date
+                    );
+            //$attributes[] = 'vexp_base_amt';
+        }
+    
+        return parent::save($runValidation, $attributes);        
+
+    }        
+    
 }
