@@ -33,8 +33,6 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
 //                ),
 //                "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.Delete"))
 //            ));
-            
-                 
             ?>                    
         </div>
     </div>
@@ -48,63 +46,75 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
         <?php
         $this->widget(
                 'TbDetailView', array(
-            'id' => 'vvoy_voyage_view',        
+            'id' => 'vvoy_voyage_view',
             'data' => $model,
             'attributes' => array(
                 array(
                     'name' => 'vvoy_number',
                     'type' => 'raw',
                     'value' => $this->widget(
-                        'EditableField', 
-                            array(
-                                'model' => $model,
-                                'attribute' => 'vvoy_number',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                            'EditableField', array(
+                        'model' => $model,
+                        'attribute' => 'vvoy_number',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
                             ), true
-                        )
+                    )
                 ),
                 array(
                     'name' => 'vvoy_vtrc_id',
                     'type' => 'raw',
                     'value' => $this->widget(
-                        'EditableField', 
-                            array(
-                                'model' => $model,
-                                'type' => 'select',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'source' => CHtml::listData(VtrcTruck::model()->findAll(array('limit' => 1000)), 'vtrc_id', 'itemLabel'),                        
-                                'attribute' => 'vvoy_vtrc_id',
-
+                            'EditableField', array(
+                        'model' => $model,
+                        'type' => 'select',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        'source' => CHtml::listData(VtrcTruck::model()->findAll(array('limit' => 1000)), 'vtrc_id', 'itemLabel'),
+                        'attribute' => 'vvoy_vtrc_id',
                             ), true
-                        )                    
-                    
+                    ).
+                    '&nbsp;'.CHtml::link(
+                            '<i class="icon-external-link"></i>',
+                            array('/trucks/vtrcTruck/view','vtrc_id'=>$model->vvoy_vtrc_id),
+                            array(
+                                'target'=>'_blank',
+                                'title'=>Yii::t('VvoyModule.model', 'Show truck data'),
+                                'data-toggle'=>'tooltip',
+                                )
+                            )
                 ),
                 array(
                     'name' => 'vvoy_vtrl_id',
                     'type' => 'raw',
                     'value' => $this->widget(
-                        'EditableField', 
-                            array(
-                                'model' => $model,
-                                'type' => 'select',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'source' => CHtml::listData(VtrlTrailer::model()->findAll(array('limit' => 1000)), 'vtrl_id', 'itemLabel'),                        
-                                'attribute' => 'vvoy_vtrl_id',
-
+                            'EditableField', array(
+                        'model' => $model,
+                        'type' => 'select',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        'source' => CHtml::listData(VtrlTrailer::model()->findAll(array('limit' => 1000)), 'vtrl_id', 'itemLabel'),
+                        'attribute' => 'vvoy_vtrl_id',
                             ), true
-                        )                    
-                    
+                    ).
+                    '&nbsp;'.
+                    CHtml::link(
+                            '<i class="icon-external-link"></i>',
+                            array('/trucks/vtrlTrailer/view','vtrl_id'=>$model->vvoy_vtrl_id),
+                            array(
+                                'target'=>'_blank',
+                                'title'=>Yii::t('VvoyModule.model', 'Show trailer data'),
+                                'data-toggle'=>'tooltip',
+                                )
+                            )
                 ),
                 array(
                     'name' => 'vvoy_status',
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
-                                'model' => $model,
-                                'type' => 'select',
-                                'attribute' => 'vvoy_status',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'source' => $model->getEnumFieldLabels('vvoy_status'),
+                        'model' => $model,
+                        'type' => 'select',
+                        'attribute' => 'vvoy_status',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                        'source' => $model->getEnumFieldLabels('vvoy_status'),
                             ), true
                     )
                 ),
@@ -112,22 +122,18 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     'name' => 'vvoy_fcrn_id',
                 ),
                 array(
-                        'name' => 'vvoy_fcrn_plan_date',
-                    ),                
+                    'name' => 'vvoy_fcrn_plan_date',
+                ),
                 array(
                     'name' => 'vvoy_start_date',
                     'type' => 'raw',
                     'value' => $this->widget(
-                            'EditableField', 
-                            array(
-                                'type' => 'datetime',
-                                'model' => $model,
-                                'attribute' => 'vvoy_start_date',
-                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                //'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
-                                //'viewformat' => 'yyyy-mm-dd hh:00', //format for display                                
-                            ), 
-                            true
+                            'EditableField', array(
+                        'type' => 'datetime',
+                        'model' => $model,
+                        'attribute' => 'vvoy_start_date',
+                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                            ), true
                     )
                 ),
                 array(
@@ -141,7 +147,6 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                             ), true
                     )
                 ),
-
                 array(
                     'name' => 'vvoy_notes',
                     'type' => 'raw',
@@ -153,41 +158,72 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                             ), true
                     )
                 ),
-                
             ),
         ));
-?>
-            
 
-    <?php        
-         $this->renderPartial('_start_end', 
-                    array(
-                        'model' => $model,
-                        'ajax' => false,
-                        )
-                    ); 
-         $this->renderPartial('_total', 
-                    array(
-                        'model' => $model,
-                        'ajax' => false,
-                        )
-                    ); 
-         ?>                
+        $total_ajax_url = $this->createUrl('', array(
+            'vvoy_id' => $model->vvoy_id,
+            'ajax' => 'vvoy-voyage-total-grid',
+        ));
+
+        $planed_real_ajax_url = $this->createUrl('', array(
+            'vvoy_id' => $model->vvoy_id,
+            'ajax' => 'vvoy-voyage-compare-grid',
+        ));
+
+        Yii::app()->clientScript->registerScript('reload_total_grid', ' 
+            function reload_total_grid(){
+                var table = $("#vvoy-voyage-total-grid");
+                $.ajax({
+                    type: \'GET\',
+                    url: \'' . $total_ajax_url . '\', 
+                    success: function(html) {
+                        $(table).html(html);
+                    }
+                });
+                var table = $("#vvoy-voyage-compare-grid");
+                $.ajax({
+                    type: \'GET\',
+                    url: \'' . $planed_real_ajax_url . '\', 
+                    success: function(html) {
+                        $(table).html(html);
+                    }
+                });
+            }    
+            ');
+
+        $this->renderPartial('_start_end', array(
+            'model' => $model,
+            'ajax' => false,
+                )
+        );
+
+        $this->renderPartial('_planed_real', array(
+            'model' => $model,
+            'ajax' => false,
+                )
+        );
+
+        $this->renderPartial('_total', array(
+            'model' => $model,
+            'ajax' => false,
+                )
+        );
+        ?>                
     </div>
 
 
     <div class="span8">
-        <?php 
-            $this->renderPartial('_view-relations_grids', 
-                    array(
-                        'modelMain' => $model,
-                        'ajax' => false,
-                        )
-                    ); 
-            ?>        
+        <?php
+        $this->renderPartial('_view-relations_grids', array(
+            'modelMain' => $model,
+            'ajax' => false,
+                )
+        );
+        ?>        
     </div>
     <div class="span8">
-        <?php $this->widget('d2FilesWidget',array('module'=>$this->module->id, 'model'=>$model)); ?>
+        <?php $this->widget('d2FilesWidget', array('module' => $this->module->id, 'model' => $model)); ?>
     </div>    
 </div>
 

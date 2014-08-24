@@ -31,6 +31,7 @@
  * @property VcrtVvoyCurrencyRate[] $vcrtVvoyCurrencyRates
  * @property VexpExpenses[] $vexpExpenses
  * @property VfueFuel[] $vfueFuels
+ * @property VfufFuelFinv[] $vfufFuelFinvs
  * @property VvclVoyageClient[] $vvclVoyageClients
  * @property VvepVoyageExpensesPlan[] $vvepVoyageExpensesPlans
  * @property VvexVoyageExpenses[] $vvexVoyageExpenses
@@ -101,6 +102,7 @@ abstract class BaseVvoyVoyage extends CActiveRecord
                 'vcrtVvoyCurrencyRates' => array(self::HAS_MANY, 'VcrtVvoyCurrencyRate', 'vcrt_vvoy_id'),
                 'vexpExpenses' => array(self::HAS_MANY, 'VexpExpenses', 'vexp_vvoy_id'),
                 'vfueFuels' => array(self::HAS_MANY, 'VfueFuel', 'vfue_vvoy_id'),
+                'vfufFuelFinvs' => array(self::HAS_MANY, 'VfufFuelFinv', 'vfuf_vvoy_id'),
                 'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
                 'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
                 'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),

@@ -74,6 +74,13 @@ public function accessRules()
                             'ajax' => $ajax,
                             )
                         );                
+            }elseif($ajax == 'vvoy-voyage-compare-grid'){
+                $this->renderPartial('_planed_real', 
+                        array(
+                            'model' => $model,
+                            'ajax' => $ajax,
+                            )
+                        );                
             }else{
                 $this->renderPartial('_view-relations_grids', 
                         array(

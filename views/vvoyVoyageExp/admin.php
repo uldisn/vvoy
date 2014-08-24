@@ -67,12 +67,12 @@ $this->widget('TbGridView',
             ),
             array(
                 'header' => Yii::t('VvoyModule.model', 'Fuel'),
-                'value' => '$data->fuelPlanTotal',
+                'value' => '$data->fuelPlanTotalAmt',
                 'htmlOptions' => array('class' => 'numeric-column'),
             ),
             array(
                 'header' => Yii::t('VvoyModule.model', 'Diff.'),
-                'value' => '$data->freightPlanTotal - $data->fuelPlanTotal - $data->expensesPlanTotal',
+                'value' => '$data->freightPlanTotal - $data->fuelPlanTotalAmt - $data->expensesPlanTotal',
                 'htmlOptions' => array('class' => 'numeric-column'),
             ),            
             array(

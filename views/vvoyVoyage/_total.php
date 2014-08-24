@@ -76,14 +76,14 @@ if (!$ajax) {
         <tr>
             <th><?php echo Yii::t('VvoyModule.model', 'Fuel') ?></th>
             <td>-</td>
-            <td class="numeric-column"><?php echo $model->fuelPlanTotal ?></td>            
+            <td class="numeric-column"><?php echo $model->fuelPlanTotalAmt ?></td>            
             <td>-</td>
             <td class="numeric-column"><?php echo $model->vvoy_fuel_amt ?></td>            
         </tr>
         <tr>
             <th><?php echo Yii::t('VvoyModule.model', 'Balance') ?></th>
             <td></td>
-            <td class="numeric-column total-row"><?php echo $model->freightPlanTotal - $model->fuelPlanTotal - $model->expensesPlanTotal ?></td>            
+            <td class="numeric-column total-row"><?php echo $model->freightPlanTotal - $model->fuelPlanTotalAmt - $model->expensesPlanTotal ?></td>            
             <td></td>
             <td class="numeric-column total-row">??</td>            
         </tr>

@@ -25,10 +25,12 @@ class VvoyVoyage extends BaseVvoyVoyage
                 'freightPlanTotal'=>array(self::STAT,  'VvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_plan_base_amt)'),                
                 'freightTotal'=>array(self::STAT,  'VvclVoyageClient', 'vvcl_vvoy_id', 'select' => 'SUM(vvcl_base_amt)'),                
                 'expensesPlanTotal'=>array(self::STAT,  'VvepVoyageExpensesPlan', 'vvep_vvoy_id', 'select' => 'SUM(vvep_base_total)'),                
-                'fuelPlanTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
+                'fuelPlanTotalAmt'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_base_amt)'),                
+                'fuelPlanTotalQnt'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(round(vvpo_plan_amt/vvpo_plan_fuel_price,2))'),                
                 'fuelExoTotal'=>array(self::STAT,  'VfueFuel', 'vfue_vvoy_id', 'select' => 'SUM(vfue_base_amt)'),                
                 'fuelExoTotalQnt'=>array(self::STAT,  'VfueFuel', 'vfue_vvoy_id', 'select' => 'SUM(vfue_qnt)'),                
                 'milagePlanTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_km)'),                
+                'vexpBaseAmtTotal'=>array(self::STAT,  'VexpExpenses', 'vexp_vvoy_id', 'select' => 'SUM(vexp_base_amt)'),                
             )
         );
     }    
@@ -158,6 +160,10 @@ class VvoyVoyage extends BaseVvoyVoyage
         }
         
         foreach($this->vvpoVoyagePoints as $cm){
+            $cm->save();
+        }
+
+        foreach($this->vexpExpenses as $cm){
             $cm->save();
         }
 
