@@ -87,4 +87,29 @@ class VexpExpenses extends BaseVexpExpenses
 
     }        
     
+    public function afterSave() {
+        
+        /**
+         * registre transaction in dimensions
+         */
+        
+        //get models
+        $fixr = $this->vexpFixr;
+        $vepo = $this->vexpVepo;
+        $vvoy = $this->vexpVvoy;
+        
+        //save dim data
+        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
+        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
+        $fdda->setFdm2Id($vepo->vepo_id, $vepo->vepo_name);
+        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
+        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
+        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
+        $fdda->save();
+        
+        parent::afterSave();
+    }
+        
+    
+    
 }

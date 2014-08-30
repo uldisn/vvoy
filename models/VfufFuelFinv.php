@@ -30,7 +30,13 @@ class VfufFuelFinv extends BaseVfufFuelFinv
 
     public function getItemPeriodLabel()
     {
-            return (string) $this->vfufVvoy->getItemLabel();
+        $vvoy = $this->vfufVvoy;
+        if(Empty($vvoy)) return '';
+        return (string) $this->vfufVvoy->getItemLabel();
+    }    
+    
+    public function isPeriodEditable(){
+        return false;
     }    
 
     public function behaviors()
@@ -61,5 +67,41 @@ class VfufFuelFinv extends BaseVfufFuelFinv
             'criteria' => $this->searchCriteria($criteria),
         ));
     }
+    
+    public function afterSave() {
+        
+        /**
+         * registre transaction in dimensions
+         */
+        
+        //get models
+        $fixr = $this->vfufFixr;
+        if(empty($fixr->fixr_period_fret_id)){
+            parent::afterSave();
+            return;
+        }
+        $vvoy = $this->vfufVvoy;
+        if(empty($vvoy)){
+            parent::afterSave();
+            return;            
+        }
+        
+        $vtrc = $vvoy->vvoyVtrc;
+        
+        //save dim data
+        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
+        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
+        
+        //dim2 - truck
+        $fdda->setFdm2Id($vtrc->vtrc_id, $vtrc->vtrc_car_reg_nr);
+        
+        //dim3 - voyage
+        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
+        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
+        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
+        $fdda->save();
+        
+        parent::afterSave();
+    }       
 
 }
