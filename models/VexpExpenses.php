@@ -97,6 +97,10 @@ class VexpExpenses extends BaseVexpExpenses
         $fixr = $this->vexpFixr;
         $vepo = $this->vexpVepo;
         $vvoy = $this->vexpVvoy;
+        if(empty($vvoy)){
+            parent::afterSave();
+            return;
+        }
         
         //save dim data
         $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
