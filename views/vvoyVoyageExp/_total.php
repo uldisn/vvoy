@@ -25,7 +25,7 @@ if (!$ajax) {
         'fixed_exp' => array(
             'label' => Yii::t('VvoyModule.model', 'Fixed Expenses'),
             'sign' => '-',
-            'planed' => $model->vdimBaseAmtTotal,
+            'planed' => $model->vpdmBaseAmtTotal,
             'real' => $model->vdimBaseAmtTotal,
         ),
         'exp' => array(

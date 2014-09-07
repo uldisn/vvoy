@@ -32,6 +32,7 @@ class VvoyVoyage extends BaseVvoyVoyage
                 'milagePlanTotal'=>array(self::STAT,  'VvpoVoyagePoint', 'vvpo_vvoy_id', 'select' => 'SUM(vvpo_plan_km)'),                
                 'vexpBaseAmtTotal'=>array(self::STAT,  'VexpExpenses', 'vexp_vvoy_id', 'select' => 'SUM(vexp_base_amt)'),                
                 'vdimBaseAmtTotal'=>array(self::STAT,  'VdimDimension', 'vdim_vvoy_id', 'select' => 'SUM(vdim_base_amt)'),                
+                'vpdmBaseAmtTotal'=>array(self::STAT,  'VpdmPlaningDimension', 'vpdm_vvoy_id', 'select' => 'SUM(vpdm_base_amt)'),                
             )
         );
     }    

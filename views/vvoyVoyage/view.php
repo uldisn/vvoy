@@ -171,9 +171,9 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
-                        'model' => $model,
-                        'attribute' => 'vvoy_plan_end_date',
-                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'model' => $model,
+                                'attribute' => 'vvoy_plan_end_date',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
                             ), true
                     )
                 ),
@@ -198,6 +198,30 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         'ajax' => false,
                         )
                     ); 
+
+        $total_ajax_url = $this->createUrl('', array(
+            'vvoy_id' => $model->vvoy_id,
+            'ajax' => 'vvoy-voyage-total-grid',
+        ));
+
+        $planed_real_ajax_url = $this->createUrl('', array(
+            'vvoy_id' => $model->vvoy_id,
+            'ajax' => 'vvoy-voyage-compare-grid',
+        ));
+        Yii::app()->clientScript->registerScript('reload_total_grid', ' 
+            function reload_total_grid(){
+                var table = $("#vvoy-voyage-total-grid");
+                $.ajax({
+                    type: \'GET\',
+                    url: \'' . $total_ajax_url . '\', 
+                    success: function(html) {
+                        $(table).html(html);
+                    }
+                });
+
+            }    
+            ');
+         
          
          $this->renderPartial('/vvoyVoyageExp/_total', 
                     array(
