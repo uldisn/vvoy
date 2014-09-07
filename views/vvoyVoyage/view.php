@@ -150,29 +150,29 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         )
                     ),                
                 array(
-                    'name' => 'vvoy_start_date',
+                    'name' => 'vvoy_plan_start_date',
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', 
                             array(
                                 'type' => 'datetime',
                                 'model' => $model,
-                                'attribute' => 'vvoy_start_date',
+                                'attribute' => 'vvoy_plan_start_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                                'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
-                                'viewformat' => 'yyyy-mm-dd hh:ii', //format for display                                
+                                //'format' => 'yyyy-mm-dd hh:ii:ss', //database datetime format
+                                //'viewformat' => 'yyyy-mm-dd hh:ii', //format for display                                
                                 //'datetime' => array('minuteStep'=>15)
                             ), 
                             true
                     )
                 ),
                 array(
-                    'name' => 'vvoy_end_date',
+                    'name' => 'vvoy_plan_end_date',
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
                         'model' => $model,
-                        'attribute' => 'vvoy_end_date',
+                        'attribute' => 'vvoy_plan_end_date',
                         'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
                             ), true
                     )
@@ -199,7 +199,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                         )
                     ); 
          
-         $this->renderPartial('_total', 
+         $this->renderPartial('/vvoyVoyageExp/_total', 
                     array(
                         'model' => $model,
                         'ajax' => false,
@@ -221,4 +221,16 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
 </div>
 
 <?php
+$cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
+    "icon" => "chevron-left",
+    "size" => "large",
+    "url" => (isset($_GET["returnUrl"])) ? $_GET["returnUrl"] : array("{$this->id}/admin"),
+    "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.View")),
+    "htmlOptions" => array(
+        "class" => "search-button",
+        "data-toggle" => "tooltip",
+        "title" => Yii::t("VvoyModule.crud", "Cancel"),
+    )
+        ), TRUE);
+
 echo $cancel_button;

@@ -11,6 +11,8 @@
  * @property string $vvoy_status
  * @property integer $vvoy_fcrn_id
  * @property string $vvoy_fcrn_plan_date
+ * @property string $vvoy_plan_start_date
+ * @property string $vvoy_plan_end_date
  * @property string $vvoy_start_date
  * @property string $vvoy_end_date
  * @property string $vvoy_sys_ccmp_id
@@ -29,9 +31,11 @@
  *
  * Relations of table "vvoy_voyage" available as properties of the model:
  * @property VcrtVvoyCurrencyRate[] $vcrtVvoyCurrencyRates
+ * @property VdimDimension[] $vdimDimensions
  * @property VexpExpenses[] $vexpExpenses
  * @property VfueFuel[] $vfueFuels
  * @property VfufFuelFinv[] $vfufFuelFinvs
+ * @property VpdmPlaningDimension[] $vpdmPlaningDimensions
  * @property VvclVoyageClient[] $vvclVoyageClients
  * @property VvepVoyageExpensesPlan[] $vvepVoyageExpensesPlans
  * @property VvexVoyageExpenses[] $vvexVoyageExpenses
@@ -68,13 +72,13 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         return array_merge(
             parent::rules(), array(
                 array('vvoy_vtrc_id, vvoy_fcrn_id', 'required'),
-                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvoy_vtrc_id, vvoy_vtrl_id, vvoy_fcrn_id, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'numerical', 'integerOnly' => true),
                 array('vvoy_number', 'length', 'max' => 20),
                 array('vvoy_status', 'length', 'max' => 8),
                 array('vvoy_sys_ccmp_id, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel_amt', 'length', 'max' => 10),
-                array('vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
-                array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_fcrn_plan_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'safe', 'on' => 'search'),
+                array('vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
+                array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'safe', 'on' => 'search'),
             )
         );
     }
@@ -100,9 +104,11 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         return array_merge(
             parent::relations(), array(
                 'vcrtVvoyCurrencyRates' => array(self::HAS_MANY, 'VcrtVvoyCurrencyRate', 'vcrt_vvoy_id'),
+                'vdimDimensions' => array(self::HAS_MANY, 'VdimDimension', 'vdim_vvoy_id'),
                 'vexpExpenses' => array(self::HAS_MANY, 'VexpExpenses', 'vexp_vvoy_id'),
                 'vfueFuels' => array(self::HAS_MANY, 'VfueFuel', 'vfue_vvoy_id'),
                 'vfufFuelFinvs' => array(self::HAS_MANY, 'VfufFuelFinv', 'vfuf_vvoy_id'),
+                'vpdmPlaningDimensions' => array(self::HAS_MANY, 'VpdmPlaningDimension', 'vpdm_vvoy_id'),
                 'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
                 'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
                 'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),
@@ -125,6 +131,8 @@ abstract class BaseVvoyVoyage extends CActiveRecord
             'vvoy_status' => Yii::t('VvoyModule.model', 'Vvoy Status'),
             'vvoy_fcrn_id' => Yii::t('VvoyModule.model', 'Vvoy Fcrn'),
             'vvoy_fcrn_plan_date' => Yii::t('VvoyModule.model', 'Vvoy Fcrn Plan Date'),
+            'vvoy_plan_start_date' => Yii::t('VvoyModule.model', 'Vvoy Plan Start Date'),
+            'vvoy_plan_end_date' => Yii::t('VvoyModule.model', 'Vvoy Plan End Date'),
             'vvoy_start_date' => Yii::t('VvoyModule.model', 'Vvoy Start Date'),
             'vvoy_end_date' => Yii::t('VvoyModule.model', 'Vvoy End Date'),
             'vvoy_sys_ccmp_id' => Yii::t('VvoyModule.model', 'Vvoy Sys Ccmp'),
@@ -192,6 +200,8 @@ abstract class BaseVvoyVoyage extends CActiveRecord
         $criteria->compare('t.vvoy_status', $this->vvoy_status, true);
         $criteria->compare('t.vvoy_fcrn_id', $this->vvoy_fcrn_id);
         $criteria->compare('t.vvoy_fcrn_plan_date', $this->vvoy_fcrn_plan_date, true);
+        $criteria->compare('t.vvoy_plan_start_date', $this->vvoy_plan_start_date, true);
+        $criteria->compare('t.vvoy_plan_end_date', $this->vvoy_plan_end_date, true);
         $criteria->compare('t.vvoy_start_date', $this->vvoy_start_date, true);
         $criteria->compare('t.vvoy_end_date', $this->vvoy_end_date, true);
         $criteria->compare('t.vvoy_sys_ccmp_id', $this->vvoy_sys_ccmp_id, true);

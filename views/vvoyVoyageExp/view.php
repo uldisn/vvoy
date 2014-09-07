@@ -129,10 +129,16 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
-                        'type' => 'datetime',
-                        'model' => $model,
-                        'attribute' => 'vvoy_start_date',
-                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'type' => 'datetime',
+                                'model' => $model,
+                                'attribute' => 'vvoy_start_date',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                'success' => '   
+                                    function(response, newValue) {
+                                        $.fn.yiiGridView.update(\'vdim-dimension-grid\');
+                                        reload_total_grid();
+                                    }    
+                                ',
                             ), true
                     )
                 ),
@@ -141,10 +147,17 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
-                        'model' => $model,
-                        'attribute' => 'vvoy_end_date',
-                        'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
-                            ), true
+                                'model' => $model,
+                                'attribute' => 'vvoy_end_date',
+                                'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
+                                                                'success' => '   
+                                    function(response, newValue) {
+                                        $.fn.yiiGridView.update(\'vdim-dimension-grid\');
+                                        reload_total_grid();
+                                    }    
+                                ',
+                            ), 
+                            true
                     )
                 ),
                 array(

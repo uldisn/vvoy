@@ -10,7 +10,7 @@ if(!$ajax){
 
 <?php
 if(!$ajax || $ajax == 'vvcl-voyage-client-grid'){
-    Yii::beginProfile('vvcl_vvoy_id.view.grid');
+    Yii::beginProfile('VvclVoyageClient.view.grid');
 ?>
 
 <div class="table-header">
@@ -143,7 +143,7 @@ $this->widget('TbGridView',
 
 <?php
 if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
-    Yii::beginProfile('vvep_vvoy_id.view.grid');
+    Yii::beginProfile('VvexVoyageExpenses.view.grid');
 ?>
 
 <div class="table-header">
@@ -313,11 +313,121 @@ if(!$ajax || $ajax == 'vvep-voyage-expenses-plan-grid'){
 <?php
     Yii::endProfile('VvexVoyageExpenses.view.grid');
 }    
+
+/**
+ * FIXED EXPENSES GRID
+ */
+if(!$ajax || $ajax == 'vdim-dimension-grid'){
+    Yii::beginProfile('vdim_vvoy_id.view.grid');
+
+    //try add records
+    if (empty($modelMain->vpdmPlaningDimensions)) {
+        $show_grid = VpdmPlaningDimension::recalcVvoyData($modelMain->primaryKey, 1);
+    }else{
+        $show_grid = true;
+    }
+
+    $model = new VpdmPlaningDimension();
+    $model->vpdm_vvoy_id = $modelMain->primaryKey;
+
+    // render grid view
+    if (!$show_grid) {
 ?>
 
-<?php
+<div class="table-header">
+    <?=Yii::t('VvoyModule.model', 'Fixed expenses')?>
+    <?php    
+        
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'link', 
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-refresh',
+            'url' => array(
+                '',
+                'vvoy_id' => $modelMain->primaryKey,
+            ),            
+            'htmlOptions' => array(
+                'title' => Yii::t('VvoyModule.crud', 'Recalc'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    ?>
+</div>
+ 
+<?php         
+        
+    } else {
+?>
+
+<div class="table-header">
+    <?=Yii::t('VvoyModule.model', 'Fixed expenses')?>
+    <?php    
+        
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'ajaxButton', 
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-refresh',
+            'url' => array(
+                '//vvoy/vpdmPlaningDimension/ajaxRecalc',
+                'vvoy_id' => $modelMain->primaryKey,
+                'ajax' => 'vdim-dimension-grid',
+            ),
+            'ajaxOptions' => array(
+                    'success' => '
+                        function(html) {
+                            $.fn.yiiGridView.update(\'vdim-dimension-grid\');
+                            reload_total_grid();  
+                        }
+                                '
+                    ),
+            'htmlOptions' => array(
+                'title' => Yii::t('VvoyModule.crud', 'Recalc'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    ?>
+</div>
+ 
+<?php         
+        $this->widget('TbGridView', array(
+            'id' => 'vdim-dimension-grid',
+            'dataProvider' => $model->search(),
+            'template' => '{summary}{items}',
+            'summaryText' => '&nbsp;',
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),
+            'columns' => array(
+                array(
+                    'name' => 'vpdm_fdm2_id',
+                    'value' => '$data->vpdmFdm2->fdm2_name'
+                ),
+                array(
+                    'name' => 'vpdm_base_amt',
+                    'htmlOptions' => array('class' => 'numeric-column'),
+                ),
+            )
+                )
+        );
+    }
+    Yii::endProfile('vdim_vvoy_id.view.grid');
+}    
+
+
+/**
+ * voyage points
+ */
+
 if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
-    Yii::beginProfile('vvpo_vvoy_id.view.grid');
+    Yii::beginProfile('VvpoVoyagePoint.view.grid');
 ?>
 
 <div class="table-header">   
@@ -554,11 +664,9 @@ if(!$ajax || $ajax == 'vvpo-voyage-point-grid'){
 <?php
     Yii::endProfile('VvpoVoyagePoint.view.grid');
 }    
-?>
 
-<?php
 if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
-    Yii::beginProfile('vxpr_vvoy_id.view.grid');
+    Yii::beginProfile('VxprVoyageXPerson.view.grid');
 ?>
 
 <div class="table-header">  
@@ -654,3 +762,4 @@ if(!$ajax || $ajax == 'vxpr-voyage-xperson-grid'){
 
     Yii::endProfile('VxprVoyageXPerson.view.grid');
 }    
+

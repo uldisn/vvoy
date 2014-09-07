@@ -65,5 +65,5 @@ if (!$ajax || $ajax == 'vcrt-vvoy-currency-rate-grid') {
     ?>
 
     <?php
-    Yii::endProfile('VcrtVvoyCurrencyRate.view.grid');
+    Yii::endProfile('vcrt_vvoy_id.view.grid');
 }    

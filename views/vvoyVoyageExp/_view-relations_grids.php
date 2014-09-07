@@ -5,10 +5,7 @@ if (!$ajax) {
             .rel-grid-view div.summary {height: 60px;}
             ');
 }
-?>
 
-
-<?php
 if (!$ajax || $ajax == 'vvcl-voyage-client-grid') {
     Yii::beginProfile('vvcl_vvoy_id.view.grid');
     ?>
@@ -142,7 +139,7 @@ if (!$ajax || $ajax == 'vvcl-voyage-client-grid') {
     );
 
 
-    Yii::endProfile('VvclVoyageClient.view.grid');
+    Yii::endProfile('vvcl_vvoy_id.view.grid');
 }
 ?>
 
@@ -287,7 +284,8 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
                     'success' => 'function(response, newValue) { 
                                     reload_total_and_start_end_grid()
                     }',
-                )
+                ),
+                'htmlOptions' => array('class' => 'numeric-column'),                                
             ),
             array(
                 //decimal(10,2) unsigned
@@ -299,7 +297,8 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
                     'success' => 'function(response, newValue) { 
                                     reload_total_and_start_end_grid()
                     }',
-                )
+                ),
+                'htmlOptions' => array('class' => 'numeric-column'),                                
             ),
             array(
                 'class' => 'editable.EditableColumn',
@@ -355,10 +354,7 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
         )
             )
     );
-    ?>
-
-    <?php
-    Yii::endProfile('VfueFuel.view.grid');
+    Yii::endProfile('vfue_vvoy_id.view.grid');
 }
 
 
@@ -389,6 +385,7 @@ if (!$ajax || $ajax == 'vfuf-fuel-finv-grid') {
         'columns' => array(
             array(
                 'name' => 'vfuf_qnt',
+                'htmlOptions' => array('class' => 'numeric-column'),                                
             ),
             array(
                 'name' => 'vfuf_date',
@@ -400,6 +397,7 @@ if (!$ajax || $ajax == 'vfuf-fuel-finv-grid') {
             array(
                 'name' => Yii::t('VvoyModule.model', 'Amount'),
                 'value' => '$data->vfufFixr->fixr_amt',
+                'htmlOptions' => array('class' => 'numeric-column'),                                
             ),
             array(
                 'name' => 'vfuf_notes',
@@ -421,10 +419,8 @@ if (!$ajax || $ajax == 'vfuf-fuel-finv-grid') {
             ),
         )
     ));
-    ?>
 
-    <?php
-    Yii::endProfile('VfufFuelFinv.view.grid');
+    Yii::endProfile('vfuf_vvoy_id.view.grid');
 }
 
 if (!$ajax || $ajax == 'vexp-expenses-grid') {
@@ -468,6 +464,7 @@ if (!$ajax || $ajax == 'vexp-expenses-grid') {
             array(
                 'name' => Yii::t('VvoyModule.model', 'Amount'),
                 'value' => '$data->vexpFixr->fixr_amt',
+                'htmlOptions' => array('class' => 'numeric-column'),                
             ),
             array(
                 'class' => 'editable.EditableColumn',
@@ -500,8 +497,109 @@ if (!$ajax || $ajax == 'vexp-expenses-grid') {
         )
             )
     );
-    ?>
-
-    <?php
-    Yii::endProfile('VexpExpenses.view.grid');
+    Yii::endProfile('vexp_vvoy_id.view.grid');
 }
+
+if(!$ajax || $ajax == 'vdim-dimension-grid'){
+    Yii::beginProfile('vdim_vvoy_id.view.grid');
+
+    //try add records
+    if (empty($modelMain->vdimDimensions)) {
+        $show_grid = VdimDimension::recalcVvoyData($modelMain->primaryKey, 1);
+    }else{
+        $show_grid = true;
+    }
+
+    $model = new VdimDimension();
+    $model->vdim_vvoy_id = $modelMain->primaryKey;
+
+    // render grid view
+    if (!$show_grid) {
+?>
+
+<div class="table-header">
+    <?=Yii::t('VvoyModule.model', 'Fixed expenses')?>
+    <?php    
+        
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'link', 
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-refresh',
+            'url' => array(
+                '',
+                'vvoy_id' => $modelMain->primaryKey,
+            ),            
+            'htmlOptions' => array(
+                'title' => Yii::t('VvoyModule.crud', 'Recalc'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    ?>
+</div>
+ 
+<?php         
+        
+    } else {
+?>
+
+<div class="table-header">
+    <?=Yii::t('VvoyModule.model', 'Fixed expenses')?>
+    <?php    
+        
+    $this->widget(
+        'bootstrap.widgets.TbButton',
+        array(
+            'buttonType' => 'ajaxButton', 
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'size' => 'mini',
+            'icon' => 'icon-refresh',
+            'url' => array(
+                '//vvoy/vdimDimension/ajaxRecalc',
+                'vvoy_id' => $modelMain->primaryKey,
+                'ajax' => 'vdim-dimension-grid',
+            ),
+            'ajaxOptions' => array(
+                    'success' => '
+                        function(html) {
+                            $.fn.yiiGridView.update(\'vdim-dimension-grid\');
+                            reload_total_grid();  
+                        }
+                                '
+                    ),
+            'htmlOptions' => array(
+                'title' => Yii::t('VvoyModule.crud', 'Recalc'),
+                'data-toggle' => 'tooltip',
+            ),                 
+        )
+    );        
+    ?>
+</div>
+ 
+<?php         
+        $this->widget('TbGridView', array(
+            'id' => 'vdim-dimension-grid',
+            'dataProvider' => $model->search(),
+            'template' => '{summary}{items}',
+            'summaryText' => '&nbsp;',
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
+            ),
+            'columns' => array(
+                array(
+                    'name' => 'vdim_fdm2_id',
+                    'value' => '$data->vdimFdm2->fdm2_name'
+                ),
+                array(
+                    'name' => 'vdim_base_amt',
+                    'htmlOptions' => array('class' => 'numeric-column'),
+                ),
+            )
+                )
+        );
+    }
+    Yii::endProfile('vdim_vvoy_id.view.grid');
+}    
