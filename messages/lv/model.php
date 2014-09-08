@@ -227,4 +227,11 @@ return array (
   'Vxpr Pprs' => 'Autovadītājs',
   'Vxpr Voyage Xperson' => 'Autovadītāji',
   'fcrn_name' => 'Valūta',
+  'Currency Rates' => 'Valūtas kursi',  
+  'Vvoy Plan Start Date' => 'No',  
+  'Vvoy Plan End Date' => 'Līdz',  
+  'Vcrt Fcrn' => 'Valūta',  
+  'Vcrt Rate Org' => 'Oficiālais',  
+  'Vcrt Rate' => 'Koriģetais',  
+  'Fixed expenses' => 'Fiksētie izdevumi',  
 );

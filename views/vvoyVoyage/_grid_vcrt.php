@@ -4,7 +4,7 @@ if (!$ajax || $ajax == 'vcrt-vvoy-currency-rate-grid') {
     ?>
 
     <div class="table-header">
-        <?= Yii::t('VvoyModule.model', 'Vcrt Vvoy Currency Rate') ?>
+        <?= Yii::t('VvoyModule.model', 'Currency Rates') ?>
 
     </div>
 
