@@ -13,8 +13,8 @@
  * @property string $vfuf_notes
  *
  * Relations of table "vfuf_fuel_finv" available as properties of the model:
- * @property VvoyVoyage $vfufVvoy
  * @property FixrFiitXRef $vfufFixr
+ * @property VvoyVoyage $vfufVvoy
  */
 abstract class BaseVfufFuelFinv extends CActiveRecord
 {
@@ -62,8 +62,8 @@ abstract class BaseVfufFuelFinv extends CActiveRecord
     {
         return array_merge(
             parent::relations(), array(
-                'vfufVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vfuf_vvoy_id'),
                 'vfufFixr' => array(self::BELONGS_TO, 'FixrFiitXRef', 'vfuf_fixr_id'),
+                'vfufVvoy' => array(self::BELONGS_TO, 'VvoyVoyage', 'vfuf_vvoy_id'),
             )
         );
     }
