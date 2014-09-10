@@ -160,13 +160,16 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
 
     //if no drivers, cann not add payment documents
     $warning = '';
-    if (count($persons) == 0) {
+    //get documents
+    $payment_doc_type = $this->module->driver_payment_docs;    
+    if (empty($persons) == 0) {
         $warning = Yii::t('VvoyModule.model', 'Pleas add driver(s) to voyage. Can not add payment docoments!');
+        $payment_doc = array();
+    }else{
+        $payment_doc = PpxdPersonXDocument::model()->filterByDocTypeAndPerson($payment_doc_type, $persons)->findAll(array('limit' => 1000));
     }
 
-    //get documents
-    $payment_doc_type = $this->module->driver_payment_docs;
-    $payment_doc = PpxdPersonXDocument::model()->filterByDocTypeAndPerson($payment_doc_type, $persons)->findAll(array('limit' => 1000));
+    
 
     //create list data
     if (count($persons) > 1) {
@@ -207,7 +210,7 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
                 )
         );
         ?>
-        <span class="label label-warning"><?php echo $warning ?></span>
+        <span class="label label-large label-warning"><?php echo $warning ?></span>
     </div>
 
     <?php
@@ -360,143 +363,159 @@ if (!$ajax || $ajax == 'vfue-fuel-grid') {
 
 if (!$ajax || $ajax == 'vfuf-fuel-finv-grid') {
     Yii::beginProfile('vfuf_vvoy_id.view.grid');
+    $is_empty_vfuf = empty($modelMain->vfufFuelFinvs);
+    $warning = '';
+    if($is_empty_vfuf){
+        $warning = Yii::t('VvoyModule.model', 'No exist invoices fueling items attached to this voyage!');
+    }
     ?>
 
     <div class="table-header">
         <i class="icon-tint"></i>
         <?= Yii::t('VvoyModule.model', 'Fuel Invoices') ?>
+        <span class="label label-large label-warning"><?php echo $warning ?></span>
     </div>
 
     <?php
- 
-    $model = new VfufFuelFinv();
-    $model->vfuf_vvoy_id = $modelMain->primaryKey;
+    //grid
+    if(!$is_empty_vfuf){
+        $model = new VfufFuelFinv();
+        $model->vfuf_vvoy_id = $modelMain->primaryKey;
 
-    // render grid view
+        // render grid view
 
-    $this->widget('TbGridView', array(
-        'id' => 'vfuf-fuel-finv-grid',
-        'dataProvider' => $model->search(),
-        'template' => '{summary}{items}',
-        'summaryText' => '&nbsp;',
-        'htmlOptions' => array(
-            'class' => 'rel-grid-view'
-        ),
-        'columns' => array(
-            array(
-                'name' => 'vfuf_qnt',
-                'htmlOptions' => array('class' => 'numeric-column'),                                
+        $this->widget('TbGridView', array(
+            'id' => 'vfuf-fuel-finv-grid',
+            'dataProvider' => $model->search(),
+            'template' => '{summary}{items}',
+            'summaryText' => '&nbsp;',
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
             ),
-            array(
-                'name' => 'vfuf_date',
-            ),
-            array(
-                'header' => Yii::t('VvoyModule.model', 'fcrn_name'),
-                'value' => '$data->vfufFixr->fixrFcrn->itemLabel',
-            ),
-            array(
-                'name' => Yii::t('VvoyModule.model', 'Amount'),
-                'value' => '$data->vfufFixr->fixr_amt',
-                'htmlOptions' => array('class' => 'numeric-column'),                                
-            ),
-            array(
-                'name' => 'vfuf_notes',
-            ),
-            array
-                (
-                'class' => 'TbButtonColumn',
-                'template' => '{show}',
-                'buttons' => array
+            'columns' => array(
+                array(
+                    'name' => 'vfuf_qnt',
+                    'htmlOptions' => array('class' => 'numeric-column'),                                
+                ),
+                array(
+                    'name' => 'vfuf_date',
+                ),
+                array(
+                    'header' => Yii::t('VvoyModule.model', 'fcrn_name'),
+                    'value' => '$data->vfufFixr->fixrFcrn->itemLabel',
+                ),
+                array(
+                    'name' => Yii::t('VvoyModule.model', 'Amount'),
+                    'value' => '$data->vfufFixr->fixr_amt',
+                    'htmlOptions' => array('class' => 'numeric-column'),                                
+                ),
+                array(
+                    'name' => 'vfuf_notes',
+                ),
+                array
                     (
-                    'show' => array
+                    'class' => 'TbButtonColumn',
+                    'template' => '{show}',
+                    'buttons' => array
                         (
-                        'label' => Yii::t('VvoyModule.model', 'Show invoice data'),
-                        'icon' => 'external-link',
-                        'options' => array('data-toggle' => 'tooltip', 'target' => '_blank'),
-                        'url' => 'Yii::app()->controller->createUrl("/d2fixr/FixrFiitXRef/viewFinv", array("finv_id" => $data->vfufFixr->fixrFiit->fiit_finv_id))',
+                        'show' => array
+                            (
+                            'label' => Yii::t('VvoyModule.model', 'Show invoice data'),
+                            'icon' => 'external-link',
+                            'options' => array('data-toggle' => 'tooltip', 'target' => '_blank'),
+                            'url' => 'Yii::app()->controller->createUrl("/d2fixr/FixrFiitXRef/viewFinv", array("finv_id" => $data->vfufFixr->fixrFiit->fiit_finv_id))',
+                        ),
                     ),
                 ),
-            ),
-        )
-    ));
+            )
+        ));
+    }
 
     Yii::endProfile('vfuf_vvoy_id.view.grid');
 }
 
 if (!$ajax || $ajax == 'vexp-expenses-grid') {
     Yii::beginProfile('vexp_vvoy_id.view.grid');
+    $is_empty_vexp = empty($modelMain->vexpExpenses);
+    $warning = '';
+    if($is_empty_vexp){
+        $warning = Yii::t('VvoyModule.model', 'No exist invoices items attached to this voyage!');
+    }    
     ?>
 
     <div class="table-header">
         <?= Yii::t('VvoyModule.model', 'Expenses (Invoices)') ?>
+        <span class="label label-large label-warning"><?php echo $warning ?></span>
     </div>
 
     <?php
-    if (empty($modelMain->vexpExpenses)) {
-        $model = new VexpExpenses;
+    if(!$is_empty_vexp){
+    //    if (empty($modelMain->vexpExpenses)) {
+    //        $model = new VexpExpenses;
+    //        $model->vexp_vvoy_id = $modelMain->primaryKey;
+    //        $model->save();
+    //        unset($model);
+    //    }
+
+        $model = new VexpExpenses();
         $model->vexp_vvoy_id = $modelMain->primaryKey;
-        $model->save();
-        unset($model);
-    }
 
-    $model = new VexpExpenses();
-    $model->vexp_vvoy_id = $modelMain->primaryKey;
+        // render grid view
 
-    // render grid view
-
-    $this->widget('TbGridView', array(
-        'id' => 'vexp-expenses-grid',
-        'dataProvider' => $model->search(),
-        'template' => '{summary}{items}',
-        'summaryText' => '&nbsp;',
-        'htmlOptions' => array(
-            'class' => 'rel-grid-view'
-        ),
-        'columns' => array(
-            array(
-                'name' => 'vepo_name',
-                'value' => '$data->vexpVepo->itemLabel',
+        $this->widget('TbGridView', array(
+            'id' => 'vexp-expenses-grid',
+            'dataProvider' => $model->search(),
+            'template' => '{summary}{items}',
+            'summaryText' => '&nbsp;',
+            'htmlOptions' => array(
+                'class' => 'rel-grid-view'
             ),
-            array(
-                'header' => Yii::t('VvoyModule.model', 'fcrn_name'),
-                'value' => '$data->vexpFixr->fixrFcrn->itemLabel',
-            ),
-            array(
-                'name' => Yii::t('VvoyModule.model', 'Amount'),
-                'value' => '$data->vexpFixr->fixr_amt',
-                'htmlOptions' => array('class' => 'numeric-column'),                
-            ),
-            array(
-                'class' => 'editable.EditableColumn',
-                'name' => 'vexp_notes',
-                'editable' => array(
-                    'type' => 'textarea',
-                    'url' => $this->createUrl('//vvoy/vexpExpenses/editableSaver'),
-                //'placement' => 'right',
-                )
-            ),
-            array(
-                'header' => Yii::t('VvoyModule.model', 'Invoice'),
-                'value' => '$data->vexpFixr->fixrFiit->fiitFinv->itemLabel',
-            ),
-            array
-                (
-                'class' => 'TbButtonColumn',
-                'template' => '{show}',
-                'buttons' => array
+            'columns' => array(
+                array(
+                    'name' => 'vepo_name',
+                    'value' => '$data->vexpVepo->itemLabel',
+                ),
+                array(
+                    'header' => Yii::t('VvoyModule.model', 'fcrn_name'),
+                    'value' => '$data->vexpFixr->fixrFcrn->itemLabel',
+                ),
+                array(
+                    'name' => Yii::t('VvoyModule.model', 'Amount'),
+                    'value' => '$data->vexpFixr->fixr_amt',
+                    'htmlOptions' => array('class' => 'numeric-column'),                
+                ),
+                array(
+                    'class' => 'editable.EditableColumn',
+                    'name' => 'vexp_notes',
+                    'editable' => array(
+                        'type' => 'textarea',
+                        'url' => $this->createUrl('//vvoy/vexpExpenses/editableSaver'),
+                    //'placement' => 'right',
+                    )
+                ),
+                array(
+                    'header' => Yii::t('VvoyModule.model', 'Invoice'),
+                    'value' => '$data->vexpFixr->fixrFiit->fiitFinv->itemLabel',
+                ),
+                array
                     (
-                    'show' => array
+                    'class' => 'TbButtonColumn',
+                    'template' => '{show}',
+                    'buttons' => array
                         (
-                        'label' => Yii::t('VvoyModule.model', 'Show invoice data'),
-                        'icon' => 'external-link',
-                        'options' => array('data-toggle' => 'tooltip', 'target' => '_blank'),
-                        'url' => 'Yii::app()->controller->createUrl("/d2fixr/FixrFiitXRef/viewFinv", array("finv_id" => $data->vexpFixr->fixrFiit->fiit_finv_id))',
+                        'show' => array
+                            (
+                            'label' => Yii::t('VvoyModule.model', 'Show invoice data'),
+                            'icon' => 'external-link',
+                            'options' => array('data-toggle' => 'tooltip', 'target' => '_blank'),
+                            'url' => 'Yii::app()->controller->createUrl("/d2fixr/FixrFiitXRef/viewFinv", array("finv_id" => $data->vexpFixr->fixrFiit->fiit_finv_id))',
+                        ),
                     ),
                 ),
-            ),
-        )
             )
-    );
+                )
+        );
+    }
     Yii::endProfile('vexp_vvoy_id.view.grid');
 }
 
@@ -505,7 +524,7 @@ if(!$ajax || $ajax == 'vdim-dimension-grid'){
 
     //try add records
     if (empty($modelMain->vdimDimensions)) {
-        $show_grid = VdimDimension::recalcVvoyData($modelMain->primaryKey, 1);
+        $show_grid = VdimDimension::recalcVvoyData($modelMain->primaryKey);
     }else{
         $show_grid = true;
     }

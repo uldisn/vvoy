@@ -28,7 +28,7 @@ class VdimDimensionController extends Controller {
     }
 
     public function actionAjaxRecalc($vvoy_id) {
-        VdimDimension::recalcVvoyData($vvoy_id, 1);
+        VdimDimension::recalcVvoyData($vvoy_id);
     }
 
 }

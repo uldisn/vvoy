@@ -322,7 +322,7 @@ if(!$ajax || $ajax == 'vdim-dimension-grid'){
 
     //try add records
     if (empty($modelMain->vpdmPlaningDimensions)) {
-        $show_grid = VpdmPlaningDimension::recalcVvoyData($modelMain->primaryKey, 1);
+        $show_grid = VpdmPlaningDimension::recalcVvoyData($modelMain->primaryKey);
     }else{
         $show_grid = true;
     }

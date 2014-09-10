@@ -58,30 +58,32 @@ class VpdmPlaningDimension extends BaseVpdmPlaningDimension
      * @param int $fdst_id - dimension type
      * @return boolean is_records
      */
-    public static function recalcVvoyData($vvoy_id,$fdst_id){
+    public static function recalcVvoyData($vvoy_id){
         
-        //saskalda vilcēja izmaksas pa perodiem
+        //saskalda  izmaksas pa perodiem
         $sql = "
                 SELECT 
-
                   fddp_fdm2_id fdm2_id,
+                  fddp_fdm3_id fdm3_id,
                   fddp_fdpe_id,
                   fddp_amt,
-                  fdm1_name,	  
-                  fdm2_name,	
+
                   ROUND(
                       TIMESTAMPDIFF(
                         SECOND, 
-                        GREATEST(fdpe_dt_from,vvoy_plan_start_date) , 
-                        LEAST(fdpe_dt_to,vvoy_plan_end_date)
+                        GREATEST(fdpe_dt_from,vvoy_start_date) , 
+                        LEAST(fdpe_dt_to,vvoy_end_date)
                       )
                       /
                       TIMESTAMPDIFF(SECOND, fdpe_dt_from, fdpe_dt_to)
                       *
                       SUM(CASE fddp_cd WHEN 'C' THEN fddp_amt/100 ELSE 0 END)
-                  ,2) vp_amt
+                  ,2) vp_amt,
+                  fdst_dim_level level
                 FROM
                   fddp_dim_data_period 
+                  INNER JOIN fdst_dim_split_type
+                    ON fddp_fdst_id = fdst_id                  
                   INNER JOIN fdpe_dim_period 
                     ON fddp_fdpe_id = fdpe_id 
                   INNER JOIN vvoy_voyage 
@@ -93,54 +95,63 @@ class VpdmPlaningDimension extends BaseVpdmPlaningDimension
                              OR fdpe_dt_from    <= vvoy_plan_end_date   AND vvoy_plan_end_date   < fdpe_dt_to
                              OR vvoy_plan_start_date <  fdpe_dt_from    AND vvoy_plan_end_date   > fdpe_dt_to
                         )
-                  INNER JOIN fdm1_dimension1
-                    ON  fddp_fdm1_id = fdm1_id
-                INNER JOIN fdm2_dimension2
-                    ON  fddp_fdm2_id = fdm2_id    
-
-                WHERE fddp_fdst_id = {$fdst_id} 
+                WHERE 
+                  fdst_type = 'VVOY' 
+                  
                   AND vvoy_id = {$vvoy_id} 
                 GROUP BY 
                   fddp_fdm2_id,
+                  fddp_fdm3_id,
                   fddp_fdpe_id             
                 ";
         $data = Yii::app()->db->createCommand($sql)->queryAll();
         
         $is_records = !empty($data);
         
-        //summee periodus pa dim2
+        //summee periodus pa dim2 un dim3 atkarība no level
         $total = array();
         foreach($data as $row){
-            if(!isset($total[$row['fdm2_id']])){
-                $total[$row['fdm2_id']] = 0;
+            if($row['level'] == 2){
+                $key = $row['fdm2_id'];
+            }else{
+                $key = $row['fdm2_id'] . '_' . $row['fdm3_id'];
             }
-            $total[$row['fdm2_id']] += $row['vp_amt'];
+            if(!isset($total[$key])){
+                $total[$key] = 0;
+            }
+            $total[$key] += $row['vp_amt'];
         }
-
-
         
         //convet to voyage currency
         $vvoy = VvoyVoyage::model()->findByPk($vvoy_id);                
-        foreach($total as $fdm2_id => $amt){
-           
-            $total[$fdm2_id] = Yii::app()->currency->convertFromTo(
+        foreach($total as $key => $amt){
+            $total[$key] = Yii::app()->currency->convertFromTo(
                                                             Yii::app()->currency->base, 
                                                             $vvoy->vvoy_fcrn_id, 
                                                             $amt,
-                                                            $vvoy->vvoy_plan_start_date
+                                                            $vvoy->vvoy_start_date
                     );
-        }   
+        }           
+        
         //update vdim data
         
         $sql = "select * from vpdm_planing_dimension where vpdm_vvoy_id = {$vvoy_id}";
         $fdim_data = Yii::app()->db->createCommand($sql)->queryAll();
 
         foreach ($fdim_data as $k => $fdim_record ){
-            if(isset($total[$fdim_record['vpdm_fdm2_id']])){
+
+            if(empty($fdim_record['vpdm_fdm3_id'])){
+                $key = $fdim_record['vpdm_fdm2_id'];
+            }else{
+                $key = $fdim_record['vpdm_fdm2_id'] . '_' . $fdim_record['vpdm_fdm3_id'];
+            }            
+            
+            
+            if(isset($total[$key])){
                 
                 //update existing record
                 $vpdm = VpdmPlaningDimension::model()->findByPk($fdim_record['vpdm_id']);
-                $vpdm->vpdm_base_amt = $total[$fdim_record['vpdm_fdm2_id']];
+                $vpdm->vpdm_base_amt = $total[$key];
                 $vpdm->save();
             }else{
                 
@@ -148,15 +159,23 @@ class VpdmPlaningDimension extends BaseVpdmPlaningDimension
                 $vpdm = VpdmPlaningDimension::model()->findByPk($fdim_record['vpdm_id']);
                 $vpdm->delete();
             }
-            unset($total[$fdim_record['vpdm_fdm2_id']]);            
+            unset($total[$key]);            
             unset($fdim_data[$k]);            
         }    
         
         //add new records
-        foreach($total as $fdm2_id => $amt){
+        foreach($total as $key => $amt){
+            $a = explode('_',$key);
+            if(count($a) == 2){
+                list($fdm2_id,$fdm3_id) = $a;
+            }else{
+                $fdm2_id = $key;
+                $fdm3_id = null;
+            }            
             $vpdm = new VpdmPlaningDimension;
             $vpdm->vpdm_vvoy_id = $vvoy_id;
             $vpdm->vpdm_fdm2_id = $fdm2_id;
+            $vpdm->vpdm_fdm3_id = $fdm3_id;
             $vpdm->vpdm_base_amt = $amt;
             $vpdm->save();                
         }

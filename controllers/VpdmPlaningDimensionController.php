@@ -28,7 +28,7 @@ class VpdmPlaningDimensionController extends Controller {
     }
 
     public function actionAjaxRecalc($vvoy_id) {
-        VpdmPlaningDimension::recalcVvoyData($vvoy_id, 1);
+        VpdmPlaningDimension::recalcVvoyData($vvoy_id);
     }
 
 }

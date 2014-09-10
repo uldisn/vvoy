@@ -169,7 +169,7 @@ class VvoyVoyage extends BaseVvoyVoyage
             $cm->save();
         }
 
-        VdimDimension::recalcVvoyData($this->vvoy_id,1);
+        VdimDimension::recalcVvoyData($this->vvoy_id);
         
     }
     
