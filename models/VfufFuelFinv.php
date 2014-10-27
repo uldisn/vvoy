@@ -7,6 +7,8 @@ Yii::import('VfufFuelFinv.*');
 class VfufFuelFinv extends BaseVfufFuelFinv
 {
 
+    private $vvoy = false;    
+    
     // Add your model-specific methods here. This file will not be overriden by gtc except you force it.
     public static function model($className = __CLASS__)
     {
@@ -33,6 +35,14 @@ class VfufFuelFinv extends BaseVfufFuelFinv
         $vvoy = $this->vfufVvoy;
         if(Empty($vvoy)) return '';
         return (string) $this->vfufVvoy->getItemLabel();
+    }    
+    
+    public function getVvoy(){
+        if(!$this->vvoy){
+            $this->vvoy = $this->vexpVvoy;
+        }
+        
+        return $this->vvoy;
     }    
     
     public function isPeriodEditable(){
@@ -70,38 +80,68 @@ class VfufFuelFinv extends BaseVfufFuelFinv
     
     public function afterSave() {
         
-        /**
-         * registre transaction in dimensions
-         */
+//        /**
+//         * registre transaction in dimensions
+//         */
+//        
+//        //get models
+//        $fixr = $this->vfufFixr;
+//        if(empty($fixr->fixr_period_fret_id)){
+//            parent::afterSave();
+//            return;
+//        }
+//        $vvoy = $this->vfufVvoy;
+//        if(empty($vvoy)){
+//            parent::afterSave();
+//            return;            
+//        }
+//        
+//        $vtrc = $vvoy->vvoyVtrc;
+//        
+//        //save dim data
+//        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
+//        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
+//        
+//        //dim2 - truck
+//        $fdda->setFdm2Id($vtrc->vtrc_id, $vtrc->vtrc_car_reg_nr);
+//        
+//        //dim3 - voyage
+//        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
+//        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
+//        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
+//        $fdda->save();
         
-        //get models
-        $fixr = $this->vfufFixr;
-        if(empty($fixr->fixr_period_fret_id)){
-            parent::afterSave();
-            return;
-        }
-        $vvoy = $this->vfufVvoy;
+        $vvoy = $this->getVvoy();
         if(empty($vvoy)){
             parent::afterSave();
-            return;            
-        }
+            return;
+        }          
         
         $vtrc = $vvoy->vvoyVtrc;
         
-        //save dim data
-        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
-        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
+        //registre transaction in dimensions
+        FddaDimData::registre($this->vtrs_fixr_id,$vtrc->vtrc_id, $vtrc->vtrc_car_reg_nr,$vvoy->vvoy_id, $vvoy->vvoy_number);
         
-        //dim2 - truck
-        $fdda->setFdm2Id($vtrc->vtrc_id, $vtrc->vtrc_car_reg_nr);
-        
-        //dim3 - voyage
-        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
-        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
-        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
-        $fdda->save();
         
         parent::afterSave();
     }       
+    
+    /**
+     * common name for FddaDimData
+     * @return date
+     */
+    public function getFddaDateFrom(){
+        $vvoy = $this->getVvoy();
+        return $vvoy->vvoy_start_date;
+    }
+
+    /**
+     * common name for FddaDimData
+     * @return date
+     */    
+    public function getFddaDateTo(){
+        $vvoy = $this->getVvoy();
+        return $vvoy->vvoy_end_date;
+    }         
 
 }

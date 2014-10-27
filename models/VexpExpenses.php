@@ -7,6 +7,7 @@ Yii::import('VexpExpenses.*');
 class VexpExpenses extends BaseVexpExpenses
 {
 
+    private $vvoy = false;
     // Add your model-specific methods here. This file will not be overriden by gtc except you force it.
     public static function model($className = __CLASS__)
     {
@@ -32,6 +33,16 @@ class VexpExpenses extends BaseVexpExpenses
     {
             return (string) $this->vexpVvoy->getItemLabel();
     }
+
+    public function getVvoy(){
+        if(!$this->vvoy){
+            $this->vvoy = $this->vexpVvoy;
+        }
+        
+        return $this->vvoy;
+        
+    }
+
 
     public function behaviors()
     {
@@ -89,31 +100,57 @@ class VexpExpenses extends BaseVexpExpenses
     
     public function afterSave() {
         
-        /**
-         * registre transaction in dimensions
-         */
+//        /**
+//         * registre transaction in dimensions
+//         */
+//        
+//        //get models
+//        $fixr = $this->vexpFixr;
+//        $vepo = $this->vexpVepo;
+//        $vvoy = $this->vexpVvoy;
+//        if(empty($vvoy)){
+//            parent::afterSave();
+//            return;
+//        }
+//        
+//        //save dim data
+//        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
+//        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
+//        $fdda->setFdm2Id($vepo->vepo_id, $vepo->vepo_name);
+//        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
+//        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
+//        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
+//        $fdda->save();
         
-        //get models
-        $fixr = $this->vexpFixr;
-        $vepo = $this->vexpVepo;
-        $vvoy = $this->vexpVvoy;
+        $vvoy = $this->getVvoy();
         if(empty($vvoy)){
             parent::afterSave();
             return;
-        }
+        }        
+        $vepo = $this->vexpVepo;
         
-        //save dim data
-        $fdda = FddaDimData::findByFixrId($fixr->fixr_id);
-        $fdda->fdda_fret_id = $fixr->fixr_period_fret_id;
-        $fdda->setFdm2Id($vepo->vepo_id, $vepo->vepo_name);
-        $fdda->setFdm3Id($vvoy->vvoy_id, $vvoy->vvoy_number);
-        $fdda->fdda_date_from = $vvoy->vvoy_start_date;
-        $fdda->fdda_date_to = $vvoy->vvoy_end_date;
-        $fdda->save();
+        //registre transaction in dimensions
+        FddaDimData::registre($this->vexp_fixr_id,$vepo->vepo_id, $vepo->vepo_name,$vvoy->vvoy_id, $vvoy->vvoy_number);
         
         parent::afterSave();
     }
         
-    
+    /**
+     * common name for FddaDimData
+     * @return date
+     */
+    public function getFddaDateFrom(){
+        $vvoy = $this->getVvoy();
+        return $vvoy->vvoy_start_date;
+    }
+
+    /**
+     * common name for FddaDimData
+     * @return date
+     */    
+    public function getFddaDateTo(){
+        $vvoy = $this->getVvoy();
+        return $vvoy->vvoy_end_date;
+    }     
     
 }
