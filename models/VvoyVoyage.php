@@ -6,8 +6,10 @@ Yii::import('VvoyVoyage.*');
 
 class VvoyVoyage extends BaseVvoyVoyage
 {
+    
+    private $oldAttrs = array();
 
-    // Add your model-specific methods here. This file will not be overriden by gtc except you force it.
+        // Add your model-specific methods here. This file will not be overriden by gtc except you force it.
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -50,14 +52,12 @@ class VvoyVoyage extends BaseVvoyVoyage
         );
     }
 
-    public function rules()
-    {
+    public function rules() {
         return array_merge(
+                array(
+            array('vvoy_mileage,vvoy_odo_start,vvoy_odo_end', 'validateVodo', Yii::t('VvoyModule.crud', 'Invalid odometer readings.')),
+                ), 
             parent::rules()
-        /* , array(
-          array('column1, column2', 'rule1'),
-          array('column3', 'rule2'),
-          ) */
         );
     }
 
@@ -71,15 +71,29 @@ class VvoyVoyage extends BaseVvoyVoyage
         ));
     }
     
+    public function beforeSave() {
+        if (!$this->isNewRecord && !VvoyVoyage::model()->findByPk($this->primaryKey)) {
+            return false;
+        }
+
+        if (!$this->isNewRecord) {
+
+            if ($this->isReadyVodo()) {
+                if ($id = $this->processVodo()) {
+                    $this->vvoy_vodo_id = $id;
+                }
+            }
+        }
+
+        return parent::beforeSave();
+    }
+
     public function save($runValidation = true, $attributes = NULL) 
     {
         //set system company id
         if ($this->isNewRecord && Yii::app()->sysCompany->getActiveCompany()){
             $this->vvoy_sys_ccmp_id = Yii::app()->sysCompany->getActiveCompany();
         }              
-        
-        //is new
-        $bIsNewRecord = $this->isNewRecord;
 
         //plan currency rates
         if(!empty($attributes) &&
@@ -92,23 +106,27 @@ class VvoyVoyage extends BaseVvoyVoyage
             $vcrt->deleteRates($this->vvoy_id);
             $vcrt->fillRates($this->vvoy_id,$this->vvoy_fcrn_plan_date,$this->vvoy_fcrn_id);
         }                
-        
-        
-        //save
-        $r = parent::save($runValidation,$attributes);
 
-        if(!$r){
-            return $r;
-        }
+        return parent::save($runValidation,$attributes);
 
+    }    
+
+    protected function afterSave()
+    {
         
-        $this->recalcItems();
-        $this->recalcTotals();
-        
-        if(!$bIsNewRecord){
-            return true;
+        if(!$this->isNewRecord){
+            
+            if(!$this->isReadyVodo()){        
+                    if(!$this->processVodo()){
+                        return false;
+                    }        
+            }            
+            
+            $this->recalcItems();
+            $this->recalcTotals();
+            parent::afterSave();
+            return;
         }
-        
         
         //add one empty client
         $vvcl = new VvclVoyageClient;
@@ -144,11 +162,9 @@ class VvoyVoyage extends BaseVvoyVoyage
         //add driver empty
         $vxpr = new VxprVoyageXPerson;
         $vxpr->vxpr_vvoy_id = $this->vvoy_id;
-        $vxpr->save();
-
+        $vxpr->save();        
         
-        return true;
-
+        parent::afterSave();
     }    
     
     public function recalcItems(){
@@ -225,10 +241,103 @@ class VvoyVoyage extends BaseVvoyVoyage
         
     }
     
+    public function isReadyVodo(){
+        $oldAttrs = $this->getOldAttributes();
+        if($oldAttrs['vvoy_odo_start'] == $this->vvoy_odo_start
+                && $oldAttrs['vvoy_odo_end'] == $this->vvoy_odo_end
+                && $oldAttrs['vvoy_mileage'] == $this->vvoy_mileage
+                && $oldAttrs['vvoy_vtrc_id'] == $this->vvoy_vtrc_id
+                && $oldAttrs['vvoy_start_date'] == $this->vvoy_start_date
+                && $oldAttrs['vvoy_end_date'] == $this->vvoy_end_date
+                ) 
+        {
+            //no changes
+            return false;
+        }
+
+        if(empty($this->vvoy_odo_start)
+                || empty($this->vvoy_odo_end)
+                || empty($this->vvoy_mileage)
+                || empty($this->vvoy_vtrc_id)
+                || empty($this->vvoy_start_date)
+                || empty($this->vvoy_end_date)
+                ) 
+        {
+            //no complete info
+            return false;
+        }
+        
+        return true;
+        
+    }
+    public function validateVodo($attribute){
+        if(!$this->isReadyVodo()){
+            return true;
+        }        
+        
+        return $this->processVodo(true,$attribute);
+        
+    }
+    public function processVodo($only_validate = false,$attribute = false){
+        
+        if(empty($this->vvoy_vodo_id)){
+            $vodo = new VodoOdometer();
+        }else{
+            $vodo = $this->vvoyVodo;
+        }
+        $vodo->vodo_vtrc_id = $this->vvoy_vtrc_id;
+        $vodo->vodo_start_odo = $this->vvoy_odo_start;
+        $vodo->vodo_end_odo = $this->vvoy_abs_odo_end;
+        $vodo->vodo_start_datetime = $this->vvoy_start_date;
+        $vodo->vodo_end_datetime = $this->vvoy_end_date;
+        $vodo->vodo_run = $this->vvoy_mileage;
+        $vodo->setVodoType();
+        
+        //validate
+        if ($only_validate) {
+            if (!$vodo->validate()) {
+                foreach ($vodo->errors as $atribute => $error) {
+                    foreach($error as $err){
+                        $this->addError($attribute, $err);
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
+        //save
+        if(!$vodo->save()){
+            foreach($vodo->errors as $atribute => $error){
+                $this->addError($this->tableSchema->primaryKey, $error);
+            }
+            return false;
+        }
+        return $vodo->vodo_id;
+    }
+    
     protected function beforeFind() {
         $criteria = new CDbCriteria;
         $criteria->compare('vvoy_sys_ccmp_id', Yii::app()->sysCompany->getActiveCompany());
         $this->dbCriteria->mergeWith($criteria);
         parent::beforeFind();
+    }    
+    
+    protected function afterFind()
+    {
+        // Save old values
+        $this->setOldAttributes($this->getAttributes());
+
+        return parent::afterFind();
+    }
+
+    public function getOldAttributes()
+    {
+        return $this->oldAttrs;
+    }
+
+    public function setOldAttributes($attrs)
+    {
+        $this->oldAttrs = $attrs;
     }    
 }
