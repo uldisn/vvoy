@@ -17,6 +17,7 @@ class VvoyVoyage extends BaseVvoyVoyage
 
     public function init()
     {
+        $this->vvoy_fcrn_id = Yii::app()->sysCompany->getAttribute('base_fcrn_id');
         return parent::init();
     }
 
@@ -55,9 +56,12 @@ class VvoyVoyage extends BaseVvoyVoyage
     public function rules() {
         return array_merge(
                 array(
-            array('vvoy_mileage,vvoy_odo_start,vvoy_odo_end', 'validateVodo', Yii::t('VvoyModule.crud', 'Invalid odometer readings.')),
+                    array('vvoy_mileage,vvoy_odo_start,vvoy_odo_end', 'validateVodo'), 
                 ), 
-            parent::rules()
+            parent::rules(),
+                array(
+                    array('vvoy_fcrn_plan_date', 'validateFcrnPlanDate'),                    
+                )
         );
     }
 
@@ -95,31 +99,32 @@ class VvoyVoyage extends BaseVvoyVoyage
             $this->vvoy_sys_ccmp_id = Yii::app()->sysCompany->getActiveCompany();
         }              
 
-        //plan currency rates
-        if(!empty($attributes) &&
-                (
-                   in_array('vvoy_fcrn_id', $attributes) 
-                || in_array('vvoy_fcrn_plan_date', $attributes)
-                )
-         ){
-            $vcrt = new VcrtVvoyCurrencyRate;
-            $vcrt->deleteRates($this->vvoy_id);
-            $vcrt->fillRates($this->vvoy_id,$this->vvoy_fcrn_plan_date,$this->vvoy_fcrn_id);
-        }                
-
         return parent::save($runValidation,$attributes);
 
     }    
 
     protected function afterSave()
     {
+
+         $oldAttrs = $this->getOldAttributes();
+        //plan currency rates
+        if(!empty($this->vvoy_fcrn_id) 
+                && !empty($this->vvoy_fcrn_plan_date)           
+                && ($oldAttrs['vvoy_fcrn_id'] != $this->vvoy_fcrn_id 
+                        || $oldAttrs['vvoy_fcrn_plan_date'] != $this->vvoy_fcrn_plan_date)
+         ){
+            $vcrt = new VcrtVvoyCurrencyRate;
+            $vcrt->deleteRates($this->vvoy_id);
+            $vcrt->fillRates($this->vvoy_id,$this->vvoy_fcrn_plan_date,$this->vvoy_fcrn_id);
+        }            
         
         if(!$this->isNewRecord){
             
             if(!$this->isReadyVodo()){        
-                    if(!$this->processVodo()){
-                        return false;
-                    }        
+                if(!$this->processVodo()){
+                    parent::afterSave();
+                    return;
+                }        
             }            
             
             $this->recalcItems();
@@ -270,14 +275,38 @@ class VvoyVoyage extends BaseVvoyVoyage
         return true;
         
     }
+    
     public function validateVodo($attribute){
+        if($this->isNewRecord){
+            return;
+        }        
         if(!$this->isReadyVodo()){
-            return true;
+            return;
         }        
         
-        return $this->processVodo(true,$attribute);
+        if(!$this->processVodo(true,$attribute)){
+             $this->addError($attribute, Yii::t('VvoyModule.crud', 'Invalid odometer readings.'));
+        }
         
     }
+
+    public function validateFcrnPlanDate($attribute){
+        
+        if(empty($this->vvoy_fcrn_plan_date)){
+            return;
+        }        
+        
+        if(empty($this->vvoy_fcrn_id)){
+            return;
+        }        
+        
+        //get actual rates
+        if(!Yii::app()->currency->isRateForDate($this->vvoy_fcrn_plan_date)){
+             $this->addError($attribute, Yii::t('VvoyModule.crud', 'For date do not exist rate.'));
+        }
+        
+    }
+    
     public function processVodo($only_validate = false,$attribute = false){
         
         if(empty($this->vvoy_vodo_id)){

@@ -47,7 +47,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
     <div class="span4">
         <?php
         $this->widget(
-                'TbDetailView', array(
+                'TbAceDetailView', array(
             'id' => 'vvoy_voyage_view',        
             'data' => $model,
             'attributes' => array(
@@ -76,8 +76,10 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                 'attribute' => 'vvoy_vtrc_id',
 
                             ), true
-                        )                    
-                    
+                        ),
+                    'value_id' => $model->vvoy_vtrc_id,
+                    'external_link' => array('/trucks/vtrcTruck/view','vtrc_id'=>$model->vvoy_vtrc_id),
+                    'external_title' => Yii::t("VvoyModule.model",'Show Truck Data'),
                 ),
                 array(
                     'name' => 'vvoy_vtrl_id',
@@ -92,7 +94,10 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                                 'attribute' => 'vvoy_vtrl_id',
 
                             ), true
-                        )                    
+                        ),
+                    'value_id' => $model->vvoy_vtrl_id,
+                    'external_link' => array('/trucks/vtrlTrailer/view','vtrl_id'=>$model->vvoy_vtrl_id),
+                    'external_title' => Yii::t("VvoyModule.model",'Show Traler Data'),                    
                     
                 ),
                 array(

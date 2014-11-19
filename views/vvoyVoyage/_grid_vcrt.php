@@ -31,6 +31,7 @@ if (!$ajax || $ajax == 'vcrt-vvoy-currency-rate-grid') {
         'columns' => array(
             array(
                 'name' => 'vcrt_fcrn_id',
+                'value' => '$data->vcrtFcrn->fcrn_code'
             ),
             array(
                 'name' => 'vcrt_rate_org',

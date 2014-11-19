@@ -40,10 +40,10 @@
  * @property VvclVoyageClient[] $vvclVoyageClients
  * @property VvepVoyageExpensesPlan[] $vvepVoyageExpensesPlans
  * @property VvexVoyageExpenses[] $vvexVoyageExpenses
- * @property VodoOdometer $vvoyVodo
  * @property VtrlTrailer $vvoyVtrl
  * @property FcrnCurrency $vvoyFcrn
  * @property VtrcTruck $vvoyVtrc
+ * @property VodoOdometer $vvoyVodo
  * @property VvpoVoyagePoint[] $vvpoVoyagePoints
  * @property VxprVoyageXPerson[] $vxprVoyageXPeople
  */
@@ -75,12 +75,14 @@ abstract class BaseVvoyVoyage extends CActiveRecord
     {
         return array_merge(
             parent::rules(), array(
-                array('vvoy_vtrc_id, vvoy_fcrn_id', 'required'),
-                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage, vvoy_vodo_id', 'default', 'setOnEmpty' => true, 'value' => null),
+                array('vvoy_vtrc_id, vvoy_fcrn_id, vvoy_fcrn_plan_date', 'required'),
+                array('vvoy_number, vvoy_vtrl_id, vvoy_status, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage, vvoy_vodo_id', 'default', 'setOnEmpty' => true, 'value' => null),
                 array('vvoy_vtrc_id, vvoy_vtrl_id, vvoy_fcrn_id, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage', 'numerical', 'integerOnly' => true),
+                array('vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel_amt', 'type','type'=>'float'),
                 array('vvoy_number', 'length', 'max' => 20),
-                array('vvoy_sys_ccmp_id, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel_amt, vvoy_vodo_id', 'length', 'max' => 10),
-                array('vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
+                array('vvoy_sys_ccmp_id, vvoy_vodo_id', 'length', 'max' => 10),
+                array('vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel_amt', 'length', 'max' => 11),
+                array('vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_notes', 'safe'),
                 array('vvoy_status', 'in', 'range' => array(self::VVOY_STATUS_PROJECT, self::VVOY_STATUS_ACCEPTED, self::VVOY_STATUS_IN_WAY, self::VVOY_STATUS_FINISHED, self::VVOY_STATUS_CLOSED, self::VVOY_STATUS_CANCELED)),
                 array('vvoy_id, vvoy_number, vvoy_vtrc_id, vvoy_vtrl_id, vvoy_status, vvoy_fcrn_id, vvoy_fcrn_plan_date, vvoy_plan_start_date, vvoy_plan_end_date, vvoy_start_date, vvoy_end_date, vvoy_sys_ccmp_id, vvoy_notes, vvoy_fuel_tank_start, vvoy_fuel_tank_end, vvoy_fuel_tank_start_amt, vvoy_fuel_tank_end_amt, vvoy_fuel, vvoy_fuel_amt, vvoy_odo_start, vvoy_odo_end, vvoy_abs_odo_start, vvoy_abs_odo_end, vvoy_mileage, vvoy_vodo_id', 'safe', 'on' => 'search'),
             )
@@ -116,10 +118,10 @@ abstract class BaseVvoyVoyage extends CActiveRecord
                 'vvclVoyageClients' => array(self::HAS_MANY, 'VvclVoyageClient', 'vvcl_vvoy_id'),
                 'vvepVoyageExpensesPlans' => array(self::HAS_MANY, 'VvepVoyageExpensesPlan', 'vvep_vvoy_id'),
                 'vvexVoyageExpenses' => array(self::HAS_MANY, 'VvexVoyageExpenses', 'vvex_vvoy_id'),
-                'vvoyVodo' => array(self::BELONGS_TO, 'VodoOdometer', 'vvoy_vodo_id'),
                 'vvoyVtrl' => array(self::BELONGS_TO, 'VtrlTrailer', 'vvoy_vtrl_id'),
                 'vvoyFcrn' => array(self::BELONGS_TO, 'FcrnCurrency', 'vvoy_fcrn_id'),
                 'vvoyVtrc' => array(self::BELONGS_TO, 'VtrcTruck', 'vvoy_vtrc_id'),
+                'vvoyVodo' => array(self::BELONGS_TO, 'VodoOdometer', 'vvoy_vodo_id'),
                 'vvpoVoyagePoints' => array(self::HAS_MANY, 'VvpoVoyagePoint', 'vvpo_vvoy_id'),
                 'vxprVoyageXPeople' => array(self::HAS_MANY, 'VxprVoyageXPerson', 'vxpr_vvoy_id'),
             )
