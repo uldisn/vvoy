@@ -40,8 +40,8 @@ class VvoyVoyageReport extends BaseVvoyVoyage {
         $sql = "
                 SELECT 
                   vvoy_id,
-                  date(vvoy_plan_start_date) start_date,
-                  date(vvoy_plan_end_date) end_date,
+                  date(vvoy_start_date) start_date,
+                  date(vvoy_end_date) end_date,
                   concat(vtrc_car_reg_nr,'/',vtrl_reg_nr) label,
                   CASE vvoy_status 
                     WHEN '" . self::VVOY_STATUS_PROJECT . "' THEN 'icon-question'
@@ -69,12 +69,12 @@ class VvoyVoyageReport extends BaseVvoyVoyage {
                     vvoy_sys_ccmp_id = " . Yii::app()->sysCompany->getActiveCompany() . "  
                     AND 
                     (
-                       vvoy_plan_start_date >= @date_from AND vvoy_plan_start_date <= @date_to
-                    OR vvoy_plan_end_date   >= @date_from AND vvoy_plan_end_date   <= @date_to
-                    OR vvoy_plan_start_date <= @date_from AND vvoy_plan_end_date   >= @date_to                    
+                       vvoy_start_date >= @date_from AND vvoy_start_date <= @date_to
+                    OR vvoy_end_date   >= @date_from AND vvoy_end_date   <= @date_to
+                    OR vvoy_start_date <= @date_from AND vvoy_end_date   >= @date_to                    
                     )
                 ORDER BY vtrc_car_reg_nr,
-                  vvoy_plan_start_date 
+                  vvoy_start_date 
             ";
 
         $data['body_data'] = Yii::app()

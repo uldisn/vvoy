@@ -34,7 +34,7 @@ class DashboardController extends Controller {
         return true;
     }
 
-    public function actionView($year = false, $week = false) {
+    public function actionView($year = null, $week = null) {
 
         //validate input params
         $model = new vvoy_dashboard();
@@ -43,7 +43,7 @@ class DashboardController extends Controller {
         
         if(!$model->validate()){
             //var_dump($model);exit;
-            throw new CHttpException(400, Yii::t('VvoyModule.crud', 'Invalid request. Please do not repeat this request again.'));
+            throw new CHttpException(400, Yii::t('VvoyModule.crud', 'cInvalid request. Please do not repeat this request again.'));
         }        
 
         //get data

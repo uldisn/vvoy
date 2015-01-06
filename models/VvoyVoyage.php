@@ -81,7 +81,7 @@ class VvoyVoyage extends BaseVvoyVoyage
         }
 
         if (!$this->isNewRecord) {
-
+           
             if ($this->isReadyVodo()) {
                 if ($id = $this->processVodo()) {
                     $this->vvoy_vodo_id = $id;
@@ -99,6 +99,26 @@ class VvoyVoyage extends BaseVvoyVoyage
             $this->vvoy_sys_ccmp_id = Yii::app()->sysCompany->getActiveCompany();
         }              
 
+        if (!$this->isNewRecord){
+            $oldAttrs = $this->getOldAttributes();
+            
+            //if changed plane start dates, update start date
+            if($oldAttrs['vvoy_plan_start_date'] != $this->vvoy_plan_start_date){
+                $this->vvoy_start_date = $this->vvoy_plan_start_date;
+                if(!empty($attributes)){
+                    $attributes[] = 'vvoy_start_date';
+                }
+            }
+            
+            //if changed plane end dates, update end date
+            if($oldAttrs['vvoy_plan_end_date'] != $this->vvoy_plan_end_date){
+                $this->vvoy_end_date = $this->vvoy_plan_end_date;
+                if(!empty($attributes)){
+                    $attributes[] = 'vvoy_end_date';
+                }                
+            }            
+        }
+        
         return parent::save($runValidation,$attributes);
 
     }    
