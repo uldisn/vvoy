@@ -8,7 +8,6 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
     "icon" => "chevron-left",
     "size" => "large",
     "url" => (isset($_GET["returnUrl"])) ? $_GET["returnUrl"] : array("{$this->id}/admin"),
-    "visible" => (Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.*") || Yii::app()->user->checkAccess("Vvoy.VvoyVoyage.View")),
     "htmlOptions" => array(
         "class" => "search-button",
         "data-toggle" => "tooltip",
@@ -38,10 +37,23 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
             ?>                    
         </div>
     </div>
-    <h1>
-        &nbsp;<i class="icon-road"></i>  
-        <?php echo '' . Yii::t('VvoyModule.model', 'Voyage plan'); ?>
-    </h1>
+    <div class="btn-group">
+        <h1>
+            &nbsp;<i class="icon-road"></i>  
+            <?php echo '' . Yii::t('VvoyModule.model', 'Voyage plan'); ?>
+        </h1>
+    </div>
+    <div class="btn-group">
+        <?php
+            $this->widget("bootstrap.widgets.TbButton", array(
+                "label" => Yii::t('VvoyModule.model', 'Voyage expenses'),
+                "icon" => "chevron-right",
+                'type' => 'info',
+                "size" => "large",
+                "url" => ["vvoyVoyageExp/view",'vvoy_id' => $model->vvoy_id],
+                    ));        
+        ?>
+    </div>    
 </div>
 <div class="row">
     <div class="span4">
@@ -176,6 +188,7 @@ $cancel_button = $this->widget("bootstrap.widgets.TbButton", array(
                     'type' => 'raw',
                     'value' => $this->widget(
                             'EditableField', array(
+                                'type' => 'datetime',                                
                                 'model' => $model,
                                 'attribute' => 'vvoy_plan_end_date',
                                 'url' => $this->createUrl('/vvoy/vvoyVoyage/editableSaver'),
