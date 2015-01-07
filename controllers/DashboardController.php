@@ -20,7 +20,7 @@ class DashboardController extends Controller {
                 'allow',
                 'actions' => array('view'),
                 //'roles' => array('Vvoy.Dashboard.View'),
-                'users' => array('*'),
+                'users' => array('@'),
             ),
             array(
                 'deny',
