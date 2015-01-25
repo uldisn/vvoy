@@ -125,8 +125,9 @@ class VpdmPlaningDimension extends BaseVpdmPlaningDimension
         //convet to voyage currency
         $vvoy = VvoyVoyage::model()->findByPk($vvoy_id);                
         foreach($total as $key => $amt){
+            $sys_ccmp_base_fcrn = Yii::app()->currency->getSysCcmpBaseCurrency($vvoy->vvoy_start_date);
             $total[$key] = Yii::app()->currency->convertFromTo(
-                                                            Yii::app()->currency->base, 
+                                                            $sys_ccmp_base_fcrn, 
                                                             $vvoy->vvoy_fcrn_id, 
                                                             $amt,
                                                             $vvoy->vvoy_start_date

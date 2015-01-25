@@ -77,8 +77,6 @@ class VcrtVvoyCurrencyRate extends BaseVcrtVvoyCurrencyRate
         //get actual rates
         $currencies = Yii::app()->currency->getCurrencyId2Code();
         
-        //Yii::app()->currency->convertToBase($this->bfrfBfpr->bfpr_price, $this->bfrfBfpr->bfpr_fcrn_id, $fcrn_date,6);
-        
         //save
         foreach ($currencies as $fcrn_id => $fcrn_code) {
             $rate = Yii::app()->currency->getCurrencyRateExt($vvoy_fcrn_plan_date,$fcrn_id,6,$vvoy_fcrn_id);
