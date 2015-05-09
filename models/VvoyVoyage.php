@@ -130,8 +130,10 @@ class VvoyVoyage extends BaseVvoyVoyage
         //plan currency rates
         if(!empty($this->vvoy_fcrn_id) 
                 && !empty($this->vvoy_fcrn_plan_date)           
-                && ($oldAttrs['vvoy_fcrn_id'] != $this->vvoy_fcrn_id 
-                        || $oldAttrs['vvoy_fcrn_plan_date'] != $this->vvoy_fcrn_plan_date)
+                && ($this->isNewRecord
+                    || $oldAttrs['vvoy_fcrn_id'] != $this->vvoy_fcrn_id 
+                    || $oldAttrs['vvoy_fcrn_plan_date'] != $this->vvoy_fcrn_plan_date
+                )
          ){
             $vcrt = new VcrtVvoyCurrencyRate;
             $vcrt->deleteRates($this->vvoy_id);
